@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { getProviders, signIn } from 'next-auth/client'
+import { getProviders, signIn, getSession } from 'next-auth/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebookF, faGooglePlusG, faGithubAlt } from '@fortawesome/free-brands-svg-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,6 +11,7 @@ import 'twin.macro'
 import Paper from '@/components/paper'
 import Input from '@/components/input'
 import Button from '@/components/button'
+import { GetServerSidePropsContext } from 'next'
 
 type SignInProps = {
   providers: any
@@ -92,7 +93,12 @@ function SignIn({ providers }: SignInProps) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+  if (session !== null) {
+    context.res.writeHead(302, { Location: '/' }).end()
+  }
+
   const providers = await getProviders()
   return {
     props: { providers }

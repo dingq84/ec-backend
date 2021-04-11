@@ -11,7 +11,8 @@ export default NextAuth({
         password: { label: 'Password', type: 'password', placeholder: 'Please enter your password' }
       },
       async authorize(credentials) {
-        console.log(credentials, 14)
+        // TODO: call api
+        console.log(credentials)
         const user = { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
 
         if (user) {
