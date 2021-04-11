@@ -1,0 +1,60 @@
+{
+  "files.associations": {
+    "*.tsx": "javascriptreact",
+    "*.jsx": "javascriptreact"
+  },
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "cSpell.words": [
+    "Copywritten",
+    "Denormalizer",
+    "Docx",
+    "Flexboxgrid",
+    "Inlines",
+    "Navigations",
+    "Plug'n'Play",
+    "SOURCEMAP",
+    "Scrollable",
+    "Sider",
+    "TAIT",
+    "Unmount",
+    "autobind",
+    "backends",
+    "bowser",
+    "denormalized",
+    "devtool",
+    "echarts",
+    "flexbugs",
+    "flyout",
+    "formdata",
+    "futher",
+    "hocs",
+    "hrefs",
+    "minfication",
+    "mixins",
+    "onstatechange",
+    "onupdatefound",
+    "pathinfo",
+    "precache",
+    "precached",
+    "pxtorem",
+    "regexes",
+    "rehooks",
+    "rematrix",
+    "renderprops",
+    "scrollbars",
+    "signalr",
+    "smoothscroll",
+    "sockjs",
+    "stylelint",
+    "svgr",
+    "testname",
+    "todos",
+    "typeahead",
+    "webpacks"
+  ]
+}
