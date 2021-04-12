@@ -5,7 +5,7 @@ import '@testing-library/jest-dom'
 // components
 import Input from '.'
 
-describe('Testing <Input />', () => {
+describe('testing <Input />', () => {
   const defaultProps = { id: 'test' }
   it('should render label', () => {
     const { queryByLabelText } = render(<Input {...defaultProps} label="test" />)

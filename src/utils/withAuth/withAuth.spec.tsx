@@ -7,7 +7,7 @@ import withAuth from '.'
 
 jest.mock('next-auth/client')
 
-describe('Testing withAuth', () => {
+describe('testing withAuth', () => {
   function AccessDenied() {
     return <div>Access denied</div>
   }
@@ -15,7 +15,7 @@ describe('Testing withAuth', () => {
     return <div>User here</div>
   }, AccessDenied)
 
-  it('If it has session, it will go into the page', () => {
+  it('should go into the page', () => {
     const mockSession = {
       expires: '1',
       user: { email: 'a', name: 'Delta', image: 'c' }
@@ -28,7 +28,7 @@ describe('Testing withAuth', () => {
     expect(getByText('User here')).toBeInTheDocument()
   })
 
-  it('If it has not session, it will go into the access deny', () => {
+  it('should go into the access deny', () => {
     ;(client.useSession as jest.Mock).mockReturnValueOnce([null, false])
     const { getByText } = render(<User />)
     expect(getByText('Access denied')).toBeInTheDocument()

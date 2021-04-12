@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 // hooks
 import useForkRef from '.'
 
-describe('Testing useForkRef', () => {
+describe('testing useForkRef', () => {
   it('refA should be equal to refB', () => {
     const WrapperComponent = () => {
       const refA = useRef<HTMLDivElement>(null)

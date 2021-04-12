@@ -2,7 +2,7 @@ import Collapse from '.'
 import { render, queryByRole, fireEvent } from '@testing-library/react'
 import { useState } from 'react'
 
-describe('Test <Collapse />', () => {
+describe('test <Collapse />', () => {
   const defaultProps = {
     inProps: true,
     children: <div>children</div>
@@ -30,7 +30,7 @@ describe('Test <Collapse />', () => {
     expect(wrapperInner.firstElementChild?.textContent).toBe('children')
   })
 
-  describe('Test Transition lifecycle', () => {
+  describe('test Transition lifecycle', () => {
     let nodeEnterHeightStyle = 0
     let nodeEnteringHeightStyle = 0
     let nodeExitHeightStyle = 0
@@ -59,11 +59,11 @@ describe('Test <Collapse />', () => {
 
     beforeEach(() => {
       const WrapperComponent = () => {
-        const [isOpen, setOpen] = useState(false)
+        const [isOpen, setIsOpen] = useState(false)
 
         return (
           <>
-            <button data-testid="button" onClick={() => setOpen(o => !o)}>
+            <button data-testid="button" onClick={() => setIsOpen(i => !i)}>
               click
             </button>
             <Collapse
@@ -127,7 +127,7 @@ describe('Test <Collapse />', () => {
     })
   })
 
-  describe('Test collapsedSize', () => {
+  describe('test collapsedSize', () => {
     const collapsedSize = '10px'
 
     it('should work when closed', () => {
