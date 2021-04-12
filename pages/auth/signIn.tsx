@@ -12,6 +12,7 @@ import Paper from '@/components/paper'
 import Input from '@/components/input'
 import Button from '@/components/button'
 import { GetServerSidePropsContext } from 'next'
+import { useEffect } from 'react'
 
 type SignInProps = {
   providers: any
@@ -29,19 +30,37 @@ const schema = yup.object().shape({
 
 function SignIn({ providers }: SignInProps) {
   const router = useRouter()
-  const { register, handleSubmit, errors, setValue } = useForm<SignInForm>({
+  const { register, handleSubmit, errors, clearErrors, setError, setValue } = useForm<SignInForm>({
     resolver: yupResolver(schema)
   })
   // 使用客製化登入頁面的 provider 會有導向問題，目前解法參考下方 issue
   // https://github.com/nextauthjs/next-auth/issues/591#issuecomment-715992773
   const callbackUrl = router.query.callbackUrl as string
 
-  const onSubmit = (data: SignInForm) => {
-    login(providers.credentials.id, data)
+  useEffect(() => {
+    clearErrors()
+  }, [])
+
+  const onSubmit = (data: SignInForm): void => {
+    login(providers.credentials.id, { ...data, redirect: false }).then(
+      (response: { status: number; url: string }) => {
+        const { status, url } = response
+        if (status === 200) {
+          return router.replace(url)
+        }
+
+        const customError = {
+          type: 'manual',
+          message: 'The account or password is wrong, please try again.'
+        }
+        setError('account', customError)
+        setError('password', customError)
+      }
+    )
   }
 
-  const login = (providerId: string, data = {}): void => {
-    signIn(providerId, { callbackUrl, ...data })
+  const login = (providerId: string, data = {}): Promise<any> => {
+    return signIn(providerId, { callbackUrl, ...data })
   }
 
   return (

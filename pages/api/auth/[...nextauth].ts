@@ -5,15 +5,14 @@ export default NextAuth({
   providers: [
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Login',
+      name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text', placeholder: 'Please enter your username' },
-        password: { label: 'Password', type: 'password', placeholder: 'Please enter your password' }
+        // username: { label: 'Username', type: 'text', placeholder: 'Please enter your username' },
+        // password: { label: 'Password', type: 'password', placeholder: 'Please enter your password' }
       },
       async authorize(credentials) {
         // TODO: call api
-        console.log(credentials)
-        const user = { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
+        const user = credentials
 
         if (user) {
           // Any user object returned here will be saved in the JSON Web Token
