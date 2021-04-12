@@ -10,15 +10,11 @@ import { forwardRef, useRef } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'
 
+// types
+import { Status } from '@/types/transition'
+
 // utils
 import useForkRef from '../../hooks/useForkRef'
-
-enum STATUS {
-  entering = 'entering',
-  entered = 'entered',
-  exiting = 'exiting',
-  exited = 'exited'
-}
 
 type CollapseProps = {
   inProps: boolean
@@ -141,7 +137,7 @@ const Collapse = forwardRef<HTMLDivElement, CollapseProps>(function Collapse(
       onExited={handleExited}
       onExiting={handleExiting}
     >
-      {(status: STATUS) => (
+      {(status: Status) => (
         <div
           ref={handleRef}
           role="root"
@@ -149,8 +145,8 @@ const Collapse = forwardRef<HTMLDivElement, CollapseProps>(function Collapse(
             tw`overflow-hidden transition-timing-function[cubic-bezier(0.4, 0, 0.2, 1)] transition-delay[0ms]`,
             orientation === 'horizontal' && tw`w-0 transition-property[width]`,
             orientation === 'vertical' && tw`max-h-0 transition-property[max-height]`,
-            status === STATUS.entered && tw`overflow-visible`,
-            status === STATUS.exited && tw`invisible`
+            status === Status.entered && tw`overflow-visible`,
+            status === Status.exited && tw`invisible`
           ]}
           style={{ [isHorizontal ? 'minWidth' : 'minHeight']: collapsedSize }}
         >
