@@ -1,3 +1,10 @@
+/**
+ * @author Dean Chen 2021-04-12
+ * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/Fade/Fade.js
+ * Fade 主要是為了製作動畫 Fade-in 和 Fade-out，主要程式碼借鏡 Material-UI，和 Collapse 邏輯相似且更為簡單
+ * 透過 react-transition-group 的生命週期處理動畫，而且僅調用 opacity
+ */
+
 import { forwardRef, cloneElement, useRef } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'

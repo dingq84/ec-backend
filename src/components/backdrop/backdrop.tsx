@@ -1,3 +1,10 @@
+/**
+ * @author Dean Chen 2021-04-13
+ * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/Backdrop/Backdrop.js
+ * Backdrop 主要是為了製作 Modal，參考 Material-UI 的 Modal 程式碼而順手建立，
+ * 主要建立一個 display: fixed 的黑幕
+ */
+
 import { forwardRef } from 'react'
 import tw from 'twin.macro'
 
