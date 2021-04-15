@@ -19,14 +19,6 @@
       "version": "detect"
     }
   },
-  "overrides": [
-    {
-      "files": ["**/*.tsx"],
-      "rules": {
-        "react/prop-types": "off"
-      }
-    }
-  ],
   "plugins": ["react", "@typescript-eslint", "eslint-plugin-prettier"],
   "rules": {
     "prettier/prettier": ["error"],
