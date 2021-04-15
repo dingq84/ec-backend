@@ -29,6 +29,7 @@ type FadeProps = {
   // https://github.com/Microsoft/TypeScript/issues/6471
   // 上述 issue 解決方式為 any
   children: any
+  [key: string]: unknown
 }
 
 const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: FadeProps, ref) => {
@@ -42,7 +43,8 @@ const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: Fad
     onExit,
     onExited,
     appear = true,
-    timeout = 500
+    timeout = 500,
+    ...restProps
   } = props
   const nodeRef = useRef<HTMLElement>(null)
   const foreignRef = useForkRef(children.ref, ref)
@@ -90,8 +92,9 @@ const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: Fad
       onExiting={handleExiting}
       onExit={handleExit}
       onExited={handleExited}
+      {...restProps}
     >
-      {(status: Status) => {
+      {(status: Status, childProps: Object) => {
         const isEntering = status === Status.entering || status === Status.entered
         const isExited = status === Status.exited && !inProps
 
@@ -103,7 +106,8 @@ const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: Fad
             opacity: isEntering ? 1 : 0,
             ...children.props.style
           },
-          ref: handleRef
+          ref: handleRef,
+          ...childProps
         })
       }}
     </Transition>

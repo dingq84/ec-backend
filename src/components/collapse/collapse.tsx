@@ -137,7 +137,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
       onExited={handleExited}
       onExiting={handleExiting}
     >
-      {(status: Status) => (
+      {(status: Status, childProps: Object) => (
         <div
           ref={handleRef}
           role="root"
@@ -149,6 +149,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
             status === Status.exited && tw`invisible`
           ]}
           style={{ [isHorizontal ? 'minWidth' : 'minHeight']: collapsedSize }}
+          {...childProps}
         >
           <div tw="flex w-full" role="wrapper" ref={wrapperRef}>
             <div tw="w-full" role="inner">

@@ -13,23 +13,23 @@ import Fade from '@/components/fade'
 
 type BackdropType = {
   inProps: boolean
-  children: React.ReactNode
+  children?: React.ReactNode
   invisible?: boolean
   timeout?: number
+  [key: string]: unknown
 }
 
 const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropType> = (
   props: BackdropType,
   ref
 ) => {
-  const { inProps, children, invisible = false, timeout = 500 } = props
-
+  const { inProps, children, invisible = false, timeout = 500, ...restProps } = props
   return (
-    <Fade inProps={inProps} timeout={timeout}>
+    <Fade inProps={inProps} timeout={timeout} {...restProps}>
       <div
         ref={ref}
         css={[
-          tw`fixed flex items-center justify-center top-0 left-0 bg-black bg-opacity-50 -webkit-tap-highlight-color[transparent]`,
+          tw`fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 -webkit-tap-highlight-color[transparent]`,
           invisible && tw`bg-transparent`
         ]}
       >
