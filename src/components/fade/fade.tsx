@@ -31,7 +31,7 @@ type FadeProps = {
   children: any
 }
 
-const Fade = forwardRef<HTMLElement, FadeProps>(function Fade(props: FadeProps, ref): JSX.Element {
+const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: FadeProps, ref) => {
   const {
     inProps,
     children,
@@ -108,6 +108,6 @@ const Fade = forwardRef<HTMLElement, FadeProps>(function Fade(props: FadeProps, 
       }}
     </Transition>
   )
-})
+}
 
-export default Fade
+export default forwardRef(Fade)

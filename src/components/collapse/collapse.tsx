@@ -30,10 +30,10 @@ type CollapseProps = {
   onExited?: Function
 }
 
-const Collapse = forwardRef<HTMLDivElement, CollapseProps>(function Collapse(
+const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = (
   props: CollapseProps,
   ref
-): JSX.Element {
+) => {
   const {
     orientation = 'vertical',
     collapsedSize = '0px',
@@ -159,6 +159,6 @@ const Collapse = forwardRef<HTMLDivElement, CollapseProps>(function Collapse(
       )}
     </Transition>
   )
-})
+}
 
-export default Collapse
+export default forwardRef(Collapse)

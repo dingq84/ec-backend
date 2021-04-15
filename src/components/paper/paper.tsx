@@ -1,4 +1,4 @@
-import { forwardRef, Ref } from 'react'
+import { forwardRef } from 'react'
 import 'twin.macro'
 
 type PaperProps = {
@@ -6,7 +6,10 @@ type PaperProps = {
   children: React.ReactNode
 }
 
-function Paper(props: PaperProps, ref: Ref<HTMLDivElement>) {
+const Paper: React.ForwardRefRenderFunction<HTMLDivElement, PaperProps> = (
+  props: PaperProps,
+  ref
+) => {
   const { className = '', children } = props
   return (
     <div

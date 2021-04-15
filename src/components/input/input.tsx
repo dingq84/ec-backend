@@ -24,7 +24,10 @@ const StyledInput = styled.input`
 `
 
 // TODO: label 得特效和 清除的按鈕會造成彼此出現錯誤，需要再修復，下下策是外部傳入 value 來控制
-const Input = forwardRef<HTMLInputElement, InputProps>(function Input(props: InputProps, ref) {
+const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
+  props: InputProps,
+  ref
+) => {
   const {
     id,
     label,
@@ -80,6 +83,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(props: Inp
       </Collapse>
     </div>
   )
-})
+}
 
-export default Input
+export default forwardRef(Input)

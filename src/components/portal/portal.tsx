@@ -25,7 +25,10 @@ function getContainer(container: PortalProps['container']) {
   return typeof container === 'function' ? container() : container
 }
 
-const Portal: React.ForwardRefRenderFunction<HTMLElement, PortalProps> = (props, ref) => {
+const Portal: React.ForwardRefRenderFunction<HTMLElement, PortalProps> = (
+  props: PortalProps,
+  ref
+) => {
   const { disablePortal = false, container, children } = props
   const [mountNode, setMountNode] = useState<HTMLElement>()
   const isValidChildren = isValidElement(children)

@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, forwardRef, Ref } from 'react'
+import { ButtonHTMLAttributes, forwardRef } from 'react'
 import tw from 'twin.macro'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -8,7 +8,10 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   click?: () => void
 }
 
-function Button(props: ButtonProps, ref: Ref<HTMLButtonElement>) {
+const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
+  props: ButtonProps,
+  ref
+) => {
   const { label, className = '', click, type = 'button', shape = 'rounded' } = props
 
   const handleClick = (): void => {

@@ -18,10 +18,10 @@ type BackdropType = {
   timeout?: number
 }
 
-const Backdrop = forwardRef<HTMLDivElement, BackdropType>(function BackDrop(
+const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropType> = (
   props: BackdropType,
   ref
-) {
+) => {
   const { inProps, children, invisible = false, timeout = 500 } = props
 
   return (
@@ -37,6 +37,6 @@ const Backdrop = forwardRef<HTMLDivElement, BackdropType>(function BackDrop(
       </div>
     </Fade>
   )
-})
+}
 
-export default Backdrop
+export default forwardRef(Backdrop)
