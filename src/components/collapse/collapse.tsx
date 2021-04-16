@@ -6,29 +6,23 @@
  * 如 Material 的垂直向是透過 Height 控制，但在實作伸縮的縮 Transition 沒有奏效，
  * 因此改良成 Max-height
  */
-import { forwardRef, useRef } from 'react'
+import { DOMAttributes, forwardRef, useRef } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'
 
 // types
-import { Status } from '@/types/transition'
+import { Status, TransitionProps } from '@/types/transition'
 
 // utils
 import useForkRef from '../../hooks/useForkRef'
 
-type CollapseProps = {
-  inProps: boolean
-  children: React.ReactNode
-  timeout?: number
-  orientation?: 'horizontal' | 'vertical'
-  collapsedSize?: string
-  onEnter?: Function
-  onEntering?: Function
-  onEntered?: Function
-  onExit?: Function
-  onExiting?: Function
-  onExited?: Function
-}
+type CollapseProps = DOMAttributes<HTMLDivElement> &
+  TransitionProps & {
+    inProps: boolean
+    children: React.ReactNode
+    orientation?: 'horizontal' | 'vertical'
+    collapsedSize?: string
+  }
 
 const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = (
   props: CollapseProps,
@@ -45,7 +39,8 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     onExit,
     onExiting,
     onExited,
-    children
+    children,
+    ...restProps
   } = props
   const nodeRef = useRef<HTMLDivElement>(null) // 控制 Transition component
   const handleRef = useForkRef<HTMLDivElement>(ref, nodeRef) // 這邊可將外部傳入的 ref 和這邊需要的 ref 合併成一個，可同時運作
@@ -150,6 +145,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
           ]}
           style={{ [isHorizontal ? 'minWidth' : 'minHeight']: collapsedSize }}
           {...childProps}
+          {...restProps}
         >
           <div tw="flex w-full" role="wrapper" ref={wrapperRef}>
             <div tw="w-full" role="inner">

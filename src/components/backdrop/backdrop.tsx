@@ -5,19 +5,21 @@
  * 主要建立一個 display: fixed 的黑幕
  */
 
-import { forwardRef } from 'react'
+import { DOMAttributes, forwardRef } from 'react'
 import tw from 'twin.macro'
 
 // components
 import Fade from '@/components/fade'
 
-type BackdropType = {
-  inProps: boolean
-  children?: React.ReactNode
-  invisible?: boolean
-  timeout?: number
-  [key: string]: unknown
-}
+// types
+import { TransitionProps } from '@/types/transition'
+
+type BackdropType = DOMAttributes<HTMLElement> &
+  TransitionProps & {
+    inProps: boolean
+    children?: React.ReactNode
+    invisible?: boolean
+  }
 
 const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropType> = (
   props: BackdropType,

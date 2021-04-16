@@ -9,14 +9,14 @@ import Portal from '@/components/portal'
 import useForkRef from '@/hooks/useForkRef'
 import useEventCallback from '@/hooks/useEventCallback'
 
-type ModalProps = {
+// types
+import { TransitionProps } from '@/types/transition'
+
+type ModalProps = TransitionProps & {
   open: boolean
   children: any
   onClose?: Function
   onBackdropClick?: Function
-  onEnter?: Function
-  onExited?: Function
-  [key: string]: unknown
 }
 
 const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (

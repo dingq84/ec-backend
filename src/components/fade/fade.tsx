@@ -5,7 +5,7 @@
  * 透過 react-transition-group 的生命週期處理動畫，而且僅調用 opacity
  */
 
-import { forwardRef, cloneElement, useRef } from 'react'
+import { forwardRef, cloneElement, useRef, DOMAttributes } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'
 
@@ -13,24 +13,17 @@ import tw from 'twin.macro'
 import useForkRef from '@/hooks/useForkRef'
 
 // types
-import { Status } from '@/types/transition'
+import { Status, TransitionProps } from '@/types/transition'
 
-type FadeProps = {
-  appear?: boolean
-  inProps: boolean
-  timeout?: number
-  onEntering?: Function
-  onEnter?: Function
-  onEntered?: Function
-  onExiting?: Function
-  onExit?: Function
-  onExited?: Function
-  // 這邊不使用 ReactNode，原因為 TS 會一直警告 children 無 ref 和 props，
-  // https://github.com/Microsoft/TypeScript/issues/6471
-  // 上述 issue 解決方式為 any
-  children: any
-  [key: string]: unknown
-}
+type FadeProps = DOMAttributes<HTMLDivElement> &
+  TransitionProps & {
+    appear?: boolean
+    inProps: boolean
+    // 這邊不使用 ReactNode，原因為 TS 會一直警告 children 無 ref 和 props，
+    // https://github.com/Microsoft/TypeScript/issues/6471
+    // 上述 issue 解決方式為 any
+    children: any
+  }
 
 const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: FadeProps, ref) => {
   const {
