@@ -1,9 +1,15 @@
+/**
+ * @author Dean Chen 2021-04-15
+ * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui-unstyled/src/ModalUnstyled/ModalManager.ts
+ * Modal 主要是為了詢問或提示用的彈窗，主要程式來自 Material-UI，並將其簡化至淡入淡出效果
+ */
+
 import { forwardRef, useState, useRef } from 'react'
 import tw from 'twin.macro'
 
 // components
-import Backdrop from '@/components/backdrop'
-import Portal from '@/components/portal'
+import Backdrop from '@/components/common/backdrop'
+import Portal from '@/components/common/portal'
 
 // hooks
 import useForkRef from '@/hooks/useForkRef'

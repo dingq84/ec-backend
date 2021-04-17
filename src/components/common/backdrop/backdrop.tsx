@@ -9,7 +9,7 @@ import { DOMAttributes, forwardRef } from 'react'
 import tw from 'twin.macro'
 
 // components
-import Fade from '@/components/fade'
+import Fade from '@/components/common/fade'
 
 // types
 import { TransitionProps } from '@/types/transition'

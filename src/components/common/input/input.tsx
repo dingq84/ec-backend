@@ -1,10 +1,16 @@
+/**
+ * @author Dean Chen 2021-04-13
+ * Input 僅提供最基本的問題，且尚未劃分 checkbox、radio 等不同於輸入匡的 input 類型
+ * TODO: label 的效果，可參考 Material-UI 近一步改善，並將此 Component 定義成 TextField
+ */
+
 import { forwardRef, InputHTMLAttributes } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw, { styled } from 'twin.macro'
 
 // components
-import Collapse from '@/components/collapse'
+import Collapse from '@/components/common/collapse'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string

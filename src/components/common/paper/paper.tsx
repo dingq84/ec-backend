@@ -1,3 +1,8 @@
+/**
+ * @author Dean Chen 2021-04-15
+ * Paper 提供一個基本框框的樣式，靈感來自 Material-UI Paper
+ */
+
 import { forwardRef } from 'react'
 import 'twin.macro'
 

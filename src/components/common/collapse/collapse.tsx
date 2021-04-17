@@ -10,6 +10,7 @@
  * [Dean Chen 2021-04-17]: 將原本預設的寬度或是最大高為 0 的設定改成根據 inProps 來決定是否放入
  * 目的是為了解決初始狀態為 true，畫面會是縮小的樣子
  */
+
 import { DOMAttributes, forwardRef, useRef } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'

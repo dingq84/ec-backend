@@ -1,3 +1,9 @@
+/**
+ * @author Dean Chen 2021-04-13
+ * Button 提供最基本的問題，擁有方形、圓角和圓形的樣式
+ * TODO: 新增文字按鈕的樣式
+ */
+
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 import tw from 'twin.macro'
 

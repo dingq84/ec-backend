@@ -4,7 +4,7 @@ import { faBars, faCogs } from '@fortawesome/free-solid-svg-icons'
 import tw, { styled } from 'twin.macro'
 
 // components
-import Collapse from '@/components/collapse'
+import Collapse from '@/components/common/collapse'
 
 // states
 import { useAppDispatch, useAppSelector } from '@/states/global/hooks'

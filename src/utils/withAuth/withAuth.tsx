@@ -1,10 +1,15 @@
+/**
+ * @author Dean Chen 2021-04-117
+ * withAuth 這支主要負責處理權限的判斷，透過 next-auth 的 utils，判斷 session，並回傳對應的 Component
+ */
+
 import { useSession, signIn } from 'next-auth/client'
 import 'twin.macro'
 
 // components
-import Modal from '@/components/modal'
-import Paper from '@/components/paper'
-import Button from '@/components/button'
+import Modal from '@/components/common/modal'
+import Paper from '@/components/common/paper'
+import Button from '@/components/common/button'
 
 const DefaultAccessDeniedComponent = () => (
   <Modal open>
