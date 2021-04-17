@@ -75,12 +75,12 @@ function SignIn({ providers }: SignInProps) {
             <Button
               label={<FontAwesomeIcon icon={faGooglePlusG} />}
               shape="circle"
-              click={() => login(providers.google.id)}
+              onClick={() => login(providers.google.id)}
             />
             <Button
               label={<FontAwesomeIcon icon={faGithubAlt} />}
               shape="circle"
-              click={() => login(providers.github.id)}
+              onClick={() => login(providers.github.id)}
             />
           </div>
           <span tw="block text-center text-gray-300">or use your email account</span>

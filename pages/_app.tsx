@@ -3,7 +3,7 @@ import { Provider } from 'next-auth/client'
 import { config } from '@fortawesome/fontawesome-svg-core'
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import '../src/styles/globals.css'
+import '@/styles/globals.css'
 
 config.autoAddCss = false // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
