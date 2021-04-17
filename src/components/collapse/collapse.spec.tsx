@@ -21,15 +21,6 @@ describe('test <Collapse />', () => {
     expect(queryByRole(root, 'wrapper')).toEqual(wrapper)
   })
 
-  it('should render a inner wrapper around children', () => {
-    const { container } = render(<Collapse {...defaultProps} />)
-    const root = container.firstElementChild as HTMLElement
-    const wrapper = root.firstElementChild as HTMLElement
-    const wrapperInner = wrapper.firstElementChild as HTMLElement
-    expect(queryByRole(wrapper, 'inner')).toEqual(wrapperInner)
-    expect(wrapperInner.firstElementChild?.textContent).toBe('children')
-  })
-
   describe('test Transition lifecycle', () => {
     let nodeEnterHeightStyle = 0
     let nodeEnteringHeightStyle = 0

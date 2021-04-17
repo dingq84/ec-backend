@@ -5,6 +5,10 @@
  * 大部分邏輯借鏡 Material-UI 的 Collapse，刪減部分功能，並修復一些問題，
  * 如 Material 的垂直向是透過 Height 控制，但在實作伸縮的縮 Transition 沒有奏效，
  * 因此改良成 Max-height
+ *
+ * @modified
+ * [Dean Chen 2021-04-17]: 將原本預設的寬度或是最大高為 0 的設定改成根據 inProps 來決定是否放入
+ * 目的是為了解決初始狀態為 true，畫面會是縮小的樣子
  */
 import { DOMAttributes, forwardRef, useRef } from 'react'
 import { Transition } from 'react-transition-group'
@@ -13,8 +17,9 @@ import tw from 'twin.macro'
 // types
 import { Status, TransitionProps } from '@/types/transition'
 
-// utils
-import useForkRef from '../../hooks/useForkRef'
+// hooks
+import useForkRef from '@/hooks/useForkRef'
+import useEnhanceEffect from '@/hooks/useEnhancedEffect'
 
 type CollapseProps = DOMAttributes<HTMLDivElement> &
   TransitionProps & {
@@ -50,6 +55,14 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
 
   const getWrapperSize = () =>
     wrapperRef.current![isHorizontal ? 'clientWidth' : 'clientHeight'] || 0
+
+  useEnhanceEffect(() => {
+    if (inProps) {
+      nodeRef.current!.style[size] = `${getWrapperSize()}px`
+    } else {
+      nodeRef.current!.style[size] = `0px`
+    }
+  }, [])
 
   const normalizedTransitionCallback = (callback?: Function) => (maybeIsAppearing?: any) => {
     if (callback) {
@@ -92,7 +105,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
 
   const handleEntered = normalizedTransitionCallback((node: HTMLElement, isAppearing: any) => {
     if (isHorizontal) {
-      node.style[size] = '100%' // 因為 width auto 的動畫效果不如預期，改良為 100%
+      node.style[size] = `${getWrapperSize()}px` // 因為 width auto 的動畫效果不如預期，改良為 wrapper 的 width
     } else {
       node.style[size] = 'auto'
     }
@@ -138,19 +151,17 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
           role="root"
           css={[
             tw`overflow-hidden transition-timing-function[cubic-bezier(0.4, 0, 0.2, 1)] transition-delay[0ms]`,
-            orientation === 'horizontal' && tw`w-0 transition-property[width]`,
+            orientation === 'horizontal' && tw`transition-property[width]`,
             orientation === 'vertical' && tw`max-h-0 transition-property[max-height]`,
-            status === Status.entered && tw`overflow-visible`,
-            status === Status.exited && tw`invisible`
+            status === Status.entered && tw`overflow-visible`
+            // status === Status.exited && tw`invisible`
           ]}
           style={{ [isHorizontal ? 'minWidth' : 'minHeight']: collapsedSize }}
           {...childProps}
           {...restProps}
         >
-          <div tw="flex w-full" role="wrapper" ref={wrapperRef}>
-            <div tw="w-full" role="inner">
-              {children}
-            </div>
+          <div role="wrapper" ref={wrapperRef}>
+            {children}
           </div>
         </div>
       )}
