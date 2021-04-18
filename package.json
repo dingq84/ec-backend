@@ -13,6 +13,7 @@
     "test": "jest",
     "test-modified": "jest -o",
     "test-all": "yarn lint && yarn type-check && yarn test",
+    "update-snapshot": "jest --updateSnapshot",
     "prepare": "husky install"
   },
   "engines": {

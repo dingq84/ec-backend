@@ -8,9 +8,9 @@ import * as yup from 'yup'
 import 'twin.macro'
 
 // components
-import Paper from '@/components/paper'
-import Input from '@/components/input'
-import Button from '@/components/button'
+import Paper from '@/components/common/paper'
+import Input from '@/components/common/input'
+import Button from '@/components/common/button'
 import { GetServerSidePropsContext } from 'next'
 import { useEffect } from 'react'
 
