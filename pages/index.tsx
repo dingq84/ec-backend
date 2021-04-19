@@ -3,7 +3,10 @@ import 'twin.macro'
 // layouts
 import DefaultLayout from '@/layout/default'
 
-const Home = () => {
+// types
+import { MyPage } from '@/types/next'
+
+const Home: MyPage = () => {
   return <div>hi</div>
 }
 

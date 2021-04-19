@@ -24,21 +24,20 @@ type MyAppProps = AppProps & {
 
 const DefaultLayout = (props: { children: React.ReactNode }) => <>{props.children}</>
 
+// TODO: 如果把 Layout 放進去 withAuth 裡面，會造成相同 layout 的 state 重置（相同 layout）
+// 如果把 Layout 放在 auth 之外，就會變成先看到 layout 才會出現是否認證的畫面，
+// 需要想個方法折衷
 function MyApp({ Component, pageProps }: MyAppProps) {
   const { layout: Layout = DefaultLayout, auth = false } = Component
 
-  const ComponentWithLayout: React.FC = () => (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  )
-
-  const ComponentWithAuth: React.FC = auth ? withAuth(ComponentWithLayout) : ComponentWithLayout
+  const ComponentWithAuth = auth ? withAuth(Component) : Component
 
   return (
     <ReduxProvider store={store}>
       <AuthProvider session={pageProps.session}>
-        <ComponentWithAuth />
+        <Layout>
+          <ComponentWithAuth {...pageProps} />
+        </Layout>
       </AuthProvider>
     </ReduxProvider>
   )

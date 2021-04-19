@@ -1,11 +1,11 @@
-export enum Status {
+enum Status {
   entering = 'entering',
   entered = 'entered',
   exiting = 'exiting',
   exited = 'exited'
 }
 
-export type TransitionProps = {
+type TransitionProps = {
   onEnter?: Function
   onEntering?: Function
   onEntered?: Function
@@ -14,3 +14,7 @@ export type TransitionProps = {
   onExited?: Function
   timeout?: number
 }
+
+export { Status }
+
+export type { TransitionProps }

@@ -108,7 +108,8 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     if (isHorizontal) {
       node.style[size] = `${getWrapperSize()}px` // 因為 width auto 的動畫效果不如預期，改良為 wrapper 的 width
     } else {
-      node.style[size] = 'auto'
+      // TODO: 設定成 none，會有 transition 消失的問題，因此設定一個大值
+      node.style[size] = `${getWrapperSize() * 5}px`
     }
 
     if (onEntered) {
