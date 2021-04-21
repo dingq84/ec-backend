@@ -100,8 +100,8 @@ const Sidebar: React.FC<{}> = () => {
   }
 
   return (
-    <Collapse inProps={sidebarIsExtend} orientation="horizontal" collapsedSize="50px">
-      <aside tw="flex-shrink-0 bg-dark-blue-1 w-12 md:(w-60 min-height[calc(100vh - 3rem)])">
+    <Collapse inProps={sidebarIsExtend} orientation="horizontal" tw="flex-shrink-0">
+      <aside tw="bg-dark-blue-1 w-60 md:(min-height[calc(100vh - 3rem)])">
         <ul>{generateSidebarList(menuList, toggleActiveMenuItem)}</ul>
       </aside>
     </Collapse>

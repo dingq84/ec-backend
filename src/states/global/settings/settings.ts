@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type initialStateProps = {
   sidebarIsExtend: boolean
@@ -12,12 +12,15 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
+    setSidebar: (state, action: PayloadAction<boolean>) => {
+      state.sidebarIsExtend = action.payload
+    },
     toggleSidebar: state => {
       state.sidebarIsExtend = !state.sidebarIsExtend
     }
   }
 })
 
-export const { toggleSidebar } = settingsSlice.actions
+export const { toggleSidebar, setSidebar } = settingsSlice.actions
 
 export default settingsSlice.reducer

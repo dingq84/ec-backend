@@ -1,1 +1,1 @@
-export { default, toggleSidebar } from './settings'
+export { default, toggleSidebar, setSidebar } from './settings'

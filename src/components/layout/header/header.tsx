@@ -5,14 +5,17 @@
  */
 
 import Link from 'next/link'
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCogs } from '@fortawesome/free-solid-svg-icons'
 import tw, { styled } from 'twin.macro'
 
+// hooks
+import useResize from '@/hooks/useResize'
+
 // states
 import { useAppDispatch } from '@/states/global/hooks'
-import { toggleSidebar } from '@/states/global/settings'
+import { toggleSidebar, setSidebar } from '@/states/global/settings'
 
 type HeaderProps = {
   className?: string
@@ -25,6 +28,15 @@ const StyledSpan = styled.span`
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   const { className = '' } = props
   const dispatch = useAppDispatch()
+  const isMobile = useResize()
+
+  useEffect(() => {
+    if (isMobile) {
+      dispatch(setSidebar(false))
+    } else {
+      dispatch(setSidebar(true))
+    }
+  }, [isMobile])
 
   return (
     <header tw="relative z-20" className={className}>

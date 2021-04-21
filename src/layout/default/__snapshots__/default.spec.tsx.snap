@@ -83,18 +83,18 @@ Object {
           </nav>
         </header>
         <div
-          class="default___StyledDiv2-e9wyj8-1 ipfEKV"
+          class="default___StyledDiv2-e9wyj8-1 jPDAoM"
         >
           <div
-            class="collapse___StyledDiv-deqgwy-0 bJjHov"
+            class="collapse___StyledDiv-deqgwy-0 bJjHov sidebar___StyledCollapse-sc-15m1zdu-7 jvnawH"
             role="root"
-            style="min-width: 50px; width: 0px;"
+            style="min-width: 0px; width: 0px;"
           >
             <div
               role="wrapper"
             >
               <aside
-                class="sidebar___StyledAside-sc-15m1zdu-7 bqEMFF"
+                class="sidebar___StyledAside-sc-15m1zdu-8 bhWSMT"
               >
                 <ul>
                   <li>
@@ -368,7 +368,7 @@ Object {
             </div>
           </div>
           <main
-            class="default___StyledMain-e9wyj8-2 jcueam"
+            class="default___StyledMain-e9wyj8-2 jEquir"
           >
             <h1>
               default testing
@@ -458,18 +458,18 @@ Object {
         </nav>
       </header>
       <div
-        class="default___StyledDiv2-e9wyj8-1 ipfEKV"
+        class="default___StyledDiv2-e9wyj8-1 jPDAoM"
       >
         <div
-          class="collapse___StyledDiv-deqgwy-0 bJjHov"
+          class="collapse___StyledDiv-deqgwy-0 bJjHov sidebar___StyledCollapse-sc-15m1zdu-7 jvnawH"
           role="root"
-          style="min-width: 50px; width: 0px;"
+          style="min-width: 0px; width: 0px;"
         >
           <div
             role="wrapper"
           >
             <aside
-              class="sidebar___StyledAside-sc-15m1zdu-7 bqEMFF"
+              class="sidebar___StyledAside-sc-15m1zdu-8 bhWSMT"
             >
               <ul>
                 <li>
@@ -743,7 +743,7 @@ Object {
           </div>
         </div>
         <main
-          class="default___StyledMain-e9wyj8-2 jcueam"
+          class="default___StyledMain-e9wyj8-2 jEquir"
         >
           <h1>
             default testing
