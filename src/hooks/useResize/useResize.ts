@@ -1,26 +1,29 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
-function useResize() {
-  const [isMobile, setIsMobile] = useState(false)
+// utils
+import debounce from '@/utils/debounce'
 
-  const handleResize = () => {
-    if (window.innerWidth >= 768) {
-      setIsMobile(false)
-    } else {
-      setIsMobile(true)
-    }
-  }
+type useResizeProps = {
+  handler: Function
+} & ({ wait: number; isDebounced: true } | { wait?: undefined; isDebounced?: boolean })
 
-  useEffect(() => {
-    handleResize()
-  }, [])
+function useResize(props: useResizeProps) {
+  const { handler, isDebounced = true, wait = 166 } = props
 
   useEffect(() => {
+    const handleResize = isDebounced ? debounce(() => handler(), wait) : () => handler()
+
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  })
 
-  return isMobile
+    return () => {
+      // TODO: handleResize 的 型別定義應該可以迴避掉 as 的用法
+      if (isDebounced) {
+        ;(handleResize as ReturnType<typeof debounce>).clear()
+      }
+
+      window.removeEventListener('resize', handleResize)
+    }
+  })
 }
 
 export default useResize

@@ -5,28 +5,50 @@ import '@testing-library/jest-dom'
 import useResize from '.'
 
 describe('testing useResize', () => {
-  const WrapperComponent = () => {
-    const isMobile = useResize()
-    return <h1>{String(isMobile)}</h1>
-  }
+  let handler: jest.Mock
 
-  it('should get true when window.innerWidth is less than 768', () => {
-    const { container } = render(<WrapperComponent />)
-    global.innerWidth = 767
-    act(() => {
-      global.dispatchEvent(new Event('resize'))
-    })
-
-    expect(container).toHaveTextContent('true')
+  beforeEach(() => {
+    handler = jest.fn()
   })
 
-  it('should get false when window.innerWidth is great than 768', () => {
-    const { container } = render(<WrapperComponent />)
-    global.innerWidth = 768
+  afterEach(() => {
+    handler.mockReset()
+  })
+
+  it('should execute handler after resizing', () => {
+    const WrapperComponent = () => {
+      useResize({ handler, isDebounced: false })
+      return null
+    }
+
+    render(<WrapperComponent />)
+
+    expect(handler).toHaveBeenCalledTimes(0)
     act(() => {
       global.dispatchEvent(new Event('resize'))
     })
 
-    expect(container).toHaveTextContent('false')
+    expect(handler).toHaveBeenCalledTimes(1)
+  })
+
+  it('should execute handler with debounce after resizing', () => {
+    jest.useFakeTimers()
+
+    const WrapperComponent = () => {
+      useResize({ handler })
+      return null
+    }
+
+    render(<WrapperComponent />)
+
+    expect(handler).toHaveBeenCalledTimes(0)
+    act(() => {
+      global.dispatchEvent(new Event('resize'))
+    })
+
+    expect(handler).toHaveBeenCalledTimes(0)
+
+    jest.runAllTimers()
+    expect(handler).toHaveBeenCalledTimes(1)
   })
 })
