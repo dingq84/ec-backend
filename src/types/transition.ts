@@ -6,6 +6,7 @@ enum Status {
 }
 
 type TransitionProps = {
+  appear?: boolean
   onEnter?: Function
   onEntering?: Function
   onEntered?: Function

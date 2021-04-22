@@ -17,19 +17,30 @@ import useEventCallback from '@/hooks/useEventCallback'
 
 // types
 import { TransitionProps } from '@/types/transition'
+import type { BackdropType } from '@/components/common/backdrop'
 
 type ModalProps = TransitionProps & {
   open: boolean
   children: any
   onClose?: Function
   onBackdropClick?: Function
+  backdropProps: Partial<BackdropType>
 }
 
 const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
   props: ModalProps,
   ref
 ) => {
-  const { open, children, onClose, onBackdropClick, onEnter, onExited } = props
+  const {
+    open,
+    children,
+    onClose,
+    onBackdropClick,
+    onEnter,
+    onExited,
+    backdropProps,
+    ...restProps
+  } = props
   const [exited, setExited] = useState(true)
   const modalRef = useRef<HTMLDivElement>(null)
   const handleRef = useForkRef(modalRef, ref)
@@ -86,13 +97,14 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
   }
 
   return (
-    <Portal ref={handlePortalRef}>
+    <Portal ref={handlePortalRef} {...restProps}>
       <div
         role="presentation"
-        css={[tw`fixed top-0 left-0 z-10`, open === false && exited && tw`invisible`]}
+        css={[tw`fixed top-0 left-0 z-10 flex`, open === false && exited && tw`invisible`]}
         ref={handleRef}
       >
         <Backdrop
+          {...backdropProps}
           inProps={open}
           onClick={handleBackdropClick}
           onEnter={handleEnter}

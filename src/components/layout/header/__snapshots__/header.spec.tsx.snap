@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <header
-        class="header___StyledHeader-sc-1s030ou-2 kCjrRq"
+        class="header___StyledHeader-sc-1s030ou-2 fIGBsp"
       >
         <a
           class="header___StyledA-sc-1s030ou-3 esQnBU"
@@ -83,7 +83,7 @@ Object {
   </body>,
   "container": <div>
     <header
-      class="header___StyledHeader-sc-1s030ou-2 kCjrRq"
+      class="header___StyledHeader-sc-1s030ou-2 fIGBsp"
     >
       <a
         class="header___StyledA-sc-1s030ou-3 esQnBU"

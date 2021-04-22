@@ -11,8 +11,7 @@ jest.mock('@/states/global/hooks')
 
 describe('testing <DefaultLayout />', () => {
   beforeAll(() => {
-    // @ts-ignore
-    useAppDispatch.mockImplementation(() => () => {})
+    ;(useAppDispatch as jest.Mock).mockImplementation(() => () => {})
   })
   it('should render correctly', () => {
     const tree = render(

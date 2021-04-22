@@ -14,7 +14,7 @@ import Fade from '@/components/common/fade'
 // types
 import { TransitionProps } from '@/types/transition'
 
-type BackdropType = DOMAttributes<HTMLElement> &
+export type BackdropType = DOMAttributes<HTMLElement> &
   TransitionProps & {
     inProps: boolean
     children?: React.ReactNode

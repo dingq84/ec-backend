@@ -5,7 +5,7 @@
  */
 
 import Link from 'next/link'
-import { memo, useEffect } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCogs } from '@fortawesome/free-solid-svg-icons'
 import tw, { styled } from 'twin.macro'
@@ -28,18 +28,24 @@ const StyledSpan = styled.span`
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   const { className = '' } = props
   const dispatch = useAppDispatch()
-  const isMobile = useResize()
+  const [isMobile, setIsMobile] = useState(global.innerWidth < 768)
+
+  const handler = useCallback(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
+
+  useResize({ handler })
 
   useEffect(() => {
-    if (isMobile) {
-      dispatch(setSidebar(false))
-    } else {
-      dispatch(setSidebar(true))
-    }
+    handler()
+  }, [])
+
+  useEffect(() => {
+    dispatch(setSidebar(!isMobile))
   }, [isMobile])
 
   return (
-    <header tw="relative z-20" className={className}>
+    <header tw="relative" className={className}>
       <Link href="/">
         <a tw="transition-width duration-300 block w-full h-12 leading-12 text-center font-size[1.25rem] bg-light-blue-3 text-white md:(float-left w-60)">
           <span tw="font-light">
