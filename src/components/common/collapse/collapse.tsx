@@ -15,17 +15,18 @@ import { DOMAttributes, forwardRef, useRef } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'
 
-// types
-import { Status, TransitionProps } from '@/types/transition'
-
 // hooks
 import useForkRef from '@/hooks/useForkRef'
 import useEnhanceEffect from '@/hooks/useEnhancedEffect'
 
+// types
+import { Status, TransitionProps } from '@/types/transition'
+import type { BasicComponentProps } from '@/types/next'
+
 type CollapseProps = DOMAttributes<HTMLDivElement> &
-  TransitionProps & {
+  TransitionProps &
+  BasicComponentProps & {
     inProps: boolean
-    children: React.ReactNode
     orientation?: 'horizontal' | 'vertical'
     collapsedSize?: string
   }

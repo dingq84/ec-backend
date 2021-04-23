@@ -7,11 +7,14 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 import tw from 'twin.macro'
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  label: string | React.ReactNode
-  className?: string
-  shape?: 'rounded' | 'square' | 'circle'
-}
+// types
+import type { BasicComponentProps } from '@/types/next'
+
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  BasicComponentProps & {
+    label: string | React.ReactNode
+    shape?: 'rounded' | 'square' | 'circle'
+  }
 
 const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
   props: ButtonProps,

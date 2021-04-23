@@ -14,9 +14,11 @@ import useForkRef from '@/hooks/useForkRef'
 
 // types
 import { Status, TransitionProps } from '@/types/transition'
+import type { BasicComponentProps } from '@/types/next'
 
 type FadeProps = DOMAttributes<HTMLDivElement> &
-  TransitionProps & {
+  TransitionProps &
+  BasicComponentProps & {
     appear?: boolean
     inProps: boolean
     // 這邊不使用 ReactNode，原因為 TS 會一直警告 children 無 ref 和 props，

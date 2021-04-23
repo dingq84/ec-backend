@@ -72,7 +72,7 @@ const generateSidebarList = (
   })
 }
 
-const Sidebar: React.FC<{}> = () => {
+const Sidebar: React.FC = () => {
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
   const [activeMenuKey, setActiveMenuKey] = useState('')
   const menuList = addSidebarProperties(BASIC_SIDEBAR_MENU, activeMenuKey)

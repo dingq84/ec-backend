@@ -12,13 +12,16 @@ import tw, { styled } from 'twin.macro'
 // components
 import Collapse from '@/components/common/collapse'
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  className?: string
-  isFull?: boolean
-  placeholder?: string
-  error?: string
-  clear?: Function
-} & ({ label?: undefined; id?: string } | { label: string; id: string })
+// types
+import type { BasicComponentProps } from '@/types/next'
+
+type InputProps = InputHTMLAttributes<HTMLInputElement> &
+  BasicComponentProps & {
+    isFull?: boolean
+    placeholder?: string
+    error?: string
+    clear?: Function
+  } & ({ label?: undefined; id?: string } | { label: string; id: string })
 
 const StyledInput = styled.input`
   ${tw`text-gray-200 bg-light-gray-2 w-full border-2 border-solid border-transparent rounded-md h-9 px-3 py-1.5 focus:(outline-none bg-white border-dark-gray-1 text-light-gray-2)`}

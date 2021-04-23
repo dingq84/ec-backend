@@ -6,11 +6,9 @@ import Modal from '@/components/common/modal'
 import Paper from '@/components/common/paper'
 
 // types
-import { TransitionProps } from '@/types/transition'
-
-function getAnchorEl(anchorEl?: () => HTMLElement | HTMLElement) {
-  return typeof anchorEl === 'function' ? anchorEl() : anchorEl
-}
+import type { TransitionProps } from '@/types/transition'
+import type { TwStyle } from 'twin.macro'
+import type { BasicComponentProps } from '@/types/next'
 
 function getOffsetTop(rect: DOMRect, vertical: verticalType) {
   switch (vertical) {
@@ -49,24 +47,27 @@ function getTransformOriginValue(transformOrigin: {
 
 type horizontalType = 'center' | 'left' | 'right' | number
 type verticalType = 'center' | 'top' | 'bottom' | number
-type PopoverProps = TransitionProps & {
-  isOpen: boolean // 控制 popover 開關
-  anchorEl?: HTMLDivElement // 錨點 決定 popover 要定位在哪裡
-  children: React.ReactNode
-  anchorOrigin?: {
-    // 錨點的 origin
-    horizontal: horizontalType
-    vertical: verticalType
+type PopoverProps = TransitionProps &
+  BasicComponentProps & {
+    isOpen: boolean // 控制 popover 開關
+    anchorEl?: HTMLDivElement // 錨點 決定 popover 要定位在哪裡
+    anchorOrigin?: {
+      // 錨點的 origin
+      horizontal: horizontalType
+      vertical: verticalType
+    }
+    transformOrigin?: {
+      // 決定 popover 的 origin
+      horizontal: horizontalType
+      vertical: verticalType
+    }
+    onClose?: Function // 開關 popover
+    horizontalSpace?: number // 錨點和 popover 的水平間距
+    verticalSpace?: number // 錨點和 popover 的垂直間距
+    paperProps?: {
+      css: TwStyle
+    }
   }
-  transformOrigin?: {
-    // 決定 popover 的 origin
-    horizontal: horizontalType
-    vertical: verticalType
-  }
-  onClose?: Function // 開關 popover
-  horizontalSpace?: number // 錨點和 popover 的水平間距
-  verticalSpace?: number // 錨點和 popover 的垂直間距
-}
 
 const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
   props: PopoverProps,
@@ -88,17 +89,15 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
     onClose,
     horizontalSpace = 0,
     verticalSpace = 0,
+    paperProps,
     ...restProps
   } = props
   const paperRef = useRef<HTMLDivElement>(null)
 
   const getAnchorOffset = useCallback(() => {
-    const resolvedAnchorEl = getAnchorEl(anchorEl)
     // nodeType 1 為 Element，如果沒傳入 anchor element，則使用 body
     const anchorElement =
-      resolvedAnchorEl && resolvedAnchorEl.nodeType === 1
-        ? resolvedAnchorEl
-        : paperRef.current?.ownerDocument.body
+      anchorEl && anchorEl.nodeType === 1 ? anchorEl : paperRef.current?.ownerDocument.body
 
     const anchorRect = anchorElement!.getBoundingClientRect()
 
@@ -106,7 +105,7 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       top: anchorRect.top + getOffsetTop(anchorRect, anchorOrigin.vertical),
       left: anchorRect.left + getOffsetLeft(anchorRect, anchorOrigin.horizontal)
     }
-  }, [anchorEl, getAnchorEl])
+  }, [anchorEl])
 
   // Returns the base transform origin using the element
   const getTransformOrigin = useCallback(
@@ -178,6 +177,7 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       <Paper
         ref={paperRef}
         tw="absolute overflow-y-auto overflow-x-hidden outline-none min-width[16px] min-height[16px]"
+        css={[{ ...paperProps?.css }]}
       >
         {children}
       </Paper>

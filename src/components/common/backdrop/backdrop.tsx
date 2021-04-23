@@ -12,12 +12,13 @@ import tw from 'twin.macro'
 import Fade from '@/components/common/fade'
 
 // types
-import { TransitionProps } from '@/types/transition'
+import type { TransitionProps } from '@/types/transition'
+import type { BasicComponentProps } from '@/types/next'
 
 export type BackdropType = DOMAttributes<HTMLElement> &
-  TransitionProps & {
+  TransitionProps &
+  BasicComponentProps & {
     inProps: boolean
-    children?: React.ReactNode
     invisible?: boolean
   }
 

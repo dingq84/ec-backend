@@ -48,11 +48,13 @@ Object {
               class="header___StyledUl-sc-1s030ou-6 hHkawK"
             >
               <li>
-                <span
-                  class="header__StyledSpan-sc-1s030ou-0 hpIcQv"
-                >
-                  Alexander Pierce
-                </span>
+                <div>
+                  <span
+                    class="header__StyledSpan-sc-1s030ou-0 hpIcQv"
+                  >
+                    Alexander Pierce
+                  </span>
+                </div>
               </li>
               <li>
                 <span
@@ -125,11 +127,13 @@ Object {
             class="header___StyledUl-sc-1s030ou-6 hHkawK"
           >
             <li>
-              <span
-                class="header__StyledSpan-sc-1s030ou-0 hpIcQv"
-              >
-                Alexander Pierce
-              </span>
+              <div>
+                <span
+                  class="header__StyledSpan-sc-1s030ou-0 hpIcQv"
+                >
+                  Alexander Pierce
+                </span>
+              </div>
             </li>
             <li>
               <span
