@@ -15,7 +15,7 @@ import tw, { styled } from 'twin.macro'
 import Popover from '@/components/common/popover'
 
 // hooks
-import useResize from '@/hooks/useResize'
+import useIsMobile from '@/hooks/useIsMobile'
 
 // states
 import { useAppDispatch } from '@/states/global/hooks'
@@ -27,18 +27,9 @@ const StyledSpan = styled.span`
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch()
-  const [isMobile, setIsMobile] = useState(global.innerWidth < 768)
   const [popoverIsOpen, setPopoverIsOpen] = useState(false)
   const anchorEl = useRef<HTMLDivElement>(null)
-  const handler = useCallback(() => {
-    setIsMobile(window.innerWidth < 768)
-  }, [])
-
-  useResize({ handler })
-
-  useEffect(() => {
-    handler()
-  }, [])
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     dispatch(setSidebar(!isMobile))
