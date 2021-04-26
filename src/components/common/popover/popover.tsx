@@ -49,7 +49,7 @@ type horizontalType = 'center' | 'left' | 'right' | number
 type verticalType = 'center' | 'top' | 'bottom' | number
 type PopoverProps = TransitionProps &
   BasicComponentProps & {
-    isOpen: boolean // 控制 popover 開關
+    inProps: boolean // 控制 popover 開關
     anchorEl?: HTMLDivElement // 錨點 決定 popover 要定位在哪裡
     anchorOrigin?: {
       // 錨點的 origin
@@ -65,7 +65,7 @@ type PopoverProps = TransitionProps &
     horizontalSpace?: number // 錨點和 popover 的水平間距
     verticalSpace?: number // 錨點和 popover 的垂直間距
     paperProps?: {
-      css: TwStyle
+      css: TwStyle[]
     }
   }
 
@@ -74,7 +74,7 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
   ref
 ) => {
   const {
-    isOpen,
+    inProps,
     children,
     anchorEl,
     anchorOrigin = {
@@ -164,7 +164,7 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
 
   return (
     <Modal
-      open={isOpen}
+      open={inProps}
       ref={ref}
       onBackdropClick={onClose}
       backdropProps={{
@@ -177,7 +177,8 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       <Paper
         ref={paperRef}
         tw="absolute overflow-y-auto overflow-x-hidden outline-none min-width[16px] min-height[16px]"
-        css={[{ ...paperProps?.css }]}
+        css={paperProps?.css}
+        {...paperProps}
       >
         {children}
       </Paper>

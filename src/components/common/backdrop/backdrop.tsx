@@ -3,6 +3,9 @@
  * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/Backdrop/Backdrop.js
  * Backdrop 主要是為了製作 Modal，參考 Material-UI 的 Modal 程式碼而順手建立，
  * 主要建立一個 display: fixed 的黑幕
+ *
+ * @modified
+ * Dean Chen 2021-04-26]: 調整 invisible 的時候，寬高調整成 0
  */
 
 import { DOMAttributes, forwardRef } from 'react'
@@ -32,8 +35,8 @@ const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropType> = (
       <div
         ref={ref}
         css={[
-          tw`fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 -webkit-tap-highlight-color[transparent]`,
-          invisible && tw`bg-transparent`
+          tw`fixed flex items-center justify-center bg-transparent bg-opacity-50 -webkit-tap-highlight-color[transparent]`,
+          invisible === false && tw`top-0 left-0 right-0 bottom-0 bg-black`
         ]}
       >
         {children}
