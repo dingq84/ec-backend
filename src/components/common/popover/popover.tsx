@@ -178,7 +178,6 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
         ref={paperRef}
         tw="absolute overflow-y-auto overflow-x-hidden outline-none min-width[16px] min-height[16px]"
         css={paperProps?.css}
-        {...paperProps}
       >
         {children}
       </Paper>

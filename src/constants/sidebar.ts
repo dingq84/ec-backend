@@ -15,12 +15,11 @@ const BASIC_SIDEBAR_MENU: Array<BASIC_SIDEBAR_MENU_TYPE> = [
           {
             icon: faTachometerAlt,
             name: 'Dashboard v1 v1',
-            // href: '/',
             children: [
               {
                 icon: faTachometerAlt,
                 name: 'Dashboard v1 v1 v1',
-                href: '/'
+                href: '/test'
               },
               {
                 icon: faTachometerAlt,
@@ -42,6 +41,10 @@ const BASIC_SIDEBAR_MENU: Array<BASIC_SIDEBAR_MENU_TYPE> = [
         href: '/'
       }
     ]
+  },
+  {
+    icon: faTachometerAlt,
+    name: 'About'
   }
 ]
 

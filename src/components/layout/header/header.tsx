@@ -69,11 +69,11 @@ const Header: React.FC = () => {
       </nav>
       <Popover
         anchorEl={anchorEl.current!}
-        isOpen={popoverIsOpen}
+        inProps={popoverIsOpen}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         horizontalSpace={10}
         onClose={() => togglePopover(false)}
-        paperProps={{ css: tw`w-auto px-0 py-0` }}
+        paperProps={{ css: [tw`w-auto px-0 py-0`] }}
       >
         <ul>
           <li
