@@ -1,3 +1,9 @@
+/**
+ * @author Dean Chen 2021-04-20
+ * 1. MyPage 替原本 next page 新增 auth & layout 的 props，為了各個頁面是否需要 layout 和驗證的設定
+ * 2. BasicComponentProps 為替所有 React Component 新增 css 和 children 的 props，
+ * 前者為了可以讓 twin.macro 客製化其他 component，後者為減少重複設定
+ */
 import { NextPage } from 'next'
 
 // types

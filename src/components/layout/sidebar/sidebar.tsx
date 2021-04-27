@@ -1,3 +1,9 @@
+/**
+ * @author Dean Chen 2021-04-27
+ * Sidebar 完成基本的 menu tree 顯示，並加上桌機版時，可縮小 sidebar 變成 hover 效果
+ * TODO: 需新增判斷 route path，找出目前的路徑
+ */
+
 import { useRouter } from 'next/router'
 import { SyntheticEvent, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -53,7 +59,7 @@ const SidebarItem = (props: SidebarItemProps) => {
         horizontal: 'right',
         vertical: 'top'
       },
-
+      hiddenBackdrop: true,
       horizontalSpace: 10,
       paperProps: {
         css: [tw`p-0 bg-dark-blue-1 rounded-l-none flex-col w-60`]
@@ -101,10 +107,12 @@ const SidebarItem = (props: SidebarItemProps) => {
             tw`bg-dark-blue-4 border-l-4 border-light-blue-2 border-solid text-white`
         ]}
       >
-        <FontAwesomeIcon
-          icon={icon}
-          className={`${isFirstLevelAndFloat ? 'text-md' : 'text-sm mr-2'}`}
-        />
+        {icon ? (
+          <FontAwesomeIcon
+            icon={icon}
+            className={`${isFirstLevelAndFloat ? 'text-md' : 'text-sm mr-2'}`}
+          />
+        ) : null}
         {isFirstLevelAndFloat ? null : (
           <>
             <span tw="select-none text-sm flex-grow">{name}</span>
@@ -146,11 +154,16 @@ const SidebarItem = (props: SidebarItemProps) => {
 }
 
 const Sidebar: React.FC = () => {
-  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
-  const [activeMenuKey, setActiveMenuKey] = useState('')
   const isMobile = useIsMobile()
+  const [activeMenuKey, setActiveMenuKey] = useState('')
+  const [menuList, setMenuList] = useState<SIDEBAR_MENU_TYPE[]>([])
+  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
   const isDesktopAndCollapsed = isMobile === false && sidebarIsExtend === false
-  const menuList = addProperties(BASIC_SIDEBAR_MENU, activeMenuKey)
+  const collapsedSize = isMobile ? '0px' : '48px'
+
+  useEnhancedEffect(() => {
+    setMenuList(addProperties(BASIC_SIDEBAR_MENU, activeMenuKey))
+  }, [activeMenuKey])
 
   useEnhancedEffect(() => {
     // reset active key
@@ -173,7 +186,7 @@ const Sidebar: React.FC = () => {
       inProps={sidebarIsExtend}
       orientation="horizontal"
       tw="flex-shrink-0"
-      collapsedSize={isMobile ? '0px' : '48px'}
+      collapsedSize={collapsedSize}
     >
       <aside tw="bg-dark-blue-1 w-60 min-height[calc(100vh - 6rem)] md:(min-height[calc(100vh - 3rem)])">
         <ul>

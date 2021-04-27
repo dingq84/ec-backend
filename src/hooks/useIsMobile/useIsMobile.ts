@@ -1,3 +1,8 @@
+/**
+ * @author Dean Chen 2021-04-20
+ * useIsMobile 根據螢幕寬度判斷是否是手機裝置，會隨著 resize 時做更新
+ */
+
 import { useCallback, useState } from 'react'
 
 // hooks

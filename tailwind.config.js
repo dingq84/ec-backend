@@ -26,7 +26,9 @@ module.exports = {
         'light-blue-3': '#367fa9', // rgb(54, 127, 169)
         'light-blue-4': '#b8c7ce', // rgb(184, 199, 206)
         'light-gray-1': '#ecf0f5', // rgb(236, 240, 245)
-        'light-gray-2': '#666666' // rgb(102, 102, 102)
+        'light-gray-2': '#666666', // rgb(102, 102, 102)
+        'light-gray-3': '#f9f9f9', // rgb(249, 249, 249)
+        'light-gray-4': '#e7e7e7' // rgb(231, 231, 231)
       }
     }
   },

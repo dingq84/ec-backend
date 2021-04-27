@@ -1,3 +1,8 @@
+/**
+ * @author Dean Chen 2021-04-20
+ * 製作一個偵測 resize 的 hook，並提供 debounce 的選擇，讓使用它的地方可以傳入各自的 handler
+ */
+
 import { useEffect } from 'react'
 
 // utils

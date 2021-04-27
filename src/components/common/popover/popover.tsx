@@ -1,3 +1,10 @@
+/**
+ * @author Dean Chen 2021-04-16
+ * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/Popover/Popover.js
+ * 程式碼參考 Material-UI，完成最基本的 popover 功能，
+ * 原本的 grow transition 改成使用 backdrop 自帶的 fade transition
+ */
+
 import { forwardRef, useCallback, useRef } from 'react'
 import 'twin.macro'
 
@@ -5,65 +12,38 @@ import 'twin.macro'
 import Modal from '@/components/common/modal'
 import Paper from '@/components/common/paper'
 
+// hooks
+import useResize from '@/hooks/useResize'
+
 // types
-import type { TransitionProps } from '@/types/transition'
 import type { TwStyle } from 'twin.macro'
+import type { TransitionProps } from '@/types/transition'
 import type { BasicComponentProps } from '@/types/next'
+import type { HorizontalType, VerticalType } from '@/types/popover'
 
-function getOffsetTop(rect: DOMRect, vertical: verticalType) {
-  switch (vertical) {
-    case 'center':
-      return rect.height / 2
-    case 'bottom':
-      return rect.height
-    case 'top':
-      return 0
-    default:
-      return vertical
-  }
-}
+// utils
+import getOffsetTop from '@/utils/popover/getOffsetTop'
+import getOffsetLeft from '@/utils/popover/getOffsetLeft'
+import getTransformOriginValue from '@/utils/popover/getTransformOriginValue'
 
-function getOffsetLeft(rect: DOMRect, horizontal: horizontalType) {
-  switch (horizontal) {
-    case 'center':
-      return rect.width / 2
-    case 'right':
-      return rect.height
-    case 'left':
-      return 0
-    default:
-      return horizontal
-  }
-}
-
-function getTransformOriginValue(transformOrigin: {
-  horizontal: horizontalType
-  vertical: verticalType
-}) {
-  return [transformOrigin.horizontal, transformOrigin.vertical]
-    .map(n => (typeof n === 'number' ? `${n}px` : n))
-    .join(' ')
-}
-
-type horizontalType = 'center' | 'left' | 'right' | number
-type verticalType = 'center' | 'top' | 'bottom' | number
 type PopoverProps = TransitionProps &
   BasicComponentProps & {
     inProps: boolean // 控制 popover 開關
     anchorEl?: HTMLDivElement // 錨點 決定 popover 要定位在哪裡
     anchorOrigin?: {
       // 錨點的 origin
-      horizontal: horizontalType
-      vertical: verticalType
+      horizontal: HorizontalType
+      vertical: VerticalType
     }
     transformOrigin?: {
       // 決定 popover 的 origin
-      horizontal: horizontalType
-      vertical: verticalType
+      horizontal: HorizontalType
+      vertical: VerticalType
     }
     onClose?: Function // 開關 popover
     horizontalSpace?: number // 錨點和 popover 的水平間距
     verticalSpace?: number // 錨點和 popover 的垂直間距
+    hiddenBackdrop?: boolean // 隱藏 backdrop
     paperProps?: {
       css: TwStyle[]
     }
@@ -89,11 +69,11 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
     onClose,
     horizontalSpace = 0,
     verticalSpace = 0,
+    hiddenBackdrop = false,
     paperProps,
     ...restProps
   } = props
   const paperRef = useRef<HTMLDivElement>(null)
-
   const getAnchorOffset = useCallback(() => {
     // nodeType 1 為 Element，如果沒傳入 anchor element，則使用 body
     const anchorElement =
@@ -162,6 +142,8 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
     setPositioningStyles()
   }
 
+  useResize({ handler: setPositioningStyles, isDebounced: false })
+
   return (
     <Modal
       open={inProps}
@@ -169,6 +151,7 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       onBackdropClick={onClose}
       backdropProps={{
         invisible: true,
+        hidden: hiddenBackdrop,
         appear: true,
         onEntering: handleEntering
       }}
@@ -176,8 +159,9 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
     >
       <Paper
         ref={paperRef}
-        tw="absolute overflow-y-auto overflow-x-hidden outline-none min-width[16px] min-height[16px]"
+        tw="absolute transition-all overflow-y-auto overflow-x-hidden outline-none min-width[16px] min-height[16px]"
         css={paperProps?.css}
+        data-testid="paper"
       >
         {children}
       </Paper>

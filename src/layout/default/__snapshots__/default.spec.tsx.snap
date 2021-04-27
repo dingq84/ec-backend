@@ -9,10 +9,11 @@ Object {
         class="default___StyledDiv-e9wyj8-0 eVVutM"
       >
         <header
-          class="header___StyledHeader-sc-1s030ou-2 fIGBsp"
+          class="header___StyledHeader-sc-1s030ou-2 bojRlJ"
         >
           <a
-            class="header___StyledA-sc-1s030ou-3 esQnBU"
+            class="header___StyledA-sc-1s030ou-3 eyqAGb"
+            data-testid="logo"
           >
             <span
               class="header___StyledSpan-sc-1s030ou-4 Bwhus"
@@ -24,7 +25,7 @@ Object {
             </span>
           </a>
           <nav
-            class="header___StyledNav-sc-1s030ou-5 lcgRvp"
+            class="header___StyledNav-sc-1s030ou-5 diCVYK"
           >
             <span
               class="header__StyledSpan-sc-1s030ou-0 header___StyledStyledSpan-sc-1s030ou-1 hpIcQv jNSywt"
@@ -51,7 +52,9 @@ Object {
                 class="header___StyledUl-sc-1s030ou-6 hHkawK"
               >
                 <li>
-                  <div>
+                  <div
+                    data-testid="functions"
+                  >
                     <span
                       class="header__StyledSpan-sc-1s030ou-0 hpIcQv"
                     >
@@ -476,10 +479,11 @@ Object {
       class="default___StyledDiv-e9wyj8-0 eVVutM"
     >
       <header
-        class="header___StyledHeader-sc-1s030ou-2 fIGBsp"
+        class="header___StyledHeader-sc-1s030ou-2 bojRlJ"
       >
         <a
-          class="header___StyledA-sc-1s030ou-3 esQnBU"
+          class="header___StyledA-sc-1s030ou-3 eyqAGb"
+          data-testid="logo"
         >
           <span
             class="header___StyledSpan-sc-1s030ou-4 Bwhus"
@@ -491,7 +495,7 @@ Object {
           </span>
         </a>
         <nav
-          class="header___StyledNav-sc-1s030ou-5 lcgRvp"
+          class="header___StyledNav-sc-1s030ou-5 diCVYK"
         >
           <span
             class="header__StyledSpan-sc-1s030ou-0 header___StyledStyledSpan-sc-1s030ou-1 hpIcQv jNSywt"
@@ -518,7 +522,9 @@ Object {
               class="header___StyledUl-sc-1s030ou-6 hHkawK"
             >
               <li>
-                <div>
+                <div
+                  data-testid="functions"
+                >
                   <span
                     class="header__StyledSpan-sc-1s030ou-0 hpIcQv"
                   >

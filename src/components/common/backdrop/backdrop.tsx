@@ -6,6 +6,7 @@
  *
  * @modified
  * Dean Chen 2021-04-26]: 調整 invisible 的時候，寬高調整成 0
+ * Dean Chen 2021-04-27]: 調整 invisible 的時候，背景為透明，並新增 hidden 控制寬高是否為 0
  */
 
 import { DOMAttributes, forwardRef } from 'react'
@@ -18,25 +19,33 @@ import Fade from '@/components/common/fade'
 import type { TransitionProps } from '@/types/transition'
 import type { BasicComponentProps } from '@/types/next'
 
-export type BackdropType = DOMAttributes<HTMLElement> &
-  TransitionProps &
+export type BackdropType = TransitionProps &
   BasicComponentProps & {
     inProps: boolean
     invisible?: boolean
+    hidden?: boolean
   }
 
 const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropType> = (
   props: BackdropType,
   ref
 ) => {
-  const { inProps, children, invisible = false, timeout = 500, ...restProps } = props
+  const {
+    inProps,
+    children,
+    invisible = false,
+    timeout = 500,
+    hidden = false,
+    ...restProps
+  } = props
   return (
     <Fade inProps={inProps} timeout={timeout} {...restProps}>
       <div
         ref={ref}
         css={[
-          tw`fixed flex items-center justify-center bg-transparent bg-opacity-50 -webkit-tap-highlight-color[transparent]`,
-          invisible === false && tw`top-0 left-0 right-0 bottom-0 bg-black`
+          tw`fixed flex items-center justify-center bg-transparent -webkit-tap-highlight-color[transparent]`,
+          invisible === false && tw`bg-black bg-opacity-50 `,
+          hidden === false && tw`top-0 left-0 right-0 bottom-0`
         ]}
       >
         {children}

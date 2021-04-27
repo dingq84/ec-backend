@@ -5,7 +5,7 @@
  */
 
 import Link from 'next/link'
-import { memo, useCallback, useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCogs } from '@fortawesome/free-solid-svg-icons'
 import { signOut } from 'next-auth/client'
@@ -18,18 +18,20 @@ import Popover from '@/components/common/popover'
 import useIsMobile from '@/hooks/useIsMobile'
 
 // states
-import { useAppDispatch } from '@/states/global/hooks'
 import { toggleSidebar, setSidebar } from '@/states/global/settings'
+import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
 
 const StyledSpan = styled.span`
   ${tw`px-4 text-sm text-center h-12 block leading-12 hover:(bg-light-blue-3 cursor-pointer)`}
 `
 
 const Header: React.FC = () => {
-  const dispatch = useAppDispatch()
-  const [popoverIsOpen, setPopoverIsOpen] = useState(false)
-  const anchorEl = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const anchorEl = useRef<HTMLDivElement>(null)
+  const [popoverIsOpen, setPopoverIsOpen] = useState(false)
+  const dispatch = useAppDispatch()
+  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
+  const isDesktopAndCollapsed = isMobile === false && sidebarIsExtend === false
 
   useEffect(() => {
     dispatch(setSidebar(!isMobile))
@@ -40,22 +42,32 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header tw="relative">
+    <header tw="relative flex flex-col md:flex-row">
       <Link href="/">
-        <a tw="transition-width duration-300 block w-full h-12 leading-12 text-center font-size[1.25rem] bg-light-blue-3 text-white md:(float-left w-60)">
+        <a
+          tw="transition-width duration-500 block w-full h-12 leading-12 text-center font-size[1.25rem] bg-light-blue-3 text-white"
+          css={[isDesktopAndCollapsed ? tw`md:w-12` : tw`md:w-60`]}
+          data-testid="logo"
+        >
           <span tw="font-light">
-            <b>Admin</b>LTE
+            {isDesktopAndCollapsed ? (
+              <b>ALT</b>
+            ) : (
+              <>
+                <b>Admin</b>LTE
+              </>
+            )}
           </span>
         </a>
       </Link>
-      <nav tw="flex justify-between duration-300 text-white bg-light-blue-2 md:(ml-60)">
+      <nav tw="flex justify-between text-white bg-light-blue-2 flex-grow">
         <StyledSpan tw="w-11" onClick={() => dispatch(toggleSidebar())} data-testid="menu">
           <FontAwesomeIcon icon={faBars} />
         </StyledSpan>
         <div>
           <ul tw="flex items-stretch">
             <li>
-              <div ref={anchorEl} onClick={() => togglePopover(true)}>
+              <div ref={anchorEl} onClick={() => togglePopover(true)} data-testid="functions">
                 <StyledSpan>Alexander Pierce</StyledSpan>
               </div>
             </li>
@@ -71,22 +83,16 @@ const Header: React.FC = () => {
         anchorEl={anchorEl.current!}
         inProps={popoverIsOpen}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        horizontalSpace={10}
+        horizontalSpace={5}
         onClose={() => togglePopover(false)}
         paperProps={{ css: [tw`w-auto px-0 py-0`] }}
       >
-        <ul>
-          <li
-            tw="text-dark-blue-2 px-8 py-2 text-sm select-none cursor-pointer hocus:(bg-dark-gray-1 text-gray-100)"
-            onClick={() => signOut()}
-          >
-            Sign out
-          </li>
+        <ul tw="all:(text-dark-blue-2 w-32 py-2 text-sm select-none text-center cursor-pointer hocus:(bg-dark-gray-1 text-gray-100))">
+          <li onClick={() => signOut()}>Sign out</li>
         </ul>
       </Popover>
     </header>
   )
 }
 
-// To avoid re-render after updating redux state
-export default memo(Header)
+export default Header

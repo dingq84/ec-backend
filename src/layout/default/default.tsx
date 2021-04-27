@@ -1,3 +1,8 @@
+/**
+ * @author Dean Chen 2021-04-10
+ * 替專案提供一個基本的 layout，擁有 header、 aside 和 footer，main 根據不同 route 顯示不同畫面
+ */
+
 import 'twin.macro'
 
 // components

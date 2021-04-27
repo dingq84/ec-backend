@@ -99,7 +99,7 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
   }
 
   return (
-    <Portal ref={handlePortalRef} {...restProps}>
+    <Portal ref={handlePortalRef}>
       <div
         role="presentation"
         css={[tw`fixed top-0 left-0 z-10 flex`, open === false && exited && tw`invisible`]}
@@ -111,6 +111,7 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
           onClick={handleBackdropClick}
           onEnter={handleEnter}
           onExited={handleExited}
+          {...restProps}
         >
           {children}
         </Backdrop>
