@@ -5,7 +5,7 @@
  */
 
 import { useRouter } from 'next/router'
-import { SyntheticEvent, useState, useRef } from 'react'
+import { SyntheticEvent, useState, useRef, useCallback } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -159,18 +159,20 @@ const Sidebar: React.FC = () => {
   const [menuList, setMenuList] = useState<SIDEBAR_MENU_TYPE[]>([])
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
   const isDesktopAndCollapsed = isMobile === false && sidebarIsExtend === false
+  // TODO: 這邊有個問題，當桌機縮成 48px，螢幕尺寸變成手機時，會出現手機的縮放仍是 48px
   const collapsedSize = isMobile ? '0px' : '48px'
 
+  // 當 activeMenuKey 更新，重新整理 menuList 的 isOpen、isActive 等 key
   useEnhancedEffect(() => {
     setMenuList(addProperties(BASIC_SIDEBAR_MENU, activeMenuKey))
   }, [activeMenuKey])
 
+  // reset active key
   useEnhancedEffect(() => {
-    // reset active key
     setActiveMenuKey('')
   }, [sidebarIsExtend])
 
-  const toggleActiveMenuItem = (event: SyntheticEvent, itemKey: string): void => {
+  const toggleActiveMenuItem = useCallback((event: SyntheticEvent, itemKey: string): void => {
     event.stopPropagation()
 
     let newActiveMenuKey: string = itemKey
@@ -179,7 +181,7 @@ const Sidebar: React.FC = () => {
     }
 
     setActiveMenuKey(newActiveMenuKey)
-  }
+  }, [])
 
   return (
     <Collapse
