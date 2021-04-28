@@ -10,6 +10,7 @@ import 'twin.macro'
 import Modal from '@/components/common/modal'
 import Paper from '@/components/common/paper'
 import Button from '@/components/common/button'
+import Loading from '@/components/common/loading'
 
 const DefaultAccessDeniedComponent = () => (
   <Modal open>
@@ -28,7 +29,7 @@ function withAuth<T extends {}>(
     const [session, loading] = useSession()
 
     if (loading) {
-      return <div>loading</div>
+      return <Loading isLoading />
     }
 
     if (!session) {
