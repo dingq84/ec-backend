@@ -17,7 +17,7 @@ import tw from 'twin.macro'
 
 // hooks
 import useForkRef from '@/hooks/useForkRef'
-import useEnhanceEffect from '@/hooks/useEnhancedEffect'
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // types
 import { Status, TransitionProps } from '@/types/transition'
@@ -58,7 +58,13 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
   const getWrapperSize = () =>
     wrapperRef.current![isHorizontal ? 'clientWidth' : 'clientHeight'] || 0
 
-  useEnhanceEffect(() => {
+  useEnhancedEffect(() => {
+    if (inProps === false) {
+      nodeRef.current!.style[size] = collapsedSize
+    }
+  }, [collapsedSize])
+
+  useEnhancedEffect(() => {
     if (inProps) {
       nodeRef.current!.style[size] = `${getWrapperSize()}px`
     } else {
