@@ -149,4 +149,6 @@ describe('test <Collapse />', () => {
       expect(handleExiting.mock.calls[0][0].style.maxHeight).toBe(collapsedSize)
     })
   })
+
+  describe('test', () => {})
 })

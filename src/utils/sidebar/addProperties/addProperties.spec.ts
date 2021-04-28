@@ -4,7 +4,7 @@ import addProperties from '.'
 // types
 import { BASIC_SIDEBAR_MENU_TYPE } from '@/types/sidebar'
 
-describe('testing addProperties', () => {
+describe('test addProperties', () => {
   const basicSidebar = [
     {
       name: 'Dashboard',

@@ -8,7 +8,7 @@ import * as constants from '@/constants/sidebar'
 
 jest.mock('@/states/global/hooks')
 
-describe('testing sidebar', () => {
+describe('test sidebar', () => {
   it('should render correctly', () => {
     // @ts-ignore
     // https://stackoverflow.com/questions/42977961/how-to-mock-an-exported-const-in-jest

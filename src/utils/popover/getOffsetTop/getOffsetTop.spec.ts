@@ -4,7 +4,7 @@ import type { VerticalType } from '@/types/popover'
 // utils
 import getOffsetTop from '.'
 
-describe('testing getOffsetTop', () => {
+describe('test getOffsetTop', () => {
   const rect: DOMRect = {
     width: 100,
     height: 200,

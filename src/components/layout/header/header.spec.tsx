@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
 
 jest.mock('@/states/global/hooks')
 
-describe('testing <Header />', () => {
+describe('test <Header />', () => {
   let mockFn: jest.Mock
   beforeAll(() => {
     mockFn = jest.fn()
@@ -20,7 +20,7 @@ describe('testing <Header />', () => {
     mockFn.mockReset()
   })
 
-  describe('testing render', () => {
+  describe('test render', () => {
     it('should render correctly', () => {
       const tree = render(<Header />)
       expect(tree).toMatchSnapshot()
@@ -50,7 +50,7 @@ describe('testing <Header />', () => {
     })
   })
 
-  describe('testing redux dispatch and selector', () => {
+  describe('test redux dispatch and selector', () => {
     it('should update sidebarIsExtend when mounted in desktop', () => {
       global.innerWidth = 768
 
@@ -79,7 +79,7 @@ describe('testing <Header />', () => {
     })
   })
 
-  describe('testing popover', () => {
+  describe('test popover', () => {
     it('should render popover when click functions', () => {
       const { queryByTestId } = render(<Header />)
       expect(document.body.querySelector('[class*="popover"]')).toBeNull()

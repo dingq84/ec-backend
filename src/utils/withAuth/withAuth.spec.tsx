@@ -7,7 +7,7 @@ import withAuth from '.'
 
 jest.mock('next-auth/client')
 
-describe('testing withAuth', () => {
+describe('test withAuth', () => {
   function AccessDenied() {
     return <div>Access denied</div>
   }

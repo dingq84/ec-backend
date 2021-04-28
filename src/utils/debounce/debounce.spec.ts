@@ -1,7 +1,7 @@
 // utils
 import debounce from '.'
 
-describe('testing debounce', () => {
+describe('test debounce', () => {
   beforeEach(() => {
     jest.useFakeTimers()
   })

@@ -1,6 +1,6 @@
 import createChainedFunction from '.'
 
-describe('testing createChainedFunction', () => {
+describe('test createChainedFunction', () => {
   it('should receive same arguments for every function', () => {
     const a = jest.fn()
     const b = jest.fn()

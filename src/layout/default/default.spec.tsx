@@ -9,7 +9,7 @@ import { useAppDispatch } from '@/states/global/hooks'
 jest.mock('react-redux')
 jest.mock('@/states/global/hooks')
 
-describe('testing <DefaultLayout />', () => {
+describe('test <DefaultLayout />', () => {
   beforeAll(() => {
     ;(useAppDispatch as jest.Mock).mockImplementation(() => () => {})
   })

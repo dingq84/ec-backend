@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 // components
 import Backdrop from '.'
 
-describe('testing <Backdrop />', () => {
+describe('test <Backdrop />', () => {
   it('should render a backdrop div with content of nested children', () => {
     const { container } = render(
       <Backdrop inProps>

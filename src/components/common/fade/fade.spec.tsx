@@ -5,8 +5,8 @@ import '@testing-library/jest-dom'
 // components
 import Fade from '.'
 
-describe('Testing <Fade />', () => {
-  describe('Testing transition lifecycle', () => {
+describe('test <Fade />', () => {
+  describe('test transition lifecycle', () => {
     const handleEnter = jest.fn()
     const handleEntering = jest.fn()
     const handleEntered = jest.fn()

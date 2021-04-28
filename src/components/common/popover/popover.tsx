@@ -153,9 +153,9 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
         invisible: true,
         hidden: hiddenBackdrop,
         appear: true,
-        onEntering: handleEntering
+        onEntering: handleEntering,
+        ...restProps
       }}
-      {...restProps}
     >
       <Paper
         ref={paperRef}

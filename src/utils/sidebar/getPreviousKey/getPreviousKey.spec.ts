@@ -1,6 +1,6 @@
 import getPreviousKey from '.'
 
-describe('testing getPreviousKey', () => {
+describe('test getPreviousKey', () => {
   it('should return "0-0-1"', () => {
     const itemKey = '0-0-1-2'
     expect(getPreviousKey(itemKey)).toBe('0-0-1')

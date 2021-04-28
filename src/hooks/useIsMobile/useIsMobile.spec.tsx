@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 // hooks
 import useIsMobile from '.'
 
-describe('testing useIsMobile', () => {
+describe('test useIsMobile', () => {
   it('should return false in desktop mode', () => {
     global.innerWidth = 768
     const WrapperComponent = () => {

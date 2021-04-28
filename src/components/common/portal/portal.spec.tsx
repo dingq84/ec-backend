@@ -4,7 +4,7 @@ import { render } from '@testing-library/react'
 // components
 import Portal from '.'
 
-describe('testing portal', () => {
+describe('test portal', () => {
   it('should have access to the mountNode when disabledPortal={false}', () => {
     const refSpy = jest.fn()
     const { unmount } = render(
@@ -65,7 +65,7 @@ describe('testing portal', () => {
     expect(rootElement!.contains(document.querySelector('.woofPortal2'))).toBeFalsy()
   })
 
-  it('should unmount when parent unmounts', () => {
+  it('should unmount when parent unmounted', () => {
     function Child() {
       const containerRef = useRef<HTMLDivElement>(null)
 

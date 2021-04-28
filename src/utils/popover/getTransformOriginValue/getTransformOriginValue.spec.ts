@@ -1,6 +1,6 @@
 import getTransformOriginValue from '.'
 
-describe('testing getTransformOriginValue', () => {
+describe('test getTransformOriginValue', () => {
   it('should return "10px 10px" when transformOriginValue equals { horizontal: 10, vertical: 10 }', () => {
     expect(getTransformOriginValue({ horizontal: 10, vertical: 10 })).toBe('10px 10px')
   })

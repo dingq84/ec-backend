@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 // hooks
 import useResize from '.'
 
-describe('testing useResize', () => {
+describe('test useResize', () => {
   let handler: jest.Mock
 
   beforeEach(() => {

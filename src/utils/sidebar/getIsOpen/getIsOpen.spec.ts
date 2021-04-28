@@ -1,7 +1,7 @@
 // utils
 import getIsOpen from '.'
 
-describe('testing getIsOpen', () => {
+describe('test getIsOpen', () => {
   it('should return false, when the item key does not include the prefix of the active key, or the length of item key is greater than the active key', () => {
     const activeKey = '0-0-3'
     const itemKey1 = '0-1'

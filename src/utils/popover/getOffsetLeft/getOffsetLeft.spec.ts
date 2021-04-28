@@ -4,7 +4,7 @@ import type { HorizontalType } from '@/types/popover'
 // utils
 import getOffsetLeft from '.'
 
-describe('testing getOffsetLeft', () => {
+describe('test getOffsetLeft', () => {
   const rect: DOMRect = {
     width: 100,
     height: 200,

@@ -1,10 +1,11 @@
-import { render } from '@testing-library/react'
+import { useState } from 'react'
+import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 // components
 import Modal from '.'
 
-describe('testing <Modal />', () => {
+describe('test <Modal />', () => {
   it('should render the children by open: true', () => {
     const { queryByTestId } = render(
       <Modal open>
@@ -28,13 +29,13 @@ describe('testing <Modal />', () => {
   it('should execute onEnter function', () => {
     const onEnter = jest.fn()
     const { rerender } = render(
-      <Modal open={false} onEnter={onEnter}>
+      <Modal open={false} backdropProps={{ onEnter }}>
         <p data-testid="content">Hello World</p>
       </Modal>
     )
 
     rerender(
-      <Modal open={true} onEnter={onEnter}>
+      <Modal open={true} backdropProps={{ onEnter }}>
         <p data-testid="content">Hello World</p>
       </Modal>
     )
@@ -42,27 +43,27 @@ describe('testing <Modal />', () => {
     expect(onEnter).toHaveBeenCalledTimes(1)
   })
 
-  // TODO: 這邊測試出現錯誤，但實際上是成功執行的
-  // it('should execute onExited function', () => {
-  //   const onExited = jest.fn()
-  //   function WrapperComponent() {
-  //     const [open, setOpen] = useState(true)
+  it('should execute onExited function', () => {
+    jest.useFakeTimers()
+    const onExited = jest.fn()
+    function WrapperComponent() {
+      const [open, setOpen] = useState(true)
 
-  //     const onClose = () => {
-  //       console.log('onClose')
-  //       setOpen(o => !o)
-  //     }
+      const onClose = () => {
+        setOpen(o => !o)
+      }
 
-  //     return (
-  //       <Modal open={open} onExited={onExited} onClose={onClose}>
-  //         <p data-testid="content">Hello World</p>
-  //       </Modal>
-  //     )
-  //   }
-  //   const { container } = render(<WrapperComponent />)
-  //   console.log(container.innerHTML)
-  //   fireEvent.click(container)
+      return (
+        <Modal open={open} backdropProps={{ onExited }} onClose={onClose}>
+          <p data-testid="content">Hello World</p>
+        </Modal>
+      )
+    }
 
-  //   expect(onExited).toHaveBeenCalledTimes(1)
-  // })
+    render(<WrapperComponent />)
+    fireEvent.click(document.body.querySelector("[class*='backdrop']")!)
+
+    jest.runAllTimers()
+    expect(onExited).toHaveBeenCalledTimes(1)
+  })
 })

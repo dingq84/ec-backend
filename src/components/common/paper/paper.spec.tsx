@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 // components
 import Paper from '.'
 
-describe('testing <Paper />', () => {
+describe('test <Paper />', () => {
   it('should render children', () => {
     const { queryByTestId } = render(
       <Paper>

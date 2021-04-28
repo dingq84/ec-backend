@@ -4,8 +4,8 @@ import '@testing-library/jest-dom'
 // components
 import Popover from '.'
 
-describe('testing popover', () => {
-  describe('testing render', () => {
+describe('test popover', () => {
+  describe('test render', () => {
     it('should render nothing when inProps equals false', () => {
       const { container } = render(<Popover inProps={false} />)
       expect(container).toBeEmptyDOMElement()
@@ -20,7 +20,8 @@ describe('testing popover', () => {
       expect(queryByTestId('popover')).toHaveTextContent('hello world')
     })
   })
-  describe('testing position', () => {
+
+  describe('test position', () => {
     const anchor = document.createElement('div')
     const width = 100
     const height = 200
@@ -103,7 +104,7 @@ describe('testing popover', () => {
     })
   })
 
-  describe('testing transition functions', () => {
+  describe('test transition functions', () => {
     it('should execute onEnter when popover is opened', () => {
       const mockFn = jest.fn()
       render(<Popover inProps onEnter={mockFn} />)

@@ -1,6 +1,6 @@
 import getKey from '.'
 
-describe('testing getKey', () => {
+describe('test getKey', () => {
   it('should return "1-2-3" ', () => {
     const previousKey = ''
     const currentKey = '1-2-3'

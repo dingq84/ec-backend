@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`testing <Header /> testing render should render correctly 1`] = `
+exports[`test <Header /> test render should render correctly 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
