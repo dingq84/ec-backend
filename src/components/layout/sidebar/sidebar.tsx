@@ -172,16 +172,19 @@ const Sidebar: React.FC = () => {
     setActiveMenuKey('')
   }, [sidebarIsExtend])
 
-  const toggleActiveMenuItem = useCallback((event: SyntheticEvent, itemKey: string): void => {
-    event.stopPropagation()
+  const toggleActiveMenuItem = useCallback(
+    (event: SyntheticEvent, itemKey: string): void => {
+      event.stopPropagation()
 
-    let newActiveMenuKey: string = itemKey
-    if (getIsOpen(itemKey, activeMenuKey)) {
-      newActiveMenuKey = getPreviousKey(itemKey)
-    }
+      let newActiveMenuKey: string = itemKey
+      if (getIsOpen(itemKey, activeMenuKey)) {
+        newActiveMenuKey = getPreviousKey(itemKey)
+      }
 
-    setActiveMenuKey(newActiveMenuKey)
-  }, [])
+      setActiveMenuKey(newActiveMenuKey)
+    },
+    [activeMenuKey]
+  )
 
   return (
     <Collapse
