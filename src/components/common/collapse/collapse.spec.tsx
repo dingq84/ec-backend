@@ -8,17 +8,19 @@ describe('test <Collapse />', () => {
     children: <div>children</div>
   }
 
-  it('should render a root around the wrapper', () => {
-    const { container } = render(<Collapse {...defaultProps} />)
-    const root = container.firstElementChild as HTMLElement
-    expect(queryByRole(container, 'root')).toEqual(root)
-  })
+  describe('test render', () => {
+    it('should render a root around the wrapper', () => {
+      const { container } = render(<Collapse {...defaultProps} />)
+      const root = container.firstElementChild as HTMLElement
+      expect(queryByRole(container, 'root')).toEqual(root)
+    })
 
-  it('should render a wrapper around the wrapper inner', () => {
-    const { container } = render(<Collapse {...defaultProps} />)
-    const root = container.firstElementChild as HTMLElement
-    const wrapper = root.firstElementChild as HTMLElement
-    expect(queryByRole(root, 'wrapper')).toEqual(wrapper)
+    it('should render a wrapper around the wrapper inner', () => {
+      const { container } = render(<Collapse {...defaultProps} />)
+      const root = container.firstElementChild as HTMLElement
+      const wrapper = root.firstElementChild as HTMLElement
+      expect(queryByRole(root, 'wrapper')).toEqual(wrapper)
+    })
   })
 
   describe('test Transition lifecycle', () => {
@@ -150,5 +152,31 @@ describe('test <Collapse />', () => {
     })
   })
 
-  describe('test', () => {})
+  describe('test horizontal collapse', () => {
+    it('the position of the wrapper should be static and the width of the root should be 600px when it in the enter phase', () => {
+      jest.useFakeTimers()
+      const WrapperComponent = () => {
+        const [isOpen, setOpen] = useState(false)
+        return (
+          <>
+            <button data-testid="button" onClick={() => setOpen(o => !o)}>
+              click
+            </button>
+            <Collapse inProps={isOpen} orientation="horizontal">
+              <div />
+            </Collapse>
+          </>
+        )
+      }
+      const { queryByTestId, queryByRole, container } = render(<WrapperComponent />)
+      const root = queryByRole('root', container) as HTMLElement
+      const wrapper = queryByRole('wrapper', container) as HTMLElement
+      jest.spyOn(wrapper, 'clientWidth', 'get').mockReturnValue(600)
+      fireEvent.click(queryByTestId('button') as HTMLButtonElement)
+      jest.runAllTimers()
+
+      expect(wrapper.style.position).toBe('static')
+      expect(root.style.width).toBe('600px')
+    })
+  })
 })
