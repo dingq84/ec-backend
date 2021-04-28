@@ -106,11 +106,11 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
         ref={handleRef}
       >
         <Backdrop
-          {...backdropProps}
           inProps={open}
           onClick={handleBackdropClick}
           onEnter={handleEnter}
           onExited={handleExited}
+          {...backdropProps}
           {...restProps}
         >
           {children}

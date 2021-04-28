@@ -56,11 +56,11 @@ const SidebarItem = (props: SidebarItemProps) => {
       ...transitionProps,
       anchorEl: anchorEl.current,
       anchorOrigin: {
-        horizontal: 'right',
+        horizontal: 'left',
         vertical: 'top'
       },
       hiddenBackdrop: true,
-      horizontalSpace: 10,
+      horizontalSpace: 48,
       paperProps: {
         css: [tw`p-0 bg-dark-blue-1 rounded-l-none flex-col w-60`]
       }

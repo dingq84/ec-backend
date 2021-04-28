@@ -1,7 +1,7 @@
 // types
-import type { horizontalType } from '@/types/popover'
+import type { HorizontalType } from '@/types/popover'
 
-function getOffsetLeft(rect: DOMRect, horizontal: horizontalType) {
+function getOffsetLeft(rect: DOMRect, horizontal: HorizontalType) {
   switch (horizontal) {
     case 'center':
       return rect.width / 2

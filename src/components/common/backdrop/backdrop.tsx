@@ -19,7 +19,8 @@ import Fade from '@/components/common/fade'
 import type { TransitionProps } from '@/types/transition'
 import type { BasicComponentProps } from '@/types/next'
 
-export type BackdropType = TransitionProps &
+export type BackdropType = DOMAttributes<HTMLElement> &
+  TransitionProps &
   BasicComponentProps & {
     inProps: boolean
     invisible?: boolean
@@ -44,7 +45,7 @@ const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropType> = (
         ref={ref}
         css={[
           tw`fixed flex items-center justify-center bg-transparent -webkit-tap-highlight-color[transparent]`,
-          invisible === false && tw`bg-black bg-opacity-50 `,
+          invisible === false && tw`bg-black bg-opacity-50`,
           hidden === false && tw`top-0 left-0 right-0 bottom-0`
         ]}
       >
