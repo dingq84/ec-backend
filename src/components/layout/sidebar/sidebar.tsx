@@ -192,6 +192,7 @@ const Sidebar: React.FC = () => {
       orientation="horizontal"
       tw="flex-shrink-0"
       collapsedSize={collapsedSize}
+      timeout={100}
     >
       <aside tw="bg-dark-blue-1 w-60 min-height[calc(100vh - 6rem)] md:(min-height[calc(100vh - 3rem)])">
         <ul>

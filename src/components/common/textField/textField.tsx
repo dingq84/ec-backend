@@ -25,7 +25,19 @@ type StyledInputProps = {
 }
 
 const StyledInput = styled.input`
-  ${tw`text-gray-200 bg-light-gray-2 w-full border-2 border-solid border-transparent rounded-md h-9 pl-3 py-1.5 pr-6`}
+  ${tw`text-gray-200 bg-light-blue-1 w-full border-2 border-solid border-transparent rounded-md h-9 pl-3 py-1.5 pr-6`}
+
+  &:disabled {
+    ${tw`bg-dark-gray-1 cursor-not-allowed`}
+
+    & ~ label {
+      ${tw`cursor-not-allowed`}
+    }
+
+    & ~ div {
+      ${tw`hidden`}
+    }
+  }
 
   &:not(:placeholder-shown) ~ label {
     ${tw`translate-x-0 -translate-y-full top-0 left-4 text-dark-gray-1`}
@@ -49,6 +61,7 @@ type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string
   error?: string
   className?: string
+  inputClassName?: string
   startAdornment?: JSX.Element
   endAdornment?: JSX.Element
   onClear?: () => void
@@ -64,6 +77,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
     placeholder,
     onClear,
     className = '',
+    inputClassName = '',
     error = '',
     isFull = true,
     startAdornment,
@@ -127,6 +141,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholderModified}
+          className={inputClassName}
           {...restProps}
         />
         {label ? (
