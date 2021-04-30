@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
 import { getProviders, signIn, getSession } from 'next-auth/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebookF, faGooglePlusG, faGithubAlt } from '@fortawesome/free-brands-svg-icons'
@@ -8,11 +9,12 @@ import * as yup from 'yup'
 import 'twin.macro'
 
 // components
-import Paper from '@/components/common/paper'
-import Input from '@/components/common/input'
 import Button from '@/components/common/button'
-import { GetServerSidePropsContext } from 'next'
-import { useEffect } from 'react'
+import Paper from '@/components/common/paper'
+import TextField from '@/components/common/textField'
+
+// types
+import type { GetServerSidePropsContext } from 'next'
 
 type SignInProps = {
   providers: any
@@ -85,24 +87,23 @@ function SignIn({ providers }: SignInProps) {
           </div>
           <span tw="block text-center text-gray-300">or use your email account</span>
           <form tw="mt-8 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-            <Input
+            <TextField
+              ref={register}
               id="account"
-              isFull
-              className="mb-7"
-              label="Account"
               name="account"
-              ref={register}
-              clear={() => setValue('account', '')}
+              label="Account"
               error={errors.account?.message}
+              tw="mb-7"
+              onClear={() => setValue('account', '')}
             />
-            <Input
-              id="password"
-              isFull
-              label="Password"
-              name="password"
+            <TextField
               ref={register}
-              clear={() => setValue('password', '')}
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
               error={errors.password?.message}
+              onClear={() => setValue('password', '')}
             />
             <Button label="Sign In" className="mt-8 mx-auto" type="submit" />
           </form>
