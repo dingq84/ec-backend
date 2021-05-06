@@ -110,7 +110,7 @@ const SidebarItem = (props: SidebarItemProps) => {
         {icon ? (
           <FontAwesomeIcon
             icon={icon}
-            className={`${isFirstLevelAndFloat ? 'text-md' : 'text-sm mr-2'}`}
+            className={`${isFirstLevelAndFloat ? '!w-4' : '!w-3 mr-2'}`}
           />
         ) : null}
         {isFirstLevelAndFloat ? null : (
@@ -192,7 +192,6 @@ const Sidebar: React.FC = () => {
       orientation="horizontal"
       tw="flex-shrink-0"
       collapsedSize={collapsedSize}
-      timeout={100}
     >
       <aside tw="bg-dark-blue-1 w-60 min-height[calc(100vh - 6rem)] md:(min-height[calc(100vh - 3rem)])">
         <ul>

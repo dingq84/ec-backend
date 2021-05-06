@@ -4,47 +4,25 @@
  * TODO: 根據未來專案需求，可能會有權限設定
  */
 
-import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTachometerAlt, faCog, faUserCog, faUserTie } from '@fortawesome/free-solid-svg-icons'
 
 // types
 import { BASIC_SIDEBAR_MENU_TYPE } from '@/types/sidebar'
 
 const BASIC_SIDEBAR_MENU: Array<BASIC_SIDEBAR_MENU_TYPE> = [
   {
-    icon: faTachometerAlt,
-    name: 'Dashboard',
+    icon: faCog,
+    name: '系統管理',
     children: [
       {
-        icon: faTachometerAlt,
-        name: 'Dashboard v1',
-        children: [
-          {
-            icon: faTachometerAlt,
-            name: 'Dashboard v1 v1',
-            children: [
-              {
-                icon: faTachometerAlt,
-                name: 'Dashboard v1 v1 v1',
-                href: '/test'
-              },
-              {
-                icon: faTachometerAlt,
-                name: 'Dashboard v1 v1 v2',
-                href: '/'
-              }
-            ]
-          },
-          {
-            icon: faTachometerAlt,
-            name: 'Dashboard v1 v2',
-            href: '/'
-          }
-        ]
+        icon: faUserCog,
+        name: '帳號管理',
+        href: '/system/user'
       },
       {
-        icon: faTachometerAlt,
-        name: 'Dashboard v2',
-        href: '/'
+        icon: faUserTie,
+        name: '角色管理',
+        href: '/system/user'
       }
     ]
   },

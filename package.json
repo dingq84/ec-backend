@@ -26,6 +26,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@hookform/resolvers": "2.0.0-beta.3",
     "@reduxjs/toolkit": "^1.5.1",
+    "@tailwindcss/jit": "^0.1.18",
     "@types/next-auth": "^3.13.0",
     "autoprefixer": "^10.2.5",
     "babel-plugin-macros": "^3.0.1",
@@ -38,7 +39,7 @@
     "react-redux": "^7.2.3",
     "react-transition-group": "^4.4.1",
     "styled-components": "^5.2.1",
-    "tailwindcss": "^2.0.3",
+    "tailwindcss": "^2.1.0",
     "twin.macro": "^2.3.0",
     "yup": "^0.32.9"
   },

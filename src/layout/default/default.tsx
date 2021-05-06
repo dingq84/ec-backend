@@ -21,7 +21,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
       <Header />
       <div tw="w-full flex">
         <Sidebar />
-        <main tw="flex-grow  bg-red-500 min-height[calc(100vh - 6rem)] md:min-height[calc(100vh - 3rem)]">
+        <main tw="flex-grow bg-light-gray-1 min-height[calc(100vh - 6rem)] md:min-height[calc(100vh - 3rem)]">
           {children}
         </main>
       </div>
