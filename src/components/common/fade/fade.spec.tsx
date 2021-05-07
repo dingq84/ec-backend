@@ -84,7 +84,6 @@ describe('test <Fade />', () => {
       const element = container.querySelector('div')
 
       expect(element).toHaveStyle({ opacity: 0 })
-      expect(element).toHaveStyle({ visibility: 'hidden' })
     })
   })
 
@@ -98,6 +97,5 @@ describe('test <Fade />', () => {
     const element = container.querySelector('div')
 
     expect(element).toHaveStyle({ opacity: 0 })
-    expect(element).toHaveStyle({ visibility: 'hidden' })
   })
 })

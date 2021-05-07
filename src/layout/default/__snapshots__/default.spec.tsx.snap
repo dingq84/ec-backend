@@ -274,13 +274,18 @@ Object {
               </aside>
             </div>
           </div>
-          <main
-            class="default___StyledMain-e9wyj8-2 dpqVxx"
+          <div
+            class="default___StyledTransitionGroup-e9wyj8-2 jYFbay"
           >
-            <h1>
-              default testing
-            </h1>
-          </main>
+            <main
+              class="default___StyledMain-e9wyj8-3 TLOba"
+              style="transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; opacity: 1;"
+            >
+              <h1>
+                default testing
+              </h1>
+            </main>
+          </div>
         </div>
         <footer />
       </div>
@@ -556,13 +561,18 @@ Object {
             </aside>
           </div>
         </div>
-        <main
-          class="default___StyledMain-e9wyj8-2 dpqVxx"
+        <div
+          class="default___StyledTransitionGroup-e9wyj8-2 jYFbay"
         >
-          <h1>
-            default testing
-          </h1>
-        </main>
+          <main
+            class="default___StyledMain-e9wyj8-3 TLOba"
+            style="transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; opacity: 1;"
+          >
+            <h1>
+              default testing
+            </h1>
+          </main>
+        </div>
       </div>
       <footer />
     </div>

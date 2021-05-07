@@ -3,6 +3,9 @@
  * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/Fade/Fade.js
  * Fade 主要是為了製作動畫 Fade-in 和 Fade-out，主要程式碼借鏡 Material-UI，和 Collapse 邏輯相似且更為簡單
  * 透過 react-transition-group 的生命週期處理動畫，而且僅調用 opacity
+ *
+ * @modified
+ * [Dean Chen 2021-05-07]: 為了兼容 Page transition，移除 visibility style
  */
 
 import { forwardRef, cloneElement, useRef, DOMAttributes } from 'react'
@@ -90,15 +93,12 @@ const Fade: React.ForwardRefRenderFunction<HTMLElement, FadeProps> = (props: Fad
       {...restProps}
     >
       {(status: Status, childProps: Object) => {
-        const isEntering = status === Status.entering || status === Status.entered
-        const isExited = status === Status.exited && !inProps
-
+        const isEntered = status === Status.entered
         return cloneElement(children, {
-          tw: 'text-lg',
           style: {
             ...tw`transition-opacity`,
-            visibility: isExited ? 'hidden' : 'visible',
-            opacity: isEntering ? 1 : 0,
+            opacity: isEntered ? 1 : 0,
+            transitionDuration: `${timeout}ms`,
             ...children.props.style
           },
           ref: handleRef,
