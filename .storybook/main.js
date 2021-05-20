@@ -8,6 +8,9 @@
  * 研究了一下 repository 發現並未有此設定，因此暫時先行移除
  */
 
+const path = require('path')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -20,5 +23,14 @@ module.exports = {
         }
       }
     }
-  ]
+  ],
+  webpackFinal: config => {
+    config.resolve.plugins = config.resolve.plugins || []
+    config.resolve.plugins.push(
+      new TsconfigPathsPlugin({
+        configFile: path.resolve(__dirname, '../tsconfig.json')
+      })
+    )
+    return config
+  }
 }
