@@ -4,6 +4,10 @@
  *
  * @modified
  * [Dean Chen 2021-05-07]: 替 page 新增 fade transition
+ * [Dean Chen 2021-05-24]: 在 TransitionGroup 上加上 min-w-0，
+ * 因為 main 繼承下來的寬度，假設是 500px，但當子層的 width 超過 500px
+ * 會造成 main 跟著拉大，後來查到原因是因為 flex item 不能小於他的內容，因此將 min-width 改成 0，
+ * 參考 https://stackoverflow.com/questions/41674979/flex-child-is-growing-out-of-parent
  */
 
 import { TransitionGroup } from 'react-transition-group'
@@ -24,13 +28,13 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
   const { children } = props
 
   return (
-    <div tw="min-h-full">
+    <div tw="h-screen flex flex-col">
       <Header />
-      <div tw="w-full flex">
+      <div tw="flex flex-grow min-h-0">
         <Sidebar />
-        <TransitionGroup tw="flex-grow bg-light-gray-1 min-height[calc(100vh - 6rem)] md:min-height[calc(100vh - 3rem)]">
+        <TransitionGroup tw="flex-grow min-w-0 bg-light-gray-1">
           <Fade inProps key={router.pathname} appear={false} timeout={300}>
-            <main tw="w-full h-full">{children}</main>
+            <main tw="h-full">{children}</main>
           </Fade>
         </TransitionGroup>
       </div>
