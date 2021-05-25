@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="default___StyledDiv-e9wyj8-0 eVVutM"
+        class="default___StyledDiv-e9wyj8-0 dBFzVD"
       >
         <header
           class="header___StyledHeader-sc-1s030ou-2 bojRlJ"
@@ -88,7 +88,7 @@ Object {
           </nav>
         </header>
         <div
-          class="default___StyledDiv2-e9wyj8-1 cBNgAk"
+          class="default___StyledDiv2-e9wyj8-1 gFZhWL"
         >
           <div
             class="collapse___StyledDiv-deqgwy-0 bJjHov sidebar___StyledCollapse-sc-15m1zdu-6 jIpnwq"
@@ -275,10 +275,10 @@ Object {
             </div>
           </div>
           <div
-            class="default___StyledTransitionGroup-e9wyj8-2 jYFbay"
+            class="default___StyledTransitionGroup-e9wyj8-2 kRivdF"
           >
             <main
-              class="default___StyledMain-e9wyj8-3 TLOba"
+              class="default___StyledMain-e9wyj8-3 kmdLWg"
               style="transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; opacity: 1;"
             >
               <h1>
@@ -293,7 +293,7 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="default___StyledDiv-e9wyj8-0 eVVutM"
+      class="default___StyledDiv-e9wyj8-0 dBFzVD"
     >
       <header
         class="header___StyledHeader-sc-1s030ou-2 bojRlJ"
@@ -375,7 +375,7 @@ Object {
         </nav>
       </header>
       <div
-        class="default___StyledDiv2-e9wyj8-1 cBNgAk"
+        class="default___StyledDiv2-e9wyj8-1 gFZhWL"
       >
         <div
           class="collapse___StyledDiv-deqgwy-0 bJjHov sidebar___StyledCollapse-sc-15m1zdu-6 jIpnwq"
@@ -562,10 +562,10 @@ Object {
           </div>
         </div>
         <div
-          class="default___StyledTransitionGroup-e9wyj8-2 jYFbay"
+          class="default___StyledTransitionGroup-e9wyj8-2 kRivdF"
         >
           <main
-            class="default___StyledMain-e9wyj8-3 TLOba"
+            class="default___StyledMain-e9wyj8-3 kmdLWg"
             style="transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; opacity: 1;"
           >
             <h1>

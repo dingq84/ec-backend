@@ -33,7 +33,7 @@ const Table: React.ForwardRefRenderFunction<HTMLDivElement, TableProps> = (
     }),
     []
   )
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, headers } = useTable(
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
       columns,
       data,
