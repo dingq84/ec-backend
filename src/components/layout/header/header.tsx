@@ -7,12 +7,12 @@
 import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faCogs } from '@fortawesome/free-solid-svg-icons'
-import { signOut } from 'next-auth/client'
+import { faBars, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import tw, { styled } from 'twin.macro'
 
 // components
-import Popover from '@/components/common/popover'
+import Image from '@/components/shared/image'
+import Popover from '@/components/shared/popover'
 
 // hooks
 import useIsMobile from '@/hooks/useIsMobile'
@@ -22,7 +22,7 @@ import { toggleSidebar, setSidebar } from '@/states/global/settings'
 import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
 
 const StyledSpan = styled.span`
-  ${tw`px-4 text-sm text-center h-12 block leading-12 hover:(bg-light-blue-3 cursor-pointer)`}
+  ${tw`px-4 text-sm text-center h-12 block leading-12 hover:(cursor-pointer)`}
 `
 
 const Header: React.FC = () => {
@@ -45,50 +45,48 @@ const Header: React.FC = () => {
     <header tw="relative flex flex-col md:flex-row">
       <Link href="/">
         <a
-          tw="transition-width duration-500 block w-full h-12 leading-12 text-center font-size[1.25rem] bg-light-blue-3 text-white"
+          tw="transition-width duration-300 flex items-center justify-center h-12 bg-gray-5"
           css={[isDesktopAndCollapsed ? tw`md:w-12` : tw`md:w-60`]}
           data-testid="logo"
         >
-          <span tw="font-light">
-            {isDesktopAndCollapsed ? (
-              <b>ALT</b>
-            ) : (
-              <>
-                <b>Admin</b>LTE
-              </>
-            )}
-          </span>
+          <Image
+            src={isDesktopAndCollapsed ? 'icons/logo-small.png' : 'icons/logo.png'}
+            alt="logo image"
+          />
         </a>
       </Link>
-      <nav tw="flex justify-between text-white bg-light-blue-2 flex-grow">
+      <nav tw="flex justify-between text-gray-1 bg-gray-6 flex-grow pr-3">
         <StyledSpan tw="w-11" onClick={() => dispatch(toggleSidebar())} data-testid="menu">
           <FontAwesomeIcon icon={faBars} />
         </StyledSpan>
-        <div>
-          <ul tw="flex items-stretch">
-            <li>
-              <div ref={anchorEl} onClick={() => togglePopover(true)} data-testid="functions">
-                <StyledSpan>Alexander Pierce</StyledSpan>
-              </div>
-            </li>
-            <li>
-              <StyledSpan>
-                <FontAwesomeIcon icon={faCogs} />
-              </StyledSpan>
-            </li>
-          </ul>
+        <div
+          ref={anchorEl}
+          onClick={() => togglePopover(true)}
+          data-testid="functions"
+          tw="flex items-center"
+        >
+          <StyledSpan>Alexander Pierce</StyledSpan>
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            tw="text-sm transition-transform duration-300"
+            css={[popoverIsOpen && tw`transform rotate-180`]}
+          />
         </div>
       </nav>
       <Popover
         anchorEl={anchorEl.current!}
-        inProps={popoverIsOpen}
+        open={popoverIsOpen}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         horizontalSpace={5}
         onClose={() => togglePopover(false)}
         paperProps={{ css: [tw`w-auto px-0 py-0`] }}
       >
-        <ul tw="all:(text-dark-blue-2 w-32 py-2 text-sm select-none text-center cursor-pointer hocus:(bg-dark-gray-1 text-gray-100))">
-          <li onClick={() => signOut()}>Sign out</li>
+        <ul tw="all:(w-32 py-1 inline-block)">
+          <li>
+            <Link href="/auth/login">
+              <a>Sign out</a>
+            </Link>
+          </li>
         </ul>
       </Popover>
     </header>

@@ -1,190 +1,84 @@
 /**
  * @author Dean Chen 2021-04-27
  * Sidebar 完成基本的 menu tree 顯示，並加上桌機版時，可縮小 sidebar 變成 hover 效果
- * TODO: 需新增判斷 route path，找出目前的路徑
+ *
+ * @modified
+ * [Dean Chen 2021-06-17]: 重構
+ * Features
+ * 1. 預設全展開或全收和
+ * 2. 有 collapse 和 popup 兩種形式
+ * 3. 只渲染出目前層的下一層，在下去的不渲染
+ * 4. 判斷目前在哪個 link，需有樣式，在 popup 時，該 link 的最根層需有樣式
+ * 5. 如果是全收和狀態，需展開目前的那個 link
  */
 
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { SyntheticEvent, useState, useRef, useCallback } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import tw from 'twin.macro'
+import 'twin.macro'
 
 // components
-import Collapse from '@/components/common/collapse'
-import Popover from '@/components/common/popover'
+import Collapse from '@/components/shared/collapse'
+import FloatSidebarItem from '@/components/layout/sidebar/floatSidebarItem'
+import SidebarItems from '@/components/layout/sidebar/sidebarItems'
 
 // constants
-import { BASIC_SIDEBAR_MENU } from '@/constants/sidebar'
+import SIDEBAR_MENU from '@/constants/components/sidebar'
 
 // hooks
-import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import useIsMobile from '@/hooks/useIsMobile'
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // states
 import { useAppSelector } from '@/states/global/hooks'
 
 // types
-import { SIDEBAR_MENU_TYPE } from '@/types/sidebar'
+import { SidebarMenuType } from '@/types/components/sidebar'
 
 // utils
-import addProperties from '@/utils/sidebar/addProperties'
-import getIsOpen from '@/utils/sidebar/getIsOpen'
-import getPreviousKey from '@/utils/sidebar/getPreviousKey'
-
-type SidebarItemProps = {
-  item: SIDEBAR_MENU_TYPE
-  toggleActiveMenuItem: Function
-  isFloat: boolean
-}
-
-const SidebarItem = (props: SidebarItemProps) => {
-  const anchorEl = useRef<HTMLDivElement>(null)
-  const router = useRouter()
-  const { item, toggleActiveMenuItem, isFloat } = props
-  const { isOpen, key, name, icon, isActive, href, children, level } = item
-  const isFirstLevel = level === 1
-  const isFirstLevelAndFloat = isFloat && isFirstLevel
-  const isFirstLevelAndOpen = isOpen && isFirstLevel
-  const hasChildren = Boolean(children)
-
-  let Transition: any = Collapse
-  let transitionProps: Object = { inProps: isOpen }
-  if (isFirstLevelAndFloat) {
-    Transition = Popover
-    transitionProps = {
-      ...transitionProps,
-      anchorEl: anchorEl.current,
-      anchorOrigin: {
-        horizontal: 'left',
-        vertical: 'top'
-      },
-      hiddenBackdrop: true,
-      horizontalSpace: 48,
-      paperProps: {
-        css: [tw`p-0 bg-dark-blue-1 rounded-l-none flex-col w-60`]
-      }
-    }
-  }
-
-  const getLiProps = () => {
-    if (isFirstLevelAndFloat) {
-      return {
-        onMouseEnter(event: SyntheticEvent) {
-          toggleActiveMenuItem(event, key)
-        },
-        onMouseLeave(event: SyntheticEvent) {
-          toggleActiveMenuItem(event, '')
-        }
-      }
-    }
-
-    return {
-      onClick(event: SyntheticEvent) {
-        toggleActiveMenuItem(event, key)
-
-        if (href) {
-          router.push(href)
-        }
-      }
-    }
-  }
-
-  return (
-    <li
-      {...getLiProps()}
-      css={[
-        tw`text-light-blue-4 text-sm cursor-pointer`,
-        isFirstLevel === false && tw`bg-dark-blue-5 text-light-blue-1`
-      ]}
-    >
-      <div
-        ref={anchorEl}
-        className={`flex items-center justify-start py-3 pr-4 transition-all pl-${key.length + 2}`}
-        css={[
-          href && isActive && tw`text-white`,
-          isFirstLevelAndOpen &&
-            tw`bg-dark-blue-4 border-l-4 border-light-blue-2 border-solid text-white`
-        ]}
-      >
-        {icon ? (
-          <FontAwesomeIcon
-            icon={icon}
-            className={`${isFirstLevelAndFloat ? '!w-4' : '!w-3 mr-2'}`}
-          />
-        ) : null}
-        {isFirstLevelAndFloat ? null : (
-          <>
-            <span tw="select-none text-sm flex-grow">{name}</span>
-            {hasChildren ? (
-              <FontAwesomeIcon
-                icon={faChevronLeft}
-                tw="text-xs transition-transform"
-                className={`transform ${isOpen ? '-rotate-90' : 'rotate-0'}`}
-              />
-            ) : null}
-          </>
-        )}
-      </div>
-
-      <Transition {...transitionProps}>
-        {isFirstLevelAndFloat ? (
-          <span
-            css={[tw`text-light-blue-1 py-3 pr-4 text-sm w-full`, isOpen && tw`text-white`]}
-            className={`flex items-center justify-start py-3 pr-4 transition-all pl-5`}
-          >
-            {name}
-          </span>
-        ) : null}
-        {hasChildren ? (
-          <ul tw="w-full">
-            {children?.map((kid: SIDEBAR_MENU_TYPE) => (
-              <SidebarItem
-                key={kid.key}
-                isFloat={isFloat}
-                toggleActiveMenuItem={toggleActiveMenuItem}
-                item={kid}
-              />
-            ))}
-          </ul>
-        ) : null}
-      </Transition>
-    </li>
-  )
-}
+import findRouteIndex from '@/utils/components/sidebar/findRouteIndex'
+import addProperties from '@/utils/components/sidebar/addProperties'
 
 const Sidebar: React.FC = () => {
-  const isMobile = useIsMobile()
-  const [activeMenuKey, setActiveMenuKey] = useState('')
-  const [menuList, setMenuList] = useState<SIDEBAR_MENU_TYPE[]>([])
+  const router = useRouter()
+  const { asPath } = router
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
-  const isDesktopAndCollapsed = isMobile === false && sidebarIsExtend === false
-  // TODO: 這邊有個問題，當桌機縮成 48px，螢幕尺寸變成手機時，會出現手機的縮放仍是 48px
+  const isMobile = useIsMobile()
+  // 手機版完全收合起來，桌機會保留 icon 的寬度
   const collapsedSize = isMobile ? '0px' : '48px'
+  // 只有桌機版的收合模式為 float
+  const isFloat = isMobile === false && sidebarIsExtend === false
+  // 目前停留的 sidebar item index
+  const activeRouteIndex = findRouteIndex(SIDEBAR_MENU, asPath)
+  const [sidebarItems, setSidebarItems] = useState<SidebarMenuType[]>([])
 
-  // 當 activeMenuKey 更新，重新整理 menuList 的 isOpen、isActive 等 key
   useEnhancedEffect(() => {
-    setMenuList(addProperties(BASIC_SIDEBAR_MENU, activeMenuKey))
-  }, [activeMenuKey])
+    setSidebarItems(
+      addProperties({
+        sidebarMenu: SIDEBAR_MENU,
+        targetRouteIndex: activeRouteIndex,
+        plugins: {
+          open: !isFloat,
+          active: true
+        }
+      })
+    )
+  }, [isFloat])
 
-  // reset active key
-  useEnhancedEffect(() => {
-    setActiveMenuKey('')
-  }, [sidebarIsExtend])
+  const toggleSidebarOpen = (key: string, open: boolean = false): void => {
+    setSidebarItems(
+      addProperties({
+        sidebarMenu: sidebarItems,
+        targetRouteIndex: !open ? key : key.slice(0, key.length - 1),
+        plugins: {
+          open: true
+        }
+      })
+    )
+  }
 
-  const toggleActiveMenuItem = useCallback(
-    (event: SyntheticEvent, itemKey: string): void => {
-      event.stopPropagation()
-
-      let newActiveMenuKey: string = itemKey
-      if (getIsOpen(itemKey, activeMenuKey)) {
-        newActiveMenuKey = getPreviousKey(itemKey)
-      }
-
-      setActiveMenuKey(newActiveMenuKey)
-    },
-    [activeMenuKey]
-  )
+  const forwardTo = (href: string): void => {
+    router.push(href)
+  }
 
   return (
     <Collapse
@@ -193,18 +87,26 @@ const Sidebar: React.FC = () => {
       tw="flex-shrink-0"
       collapsedSize={collapsedSize}
     >
-      <aside tw="bg-dark-blue-1 w-60 min-height[calc(100vh - 6rem)] md:(min-height[calc(100vh - 3rem)])">
-        <ul>
-          {menuList.map(item => (
-            <SidebarItem
-              key={item.key}
-              item={item}
-              isFloat={isDesktopAndCollapsed}
-              toggleActiveMenuItem={toggleActiveMenuItem}
+      {isFloat ? (
+        <div>
+          {sidebarItems.map(sidebar => (
+            <FloatSidebarItem
+              key={sidebar.name}
+              item={sidebar}
+              toggleSidebarOpen={toggleSidebarOpen}
+              forwardTo={forwardTo}
             />
           ))}
-        </ul>
-      </aside>
+        </div>
+      ) : (
+        <div tw="w-60">
+          <SidebarItems
+            sidebarItems={sidebarItems}
+            toggleSidebarOpen={toggleSidebarOpen}
+            forwardTo={forwardTo}
+          />
+        </div>
+      )}
     </Collapse>
   )
 }

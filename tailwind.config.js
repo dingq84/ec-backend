@@ -1,3 +1,5 @@
+const { fontFamily } = require('tailwindcss/defaultTheme')
+
 module.exports = {
   purge: ['./pages/**/*.tsx', './src/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
@@ -5,30 +7,37 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Lato', 'cursive', 'Helvetica', 'Arial', 'sans-serif']
+        ...fontFamily,
+        sans: ['Roboto', 'ui-sans-serif', 'system-ui']
       },
       transitionProperty: {
         width: 'width'
       },
       lineHeight: {
-        12: '3rem'
+        12: '3rem',
+        tighter: '1.167'
       },
       colors: {
         primary: '#209A66',
-        'dark-blue-1': '#222d32', // rgb(34, 45, 50)
-        'dark-blue-2': '#374850', // rgb(55, 72, 80)
-        'dark-blue-3': '#1a2226', // rgb(26, 34, 38)
-        'dark-blue-4': '#1e282c', // rgb(30, 40, 44)
-        'dark-blue-5': '#2c3b41', // rgb(44, 59, 65)
-        'dark-gray-1': '#444444', // rgb(68, 68, 68)
-        'light-blue-1': '#8aa4af', // rgb(138, 164, 175)
-        'light-blue-2': '#3c8dbc', // rgb(60, 141, 188)
-        'light-blue-3': '#367fa9', // rgb(54, 127, 169)
-        'light-blue-4': '#b8c7ce', // rgb(184, 199, 206)
-        'light-gray-1': '#ecf0f5', // rgb(236, 240, 245)
-        'light-gray-2': '#666666', // rgb(102, 102, 102)
-        'light-gray-3': '#f9f9f9', // rgb(249, 249, 249)
-        'light-gray-4': '#e7e7e7' // rgb(231, 231, 231)
+        'white-1': '#f5f7fa',
+        'white-2': '#e4e7ed',
+        'white-3': '#f5f5f5',
+        'black-1': '#0e1726',
+        'blue-1': '#404E67',
+        'blue-2': '#2c3648',
+        'green-1': '#227949',
+        'green-2': '#4D886A',
+        'green-3': '#72A28B',
+        'green-4': '#E8F3EE',
+        'brown-1': '#C4863B',
+        'brown-2': '#E4C385',
+        'brown-3': '#F9E6B3',
+        'gray-1': '#333333',
+        'gray-2': '#666666',
+        'gray-3': '#999999',
+        'gray-4': '#CCCCCC',
+        'gray-5': '#F2F2F2',
+        'gray-6': '#FAFAFA'
       }
     }
   },

@@ -1,16 +1,54 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import 'twin.macro'
 
+// components
+import Button from '@/components/shared/button'
+import Paper from '@/components/shared/paper'
+import Table from '@/components/shared/table'
+import TextField from '@/components/shared/textField'
+
+// mocks
+import accountData from '@/mocks/accountData.json'
+
 // layouts
-import DefaultLayout from '@/layout/default'
+import DefaultLayout from '@/layouts/default'
 
-// types
-import { MyPage } from '@/types/next'
+// utils
+import withAuth from '@/utils/shared/withAuth'
 
-const Home: MyPage = () => {
-  return <div>hi</div>
+const Home = () => {
+  return (
+    <DefaultLayout>
+      <div tw="py-6 px-4 flex flex-col space-y-5 h-full">
+        <Paper tw="w-full py-4 justify-between">
+          <TextField
+            id="account-search"
+            placeholder="搜尋帳號、姓名..."
+            startAdornment={<FontAwesomeIcon icon={faSearch} tw="text-black" />}
+          />
+          <Button
+            className="btn"
+            label={
+              <>
+                <FontAwesomeIcon icon={faSearch} />
+                <span>搜尋</span>
+              </>
+            }
+          />
+        </Paper>
+        <Table
+          columns={accountData.columns}
+          data={accountData.data}
+          pagination={{
+            currentPage: 0,
+            totalRows: accountData.data.length,
+            fetchData: () => {}
+          }}
+        />
+      </div>
+    </DefaultLayout>
+  )
 }
 
-Home.layout = DefaultLayout
-Home.auth = true
-
-export default Home
+export default withAuth(Home)

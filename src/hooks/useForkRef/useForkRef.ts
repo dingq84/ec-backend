@@ -10,7 +10,7 @@
 import { useMemo } from 'react'
 
 // utils
-import setRef from '@/utils/setRef'
+import setRef from '@/utils/shared/setRef'
 
 function useForkRef<Instance>(
   refA: React.Ref<Instance> | null | undefined,

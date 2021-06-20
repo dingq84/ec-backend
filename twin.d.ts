@@ -1,6 +1,7 @@
 import { ComponentType } from 'react'
 import { TwFn, TemplateFn } from 'twin.macro'
 import styledImport, { css as cssImport } from 'styled-components'
+
 declare module 'twin.macro' {
   type TwComponentWrapper = <T extends ComponentType<any>>(component: T) => TemplateFn<T>
   const tw: TwFn & TwComponentMap & TwComponentWrapper
@@ -18,6 +19,12 @@ declare module 'react' {
   }
   // The inline svg css prop
   interface SVGProps<T> extends SVGProps<SVGSVGElement> {
+    css?: CSSProp
+  }
+}
+
+declare module '@fortawesome/react-fontawesome' {
+  interface FontAwesomeIconProps {
     css?: CSSProp
   }
 }

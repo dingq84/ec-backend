@@ -5,7 +5,7 @@ import '@testing-library/jest-dom'
 import Header from '.'
 
 // states
-import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
+import { useAppDispatch } from '@/states/global/hooks'
 
 jest.mock('@/states/global/hooks')
 
@@ -18,36 +18,6 @@ describe('test <Header />', () => {
 
   afterEach(() => {
     mockFn.mockReset()
-  })
-
-  describe('test render', () => {
-    it('should render correctly', () => {
-      const tree = render(<Header />)
-      expect(tree).toMatchSnapshot()
-    })
-
-    it('should render AdminLTE when sidebarIsExtend equals true in desktop mode', () => {
-      global.innerWidth = 768
-      ;(useAppSelector as jest.Mock).mockReturnValue(true)
-      const { queryByTestId } = render(<Header />)
-      const logo = queryByTestId('logo')
-      expect(logo).toHaveTextContent('AdminLTE')
-    })
-
-    it('should render AdminLTE in mobile mode', () => {
-      global.innerWidth = 767
-      const { queryByTestId } = render(<Header />)
-      const logo = queryByTestId('logo')
-      expect(logo).toHaveTextContent('AdminLTE')
-    })
-
-    it('should render ALT when sidebarIsExtend equals false in desktop mode', () => {
-      global.innerWidth = 768
-      ;(useAppSelector as jest.Mock).mockReturnValue(false)
-      const { queryByTestId } = render(<Header />)
-      const logo = queryByTestId('logo')
-      expect(logo).toHaveTextContent('ALT')
-    })
   })
 
   describe('test redux dispatch and selector', () => {

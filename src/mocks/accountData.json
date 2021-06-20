@@ -1,0 +1,169 @@
+{
+  "columns": [
+    {
+      "Header": "帳號",
+      "accessor": "account",
+      "width": "200"
+    },
+    {
+      "Header": "姓名",
+      "accessor": "name"
+    },
+    {
+      "Header": "性別",
+      "accessor": "gender"
+    },
+    {
+      "Header": "手機號碼",
+      "accessor": "phone"
+    },
+    {
+      "Header": "電子郵件",
+      "accessor": "email"
+    },
+    {
+      "Header": "註冊時間",
+      "accessor": "registrationTime"
+    },
+    {
+      "Header": "更新時間",
+      "accessor": "updateTime"
+    },
+    {
+      "Header": "總訂單數",
+      "accessor": "orderNumber"
+    }
+  ],
+  "data": [
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    },
+    {
+      "account": "test",
+      "name": "alex",
+      "gender": "男",
+      "phone": "0912345678",
+      "email": "qeqwe@gmail.com",
+      "registrationTime": "2021-01-01",
+      "updateTime": "2021-01-01",
+      "orderNumber": 200
+    }
+  ]
+}

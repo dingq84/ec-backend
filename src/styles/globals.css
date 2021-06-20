@@ -2,4 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+@layer base {
+  h1 {
+    @apply text-8xl leading-tighter font-light tracking-tight;
+  }
+  h2 {
+    @apply text-6xl leading-tight font-light tracking-tight;
+  }
+  h3 {
+    @apply text-5xl leading-tighter font-normal tracking-wide;
+  }
+  h4 {
+    @apply text-4xl leading-tight font-normal tracking-wide;
+  }
+  h5 {
+    @apply text-2xl leading-snug font-normal tracking-normal;
+  }
+  h6 {
+    @apply text-xl leading-relaxed font-medium tracking-wide;
+  }
+  p {
+    @apply text-base leading-relaxed font-medium tracking-wide;
+  }
+  span {
+    @apply text-sm leading-normal font-medium tracking-wide;
+  }
+  small {
+    @apply text-xs leading-relaxed font-normal;
+  }
+  a {
+    @apply text-center select-none text-base leading-none font-normal text-gray-2 hover:text-green-1;
+  }
+  button {
+    @apply focus:outline-none;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply rounded px-6 py-2 bg-green-1 text-white hover:bg-opacity-80 disabled:pointer-events-none disabled:bg-gray-4;
+  }
+  .btn-outline {
+    @apply rounded px-4 py-2 text-green-1 border border-solid border-green-1 hover:bg-green-1 hover:text-white disabled:pointer-events-none disabled:bg-gray-4;
+  }
+  .btn-text {
+    @apply text-green-1 hover:opacity-80 disabled:pointer-events-none disabled:text-gray-4;
+  }
+}

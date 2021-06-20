@@ -6,7 +6,7 @@
 import { useEffect } from 'react'
 
 // utils
-import debounce from '@/utils/debounce'
+import debounce from '@/utils/shared/debounce'
 
 type useResizeProps = {
   handler: Function
