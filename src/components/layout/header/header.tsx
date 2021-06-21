@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import tw, { styled } from 'twin.macro'
+import tw from 'twin.macro'
 
 // components
 import Image from '@/components/shared/image'
@@ -20,10 +20,6 @@ import useIsMobile from '@/hooks/useIsMobile'
 // states
 import { toggleSidebar, setSidebar } from '@/states/global/settings'
 import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
-
-const StyledSpan = styled.span`
-  ${tw`px-4 text-sm text-center h-12 block leading-12 hover:(cursor-pointer)`}
-`
 
 const Header: React.FC = () => {
   const isMobile = useIsMobile()
