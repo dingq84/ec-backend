@@ -31,7 +31,7 @@
     @apply text-xs leading-relaxed font-normal;
   }
   a {
-    @apply text-center select-none text-base leading-none font-normal text-blue-1 hover:text-primary;
+    @apply text-center select-none text-base leading-none font-normal text-black hover:text-primary;
   }
   button,
   input {

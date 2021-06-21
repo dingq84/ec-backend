@@ -7,7 +7,7 @@
 import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faLongArrowAltRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import tw, { styled } from 'twin.macro'
 
 // components
@@ -37,16 +37,21 @@ const Header: React.FC = () => {
     dispatch(setSidebar(!isMobile))
   }, [isMobile])
 
+  const handleClick = (): void => {
+    dispatch(toggleSidebar())
+  }
+
   const togglePopover = (isOpen: boolean): void => {
     setPopoverIsOpen(isOpen)
   }
 
   return (
-    <header tw="relative flex flex-col md:flex-row">
+    <header tw="relative bg-white-1 flex flex-col md:flex-row">
       <Link href="/">
         <a
-          tw="transition-width duration-300 flex items-center justify-center h-12 bg-gray-5"
-          css={[isDesktopAndCollapsed ? tw`md:w-12` : tw`md:w-60`]}
+          tw="transition-width duration-300 h-12 md:w-60"
+          className="flex-center"
+          css={[isDesktopAndCollapsed && tw`md:w-12`]}
           data-testid="logo"
         >
           <Image
@@ -55,36 +60,43 @@ const Header: React.FC = () => {
           />
         </a>
       </Link>
-      <nav tw="flex justify-between text-gray-1 bg-gray-6 flex-grow pr-3">
-        <StyledSpan tw="w-11" onClick={() => dispatch(toggleSidebar())} data-testid="menu">
-          <FontAwesomeIcon icon={faBars} />
-        </StyledSpan>
+      <nav tw="flex justify-between text-black flex-grow pr-3">
+        <button
+          tw="text-sm px-4 transform transition-transform duration-300 hover:(scale-125)"
+          css={[sidebarIsExtend && tw`rotate-180`]}
+          onClick={handleClick}
+          data-testid="menu"
+        >
+          <FontAwesomeIcon icon={faLongArrowAltRight} />
+        </button>
+
         <div
           ref={anchorEl}
-          onClick={() => togglePopover(true)}
+          tw="text-gray-3 hover:(opacity-70)"
           data-testid="functions"
-          tw="flex items-center"
+          className="flex-center"
+          onClick={() => togglePopover(true)}
         >
-          <StyledSpan>Alexander Pierce</StyledSpan>
+          <button tw="px-4 color[inherit]">Alexander Pierce</button>
           <FontAwesomeIcon
             icon={faChevronDown}
-            tw="text-sm transition-transform duration-300"
+            tw="text-sm transition-transform duration-300 color[inherit]"
             css={[popoverIsOpen && tw`transform rotate-180`]}
           />
         </div>
       </nav>
       <Popover
-        anchorEl={anchorEl.current!}
-        open={popoverIsOpen}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         horizontalSpace={5}
+        open={popoverIsOpen}
+        anchorEl={anchorEl.current!}
         onClose={() => togglePopover(false)}
-        paperProps={{ css: [tw`w-auto px-0 py-0`] }}
+        paperProps={{ css: [tw`w-auto px-0 py-0 shadow-xl`] }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <ul tw="all:(w-32 py-1 inline-block)">
+        <ul tw="all:(w-40 py-1.5 inline-block)">
           <li>
             <Link href="/auth/login">
-              <a>Sign out</a>
+              <a className="text-black">Sign out</a>
             </Link>
           </li>
         </ul>

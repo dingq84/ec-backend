@@ -20,7 +20,7 @@ const Paper: React.ForwardRefRenderFunction<HTMLDivElement, PaperProps> = (
   return (
     <div
       ref={ref}
-      tw="bg-gray-50 w-full p-4 rounded-md shadow-lg flex justify-center items-center sm:(w-auto) md:(inline-flex py-8 px-12)"
+      tw="bg-white w-full p-4 rounded-md shadow-lg flex justify-center items-center sm:(w-auto) md:(inline-flex py-8 px-12)"
       {...restProps}
     >
       {children}

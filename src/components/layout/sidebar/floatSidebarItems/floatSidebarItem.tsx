@@ -11,13 +11,13 @@ import SidebarItems from '@/components/layout/sidebar/sidebarItems'
 import SidebarItem from '@/components/layout/sidebar/sidebarItem'
 
 // types
-import { SidebarMenuType, SidebarItemProps } from '@/types/components/sidebar'
+import { SidebarMenuType, SidebarItemsProps } from '@/types/components/sidebar'
 
-type FloatSidebarItemProps = Omit<SidebarItemProps, 'sidebarItems'> & {
+type FloatSidebarItemsProps = Omit<SidebarItemsProps, 'sidebarItems'> & {
   item: SidebarMenuType
 }
 
-const FloatSidebarItem = (props: FloatSidebarItemProps) => {
+const FloatSidebarItems = (props: FloatSidebarItemsProps) => {
   const { item, toggleSidebarOpen, forwardTo } = props
   const ref = useRef<HTMLDivElement>(null)
   const { isOpen, name, key, isActive, prefix, children = [] } = item
@@ -27,7 +27,7 @@ const FloatSidebarItem = (props: FloatSidebarItemProps) => {
       ref={ref}
       tw="w-full flex items-center justify-center px-3 py-2 text-lg text-gray-1 hover:(cursor-pointer bg-white-2)"
       key={name}
-      css={[isActive && tw`text-green-1`]}
+      css={[isActive && tw`text-primary`]}
       onMouseEnter={() => toggleSidebarOpen(key!, isOpen)}
       onMouseLeave={() => toggleSidebarOpen(key!, isOpen)}
     >
@@ -45,7 +45,7 @@ const FloatSidebarItem = (props: FloatSidebarItemProps) => {
           css: [tw`p-0 rounded-l-none flex-col w-60 bg-white`]
         }}
       >
-        <SidebarItem label={name} />
+        <SidebarItem label={name} isActive={isActive} />
         <SidebarItems
           sidebarItems={children}
           toggleSidebarOpen={toggleSidebarOpen}
@@ -56,4 +56,4 @@ const FloatSidebarItem = (props: FloatSidebarItemProps) => {
   )
 }
 
-export default FloatSidebarItem
+export default FloatSidebarItems

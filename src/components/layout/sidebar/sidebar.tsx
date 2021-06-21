@@ -18,7 +18,7 @@ import 'twin.macro'
 
 // components
 import Collapse from '@/components/shared/collapse'
-import FloatSidebarItem from '@/components/layout/sidebar/floatSidebarItem'
+import FloatSidebarItems from '@/components/layout/sidebar/floatSidebarItems'
 import SidebarItems from '@/components/layout/sidebar/sidebarItems'
 
 // constants
@@ -84,13 +84,13 @@ const Sidebar: React.FC = () => {
     <Collapse
       inProps={sidebarIsExtend}
       orientation="horizontal"
-      tw="flex-shrink-0"
+      tw="flex-shrink-0 bg-white-1"
       collapsedSize={collapsedSize}
     >
       {isFloat ? (
         <div>
           {sidebarItems.map(sidebar => (
-            <FloatSidebarItem
+            <FloatSidebarItems
               key={sidebar.name}
               item={sidebar}
               toggleSidebarOpen={toggleSidebarOpen}
