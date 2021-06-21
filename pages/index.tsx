@@ -23,9 +23,10 @@ const Home = () => {
       <div tw="py-6 px-4 flex flex-col space-y-5 h-full">
         <Paper tw="w-full py-4 justify-between">
           <TextField
-            id="account-search"
             placeholder="搜尋帳號、姓名..."
-            startAdornment={<FontAwesomeIcon icon={faSearch} tw="text-black" />}
+            adornment={{
+              start: <FontAwesomeIcon icon={faSearch} tw="text-black" />
+            }}
           />
           <Button
             className="btn"

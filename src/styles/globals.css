@@ -31,21 +31,30 @@
     @apply text-xs leading-relaxed font-normal;
   }
   a {
-    @apply text-center select-none text-base leading-none font-normal text-gray-2 hover:text-green-1;
+    @apply text-center select-none text-base leading-none font-normal text-blue-1 hover:text-primary;
   }
-  button {
-    @apply focus:outline-none;
+  button,
+  input {
+    @apply border-none outline-none bg-transparent tracking-wide focus:outline-none;
+  }
+
+  input[type='password']::-ms-reveal,
+  input[type='password']::-ms-clear {
+    @apply hidden;
   }
 }
 
 @layer components {
   .btn {
-    @apply rounded px-6 py-2 bg-green-1 text-white hover:bg-opacity-80 disabled:pointer-events-none disabled:bg-gray-4;
+    @apply rounded px-6 py-2 bg-primary text-white hover:bg-opacity-80 disabled:pointer-events-none disabled:bg-gray-1;
   }
   .btn-outline {
-    @apply rounded px-4 py-2 text-green-1 border border-solid border-green-1 hover:bg-green-1 hover:text-white disabled:pointer-events-none disabled:bg-gray-4;
+    @apply rounded px-4 py-2 text-primary border border-solid border-primary hover:bg-primary hover:text-white disabled:pointer-events-none disabled:bg-gray-1;
   }
   .btn-text {
-    @apply text-green-1 hover:opacity-80 disabled:pointer-events-none disabled:text-gray-4;
+    @apply text-primary hover:opacity-80 disabled:pointer-events-none disabled:text-gray-1;
+  }
+  .flex-center {
+    @apply flex justify-center items-center;
   }
 }

@@ -1,70 +1,27 @@
-/**
- * @author Dean Chen 2021-04-30
- * TextField 從原本的 Input component 改名而來，將 type 為 text、 password 獨立出來，
- * checkbox、radio、select 則透過其他 component 處理
- * 有兩個直得討論的功能
- * 1. 使用看不見的 placeholder: 透過看不見的 placeholder 完成 label 的動畫，因為 react-hook-form 的 watch 或 useWatch，
- * 無論哪一個都會造成父層或子層隨著 change event 而渲染
- * 2. 新增 mouse down event 來處理 點選清除按鈕時造成 input blur 的問題
- */
+import { ChangeEvent, InputHTMLAttributes, forwardRef, useState } from 'react'
 
-import { InputHTMLAttributes, forwardRef, useState, useRef } from 'react'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import tw, { styled } from 'twin.macro'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import tw from 'twin.macro'
 
 // components
 import Collapse from '@/components/shared/collapse'
-import useForkRef from '@/hooks/useForkRef'
+import Fade from '@/components/shared/fade'
 
-type StyledInputProps = {
-  hasPlaceholder: boolean
-  isFocused: boolean
-  hasStartAdornment: boolean
-  hasEndAdornment: boolean
-}
-
-const StyledInput = styled.input`
-  ${tw`text-blue-2 bg-white-2 w-full text-sm border-2 border-solid border-transparent rounded-md h-9 pl-3 py-1.5 pr-6`}
-
-  &:disabled {
-    ${tw`bg-gray-700 cursor-not-allowed`}
-
-    & ~ label {
-      ${tw`cursor-not-allowed`}
-    }
-
-    & ~ div {
-      ${tw`hidden`}
-    }
-  }
-
-  &:not(:placeholder-shown) ~ label {
-    ${tw`translate-x-0 -translate-y-full top-0 left-4 text-gray-700`}
-  }
-
-  ${({ hasPlaceholder }: StyledInputProps) => !hasPlaceholder && tw`placeholder:(text-transparent)`}
-
-  ${({ isFocused }: StyledInputProps) => isFocused && tw`outline-none bg-white border-gray-500`}
-
-  ${({ hasStartAdornment }: StyledInputProps) => hasStartAdornment && tw`pl-6`}
-
-  ${({ hasEndAdornment }: StyledInputProps) => hasEndAdornment && tw`pr-12`}
-`
-
-type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
-  id: string
-  name?: string
-  isFull?: boolean
+export type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   type?: 'text' | 'password'
-  label?: string
-  error?: string
-  className?: string
-  inputClassName?: string
-  startAdornment?: JSX.Element
-  endAdornment?: JSX.Element
+  initialValue?: string
+  error?: boolean // 判斷是否有錯誤，每個錯誤不一定需要錯誤訊息
+  errorMessage?: string // 錯誤訊息
+  adornment?: {
+    start?: JSX.Element
+    end?: JSX.Element
+  }
+  clear?: boolean // 控制是否出現 x
+  labelPosition?: 'top' | 'left' // label 在 input 的上方或是下方，預設上方
+  onChange?: (value: string) => void
   onClear?: () => void
-}
+} & ({ id: string; label: string } | { id?: undefined; label?: undefined })
 
 const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps> = (
   props: TextFieldProps,
@@ -73,101 +30,70 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
   const {
     id,
     label,
-    placeholder,
     onClear,
+    onChange,
+    errorMessage,
+    adornment = {
+      start: null,
+      end: null
+    },
+    error = false,
+    clear = true,
+    initialValue = '',
+    labelPosition = 'top',
     className = '',
-    inputClassName = '',
-    error = '',
-    isFull = true,
-    startAdornment,
-    endAdornment,
     ...restProps
   } = props
-  const [focused, setFocused] = useState(false)
-  const isClearing = useRef(false)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const handleRef = useForkRef(inputRef, ref)
-  const isFloatLabel = placeholder || focused
-  const hasError = Boolean(error)
-  const hasStartAdornment = Boolean(startAdornment)
-  const hasEndAdornment = Boolean(endAdornment)
-  // 判斷是否有 placeholder，來決定 label 呈現方式
-  const hasPlaceholder = Boolean(placeholder)
-  // 因為 value 有值的時候，placeholder-shown: false，因此 label 會固定在上方，但沒傳 placeholder 的話，也會 placeholder-shown:false
-  // 因此需傳入一個非空字串的虛擬 placeholder 進去
-  const placeholderModified = placeholder || 'hidden placeholder'
+  const [value, setValue] = useState(initialValue)
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value)
 
-  // mousedown、blur、click 發生順序依序為 mousedown -> blur -> click，因為 clear function 會觸發 blur
-  // 因此在 mousedown 這邊先進行判斷是否進行 clear
-  // const handleMouseDown = (): void => {
-  //   isClearing.current = true
-  // }
-
-  const handleFocus = (): void => {
-    setFocused(true)
-  }
-
-  const handleBlur = (): void => {
-    if (isClearing.current === false) {
-      setFocused(false)
+    if (onChange) {
+      onChange(event.target.value)
     }
   }
 
-  // const handleClear = (): void => {
-  //   isClearing.current = false
-  //   inputRef.current!.focus()
-  //   if (onClear) {
-  //     onClear()
-  //   }
-  // }
+  const handleClear = () => {
+    setValue('')
+    if (onClear) {
+      onClear()
+    }
+  }
 
   return (
-    <div css={[isFull === false && tw`inline-block`]} className={className}>
-      <div tw="relative">
-        {hasStartAdornment ? (
-          <span tw="absolute text-gray-200 text-xs top-1/2 left-2 transform -translate-y-1/2 vertical-align[0]">
-            {startAdornment}
-          </span>
-        ) : null}
-
-        <StyledInput
-          ref={handleRef}
-          id={id}
-          hasStartAdornment={hasStartAdornment}
-          hasPlaceholder={hasPlaceholder}
-          isFocused={focused}
-          hasEndAdornment={hasEndAdornment}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          placeholder={placeholderModified}
-          className={inputClassName}
-          {...restProps}
-        />
+    <div className={className}>
+      <div
+        tw="w-full text-blue-1 flex flex-col"
+        css={[labelPosition === 'left' && tw`flex-row space-y-0 space-x-1.5 items-center`]}
+      >
         {label ? (
-          <label
-            htmlFor={id}
-            tw="absolute text-blue-2 text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all select-none"
-            css={[isFloatLabel && tw`translate-x-0 -translate-y-full top-0 left-4 text-gray-700`]}
-          >
+          <label tw="text-sm text-black" htmlFor={id}>
             {label}
           </label>
         ) : null}
-
-        <div tw="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 text-xs flex items-center">
-          {endAdornment || null}
-          {/* {onClear ? (
-            <FontAwesomeIcon
-              icon={faTimes}
-              onClick={handleClear}
-              onMouseDown={handleMouseDown}
-              tw="cursor-pointer ml-2"
-            />
-          ) : null} */}
+        <div
+          tw="border border-solid border-blue-1 py-1 px-2 text-sm rounded space-x-1 flex items-center"
+          css={[error && tw`border-red-500`]}
+        >
+          {adornment.start}
+          <input
+            tw="color[inherit] border-none flex-grow placeholder:(text-xs)"
+            id={id}
+            value={value}
+            onChange={handleChange}
+            ref={ref}
+            {...restProps}
+          />
+          <Fade inProps={clear && value !== ''}>
+            <button tw="mr-1! leading-none h-3.5" onClick={handleClear} data-testid="clear">
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </Fade>
+          {adornment.end}
         </div>
       </div>
-
-      <Collapse inProps={hasError}>
-        <span tw="text-sm text-red-400 ml-2">{error}</span>
+      <Collapse inProps={error}>
+        <span tw="inline-block ml-1 h-3 leading-none text-red-500 text-xs">{errorMessage}</span>
       </Collapse>
     </div>
   )
