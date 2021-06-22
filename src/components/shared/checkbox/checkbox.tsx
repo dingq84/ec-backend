@@ -5,6 +5,9 @@
  * 而且有一個 :checked 的變化，覺得透過 js 驅動有點笨拙，
  * 因此本 component 使用 sass 處理
  * 有 conditional 的部分才會透過 twin.macro - css 處理
+ *
+ * @modified
+ * [Ding.Chen-2021-06-22]: 重構 checkbox，取消原本的 svg 動畫，改用較為簡單方式處理
  */
 
 import { InputHTMLAttributes, ChangeEvent, useState, forwardRef } from 'react'

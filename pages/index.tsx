@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons'
 import 'twin.macro'
 
 // components
@@ -20,23 +20,26 @@ import withAuth from '@/utils/shared/withAuth'
 const Home = () => {
   return (
     <DefaultLayout>
-      <div tw="py-6 px-4 flex flex-col space-y-5 h-full">
+      <div tw="py-6 px-4 flex flex-col space-y-5 h-full overflow-auto">
         <Paper tw="w-full py-4 justify-between">
           <TextField
             placeholder="搜尋帳號、姓名..."
             adornment={{
-              start: <FontAwesomeIcon icon={faSearch} tw="text-black" />
+              start: <FontAwesomeIcon icon={faSearch} />
             }}
           />
-          <Button
-            className="btn"
-            label={
-              <>
-                <FontAwesomeIcon icon={faSearch} />
-                <span>搜尋</span>
-              </>
-            }
-          />
+          <div className="flex-center" tw="space-x-3">
+            <Button className="btn-outline" label="匯出" />
+            <Button
+              className="btn"
+              label={
+                <>
+                  <FontAwesomeIcon icon={faFilter} />
+                  <span>篩選條件</span>
+                </>
+              }
+            />
+          </div>
         </Paper>
         <Table
           columns={accountData.columns}

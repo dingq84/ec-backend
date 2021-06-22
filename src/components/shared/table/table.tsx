@@ -87,7 +87,10 @@ const Table: React.ForwardRefRenderFunction<HTMLDivElement, TableProps> = (
           {headerGroups.map(headerGroup => (
             <div {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <div tw="bg-green-1 px-3 py-4 text-gray-200 font-bold" {...column.getHeaderProps()}>
+                <div
+                  tw="bg-white border-b border-solid border-gray-1  px-3 py-4 text-blue-1"
+                  {...column.getHeaderProps()}
+                >
                   {column.render('Header')}
                 </div>
               ))}
@@ -98,7 +101,10 @@ const Table: React.ForwardRefRenderFunction<HTMLDivElement, TableProps> = (
           {rows.map(row => {
             prepareRow(row)
             return (
-              <div {...row.getRowProps()} tw="hover:(bg-gray-5 shadow-lg cursor-pointer)">
+              <div
+                {...row.getRowProps()}
+                tw="text-blue-2 border-b border-solid border-gray-1 hover:(bg-purple-1 shadow-lg cursor-pointer)"
+              >
                 {row.cells.map((cell, i) => {
                   return (
                     <div

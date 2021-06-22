@@ -13,7 +13,7 @@ const Loading = (props: LoadingProps) => {
   const { isLoading } = props
   return (
     <Modal open={isLoading}>
-      <FontAwesomeIcon icon={faSpinner} tw="animate-spin text-4xl text-green-1" />
+      <FontAwesomeIcon icon={faSpinner} tw="animate-spin text-4xl text-primary" />
     </Modal>
   )
 }
