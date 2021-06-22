@@ -9,7 +9,7 @@ Default.args = {
   label: 'Checkbox label',
   id: 'checkbox',
   labelPosition: 'left',
-  initialValue: false,
+  value: false,
   disabled: false
 }
 Default.argTypes = {

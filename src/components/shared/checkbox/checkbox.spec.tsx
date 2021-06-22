@@ -8,21 +8,21 @@ import Checkbox from '.'
 describe('test <Checkbox />', () => {
   it('should render label if it exists', () => {
     const { container } = render(
-      <Checkbox initialValue={false} onChange={() => {}} label="test" id="test" />
+      <Checkbox value={false} onChange={() => {}} label="test" id="test" />
     )
 
     expect(container).toHaveTextContent('test')
   })
 
   it('should be disabled if the disabled is true', () => {
-    const { container } = render(<Checkbox initialValue={false} onChange={() => {}} disabled />)
+    const { container } = render(<Checkbox value={false} onChange={() => {}} disabled />)
     const input = container.querySelector('input')
     expect(input).toHaveAttribute('disabled')
   })
 
   it('should execute onChange function when click checkbox', () => {
     const mockChange = jest.fn()
-    const { container } = render(<Checkbox initialValue={false} onChange={mockChange} />)
+    const { container } = render(<Checkbox value={false} onChange={mockChange} />)
     userEvent.click(container.querySelector('input')!)
     expect(mockChange).toHaveBeenCalledTimes(1)
     expect(mockChange).toHaveBeenCalledWith(true)
@@ -35,7 +35,7 @@ describe('test <Checkbox />', () => {
   // https://github.com/testing-library/react-testing-library/issues/275
   it('should not execute onChange function when checkbox is disabled', () => {
     const mockChange = jest.fn()
-    const { container } = render(<Checkbox initialValue={false} onChange={mockChange} disabled />)
+    const { container } = render(<Checkbox value={false} onChange={mockChange} disabled />)
     userEvent.click(container.querySelector('input')!)
     expect(mockChange).toHaveBeenCalledTimes(0)
   })

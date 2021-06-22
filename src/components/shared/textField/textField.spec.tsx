@@ -67,7 +67,7 @@ describe('test <TextField />', () => {
   it('should execute onClear when clicking clear button', () => {
     const clearFn = jest.fn()
     const { queryByTestId } = render(
-      <TextField {...defaultProps} initialValue={'123'} onClear={clearFn} />
+      <TextField {...defaultProps} value={'123'} onClear={clearFn} />
     )
     const clearSvg = queryByTestId('clear')
     fireEvent.click(clearSvg!)

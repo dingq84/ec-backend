@@ -28,3 +28,9 @@ declare module '@fortawesome/react-fontawesome' {
     css?: CSSProp
   }
 }
+
+declare module 'react-datepicker' {
+  interface ReactDatePickerProps {
+    css?: CSSProp
+  }
+}

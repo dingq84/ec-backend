@@ -15,8 +15,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
-export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> & {
-  initialValue?: boolean
+// hooks
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+
+export type CheckboxProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'type' | 'onChange'
+> & {
+  value?: boolean
   onChange?: (checked: boolean) => void
   labelPosition?: 'top' | 'left'
   error?: boolean
@@ -34,11 +40,16 @@ const Checkbox: React.ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> 
     error,
     errorMessage,
     labelPosition = 'left',
-    initialValue = false,
+    value: initialValue = false,
     disabled = false,
     ...restProps
   } = props
   const [value, setValue] = useState(initialValue)
+
+  useEnhancedEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setValue(event.target.checked)
 

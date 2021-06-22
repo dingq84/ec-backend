@@ -8,12 +8,15 @@ import tw from 'twin.macro'
 import Collapse from '@/components/shared/collapse'
 import Fade from '@/components/shared/fade'
 
+// hooks
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+
 export type TextFieldProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type' | 'onChange' | 'onClear'
 > & {
   type?: 'text' | 'password'
-  initialValue?: string
+  value?: string
   error?: boolean // 判斷是否有錯誤，每個錯誤不一定需要錯誤訊息
   errorMessage?: string // 錯誤訊息
   adornment?: {
@@ -43,12 +46,17 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
     error = false,
     disabled = false,
     clear = true,
-    initialValue = '',
+    value: initialValue = '',
     labelPosition = 'top',
     className = '',
     ...restProps
   } = props
+
   const [value, setValue] = useState(initialValue)
+  useEnhancedEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
 

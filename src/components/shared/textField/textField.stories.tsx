@@ -9,7 +9,7 @@ const Template: Story<TextFieldProps> = args => <TextField {...args} />
 const Default = Template.bind({})
 Default.args = {
   label: 'Input label',
-  initialValue: 'test',
+  value: 'test',
   placeholder: 'Please enter something...',
   labelPosition: 'top',
   clear: true,
