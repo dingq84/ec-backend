@@ -1,7 +1,12 @@
+import { DOMAttributes } from 'react'
 import tw from 'twin.macro'
 
-// types
-import type { SidebarItemProps } from '@/types/components/sidebar'
+export type SidebarItemProps = DOMAttributes<HTMLDivElement> & {
+  label: string // link 的名稱
+  prefix?: React.ReactNode // link 名稱前面的 component
+  suffix?: React.ReactNode // link 名稱後面的 component
+  isActive?: boolean // 現在是否在這層
+}
 
 const SidebarItem: React.FC<SidebarItemProps> = (props: SidebarItemProps) => {
   const { label, prefix, suffix, isActive = false, ...restProps } = props

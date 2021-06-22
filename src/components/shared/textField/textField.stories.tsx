@@ -9,10 +9,12 @@ const Template: Story<TextFieldProps> = args => <TextField {...args} />
 const Default = Template.bind({})
 Default.args = {
   label: 'Input label',
-  id: 'adornment',
+  initialValue: 'test',
   placeholder: 'Please enter something...',
   labelPosition: 'top',
-  clear: true
+  clear: true,
+  disabled: false,
+  id: 'adornment'
 }
 Default.argTypes = {
   labelPosition: {
@@ -33,7 +35,6 @@ const Adornment = () => (
 )
 
 const Error = Template.bind({})
-
 Error.args = {
   label: 'error',
   id: 'error',

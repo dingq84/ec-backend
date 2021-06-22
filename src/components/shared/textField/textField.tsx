@@ -8,7 +8,10 @@ import tw from 'twin.macro'
 import Collapse from '@/components/shared/collapse'
 import Fade from '@/components/shared/fade'
 
-export type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
+export type TextFieldProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type' | 'onChange' | 'onClear'
+> & {
   type?: 'text' | 'password'
   initialValue?: string
   error?: boolean // 判斷是否有錯誤，每個錯誤不一定需要錯誤訊息
@@ -38,6 +41,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
       end: null
     },
     error = false,
+    disabled = false,
     clear = true,
     initialValue = '',
     labelPosition = 'top',
@@ -54,6 +58,10 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
   }
 
   const handleClear = () => {
+    if (disabled) {
+      return
+    }
+
     setValue('')
     if (onClear) {
       onClear()
@@ -73,7 +81,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
         ) : null}
         <div
           tw="border border-solid border-blue-1 py-1 px-2 text-sm rounded space-x-1 flex items-center"
-          css={[error && tw`border-red-500`]}
+          css={[error && tw`border-red-500`, disabled && tw`bg-gray-1 text-black`]}
         >
           {adornment.start}
           <input
@@ -82,10 +90,17 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
             value={value}
             onChange={handleChange}
             ref={ref}
+            disabled={disabled}
+            css={[disabled && tw`cursor-not-allowed`]}
             {...restProps}
           />
           <Fade inProps={clear && value !== ''}>
-            <button tw="mr-1! leading-none h-3.5" onClick={handleClear} data-testid="clear">
+            <button
+              tw="mr-1! leading-none h-3.5"
+              css={[disabled && tw`cursor-not-allowed`]}
+              onClick={handleClear}
+              data-testid="clear"
+            >
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </Fade>

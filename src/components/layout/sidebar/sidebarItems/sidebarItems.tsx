@@ -8,7 +8,8 @@ import ChevronDown from '@/components/layout/sidebar/chevronDown'
 import SidebarItem from '@/components/layout/sidebar/sidebarItem'
 
 // types
-import { SidebarItemsProps, SidebarItemProps } from '@/types/components/sidebar'
+import type { SidebarItemsProps } from '@/types/components/sidebar'
+import type { SidebarItemProps } from '@/components/layout/sidebar/sidebarItem'
 
 const SidebarItems: React.FC<SidebarItemsProps> = (props: SidebarItemsProps) => {
   const { sidebarItems, toggleSidebarOpen, forwardTo } = props

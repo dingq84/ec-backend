@@ -7,76 +7,78 @@
  * 有 conditional 的部分才會透過 twin.macro - css 處理
  */
 
-import type { HTMLAttributes, ChangeEvent } from 'react'
-import tw, { css, TwStyle } from 'twin.macro'
+import { InputHTMLAttributes, ChangeEvent, useState, forwardRef } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import tw from 'twin.macro'
 
-const checkboxCss = css`
-  & {
-    ${tw`inline-flex items-center relative cursor-pointer`}
+export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> & {
+  initialValue?: boolean
+  onChange?: (checked: boolean) => void
+  labelPosition?: 'top' | 'left'
+  error?: boolean
+  errorMessage?: string
+} & ({ id: string; label: string } | { id?: undefined; label?: undefined })
 
-    & svg {
-      & path {
-        ${tw`fill-current text-gray-200`}
-      }
-
-      & polyline {
-        stroke-dasharray: 70;
-        stroke-dashoffset: 70;
-        stroke-width: 8;
-        fill: none;
-        transition: stroke-dashoffset 0.3s linear;
-      }
-    }
-
-    & input {
-      ${tw`invisible opacity-0 absolute top-0 left-0`}
-
-      &:checked + svg > polyline {
-        stroke-dashoffset: 0;
-        ${tw`stroke-current text-green-1`}
-      }
-    }
-
-    & span {
-      ${tw`text-sm`}
-    }
-  }
-`
-
-type CheckboxProps = HTMLAttributes<HTMLLabelElement> & {
-  checked: boolean
-  toggleChecked: (event: ChangeEvent<HTMLInputElement>) => void
-  isReverse?: boolean // If true, 字和框會相反
-  label?: string
-  textStyle?: TwStyle
-  disabled?: boolean
-}
-
-function Checkbox(props: CheckboxProps) {
+const Checkbox: React.ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> = (
+  props: CheckboxProps,
+  ref
+) => {
   const {
-    checked,
-    toggleChecked,
+    id,
     label,
-    isReverse = false,
-    textStyle = {},
+    onChange,
+    error,
+    errorMessage,
+    labelPosition = 'left',
+    initialValue = false,
     disabled = false,
     ...restProps
   } = props
+  const [value, setValue] = useState(initialValue)
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setValue(event.target.checked)
+
+    if (onChange) {
+      onChange(event.target.checked)
+    }
+  }
 
   return (
-    <label css={[checkboxCss, isReverse && tw`flex-row-reverse`]} {...restProps}>
-      <input type="checkbox" checked={checked} onChange={toggleChecked} disabled={disabled} />
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" tw="w-4 h-4">
-        <path d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z" />
-        <polyline points="25.5,53.5 39.5,67.5 72.5,34.5" />
-      </svg>
+    <div
+      className="flex-center"
+      tw="space-x-1.5 inline-flex"
+      css={[labelPosition === 'top' && tw`flex-col space-x-0 space-y-0.5 items-start`]}
+    >
       {label ? (
-        <span className={`text-gray-700 text-sm ${isReverse ? 'mr-1' : 'ml-1'}`} {...textStyle}>
+        <label htmlFor={id} tw="text-sm text-black">
           {label}
-        </span>
+        </label>
       ) : null}
-    </label>
+      <div tw="relative font-size[0px]">
+        <span
+          tw="inline-block w-4 h-4 leading-none bg-transparent border border-solid border-blue-1 rounded"
+          css={[error && tw`border-red-500`]}
+        ></span>
+        <FontAwesomeIcon
+          tw="text-xs text-primary opacity-0 transition-opacity duration-300 absolute top-0.5 left-0.5"
+          css={[value && tw`opacity-100`, disabled && tw`text-gray-2`]}
+          icon={faCheck}
+        />
+        <input
+          ref={ref}
+          id={id}
+          tw="absolute top-0 left-0 w-4 h-4 z-10 opacity-0 hover:(cursor-pointer)"
+          css={[disabled && tw`hover:(cursor-not-allowed)`]}
+          type="checkbox"
+          disabled={disabled}
+          checked={value}
+          onChange={handleChange}
+          {...restProps}
+        />
+      </div>
+    </div>
   )
 }
 
-export default Checkbox
+export default forwardRef(Checkbox)
