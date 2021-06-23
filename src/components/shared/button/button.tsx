@@ -12,7 +12,7 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 import 'twin.macro'
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   label: string | React.ReactNode
 }
 
@@ -20,10 +20,16 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
   props: ButtonProps,
   ref
 ) => {
-  const { label, type = 'button', ...restProps } = props
+  const { label, className = '', type = 'button', ...restProps } = props
 
   return (
-    <button ref={ref} type={type} tw="flex items-center space-x-1.5" {...restProps}>
+    <button
+      ref={ref}
+      type={type}
+      className={`flex-center ${className}`}
+      tw="space-x-1.5"
+      {...restProps}
+    >
       {label}
     </button>
   )

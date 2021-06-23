@@ -14,7 +14,6 @@ module.exports = {
         width: 'width'
       },
       lineHeight: {
-        12: '3rem',
         tighter: '1.167'
       },
       colors: {
@@ -29,22 +28,7 @@ module.exports = {
         'gray-1': '#e0e0e0',
         'gray-2': '#828282',
         'gray-3': '#4f4f4f',
-        'black-1': '#0e1726',
-        // 'blue-1': '#404E67',
-        // 'blue-2': '#2c3648',
-        'green-1': '#227949',
-        'green-2': '#4D886A',
-        'green-3': '#72A28B',
-        'green-4': '#E8F3EE',
-        'brown-1': '#C4863B',
-        'brown-2': '#E4C385',
-        'brown-3': '#F9E6B3',
-        // 'gray-1': '#333333',
-        // 'gray-2': '#666666',
-        // 'gray-3': '#999999',
-        'gray-4': '#CCCCCC',
-        'gray-5': '#F2F2F2',
-        'gray-6': '#FAFAFA'
+        'black-1': '#0e1726'
       }
     }
   },

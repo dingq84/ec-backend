@@ -14,6 +14,7 @@ Default.args = {
   labelPosition: 'top',
   clear: true,
   disabled: false,
+  border: true,
   id: 'adornment'
 }
 Default.argTypes = {

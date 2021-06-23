@@ -1,5 +1,4 @@
 import { ChangeEvent, InputHTMLAttributes, forwardRef, useState } from 'react'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -23,7 +22,8 @@ export type TextFieldProps = Omit<
     start?: JSX.Element
     end?: JSX.Element
   }
-  clear?: boolean // 控制是否出現 x
+  clear?: boolean // 預設有 x 按鈕
+  border?: boolean // 預設有 border
   labelPosition?: 'top' | 'left' // label 在 input 的上方或是下方，預設上方
   onChange?: (value: string) => void
   onClear?: () => void
@@ -49,6 +49,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
     value: initialValue = '',
     labelPosition = 'top',
     className = '',
+    border = true,
     ...restProps
   } = props
 
@@ -89,7 +90,11 @@ const TextField: React.ForwardRefRenderFunction<HTMLInputElement, TextFieldProps
         ) : null}
         <div
           tw="border border-solid border-blue-1 py-1 px-2 text-sm rounded space-x-1 flex items-center"
-          css={[error && tw`border-red-500`, disabled && tw`bg-gray-1 text-black`]}
+          css={[
+            error && tw`border-red-500`,
+            disabled && tw`bg-gray-1 text-black`,
+            border === false && `border-none`
+          ]}
         >
           {adornment.start}
           <input
