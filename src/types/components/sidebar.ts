@@ -1,11 +1,11 @@
-type ConstantsSidebarMenuType = {
+interface ConstantsSidebarMenuType {
   prefix: any
   name: string
   href?: string
   children?: ConstantsSidebarMenuType[]
 }
 
-type SidebarMenuType = Omit<ConstantsSidebarMenuType, 'children'> & {
+interface SidebarMenuType extends Omit<ConstantsSidebarMenuType, 'children'> {
   isOpen?: boolean
   isActive?: boolean
   suffix?: any
@@ -13,7 +13,7 @@ type SidebarMenuType = Omit<ConstantsSidebarMenuType, 'children'> & {
   children?: SidebarMenuType[]
 }
 
-type SidebarItemsProps = {
+interface SidebarItemsProps {
   sidebarItems: SidebarMenuType[]
   toggleSidebarOpen: (key: string, open?: boolean) => void
   forwardTo: (href: string) => void

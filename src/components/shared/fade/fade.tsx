@@ -8,7 +8,7 @@
  * [Dean Chen 2021-05-07]: 為了兼容 Page transition，移除 visibility style
  */
 
-import { forwardRef, cloneElement, useRef } from 'react'
+import { forwardRef, cloneElement, useRef, HTMLAttributes } from 'react'
 import { Transition } from 'react-transition-group'
 import tw from 'twin.macro'
 
@@ -18,9 +18,17 @@ import { Status } from '@/constants/components/transition'
 import useForkRef from '@/hooks/useForkRef'
 
 // types
-import type { FadeProps } from '@/types/components/fade'
+import type { TransitionProps } from '@/types/components/transition'
 
-const Fade: React.ForwardRefRenderFunction<HTMLDivElement, FadeProps> = (props: FadeProps, ref) => {
+export interface FadeProps<T = HTMLDivElement> extends TransitionProps, HTMLAttributes<T> {
+  inProps: boolean
+  // 這邊不使用 ReactNode，原因為 TS 會一直警告 children 無 ref 和 props，
+  // https://github.com/Microsoft/TypeScript/issues/6471
+  // 上述 issue 解決方式為 any
+  children: any
+}
+
+const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
   const {
     inProps,
     children,
@@ -34,13 +42,13 @@ const Fade: React.ForwardRefRenderFunction<HTMLDivElement, FadeProps> = (props: 
     timeout = 300,
     ...restProps
   } = props
-  const nodeRef = useRef<HTMLElement>(null)
+  const nodeRef = useRef<HTMLElement>(null!)
   const foreignRef = useForkRef(children.ref, ref)
   const handleRef = useForkRef(nodeRef, foreignRef)
 
   const normalizedTransitionCallback = (callback?: Function) => (maybeIsAppearing?: any): void => {
     if (callback) {
-      const node = nodeRef.current!
+      const node = nodeRef.current
 
       // onEnterXxx and onExitXxx callbacks have a different arguments.length value.
       if (maybeIsAppearing === undefined) {
@@ -97,6 +105,6 @@ const Fade: React.ForwardRefRenderFunction<HTMLDivElement, FadeProps> = (props: 
       }}
     </Transition>
   )
-}
+})
 
-export default forwardRef(Fade)
+export default Fade

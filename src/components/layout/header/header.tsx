@@ -21,9 +21,9 @@ import useIsMobile from '@/hooks/useIsMobile'
 import { toggleSidebar, setSidebar } from '@/states/global/settings'
 import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
 
-const Header: React.FC = () => {
+const Header = () => {
   const isMobile = useIsMobile()
-  const anchorEl = useRef<HTMLDivElement>(null)
+  const anchorEl = useRef<HTMLDivElement>(null!)
   const [popoverIsOpen, setPopoverIsOpen] = useState(false)
   const dispatch = useAppDispatch()
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
@@ -84,12 +84,12 @@ const Header: React.FC = () => {
       <Popover
         horizontalSpace={5}
         open={popoverIsOpen}
-        anchorEl={anchorEl.current!}
+        anchorEl={anchorEl.current}
         onClose={() => togglePopover(false)}
         paperProps={{ css: [tw`w-auto px-0 py-0 shadow-xl`] }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <ul tw="all:(w-40 py-1.5 inline-block)">
+        <ul tw="all:(py-1.5 inline-block)">
           <li>
             <Link href="/auth/login">
               <a className="text-black">Sign out</a>

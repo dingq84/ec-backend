@@ -20,7 +20,7 @@ import Paper from '@/components/shared/paper'
 // types
 import type { CustomColumn } from '@/types/components/table'
 
-type TableProps = HTMLAttributes<HTMLDivElement> & {
+interface TableProps extends HTMLAttributes<HTMLDivElement> {
   columns: CustomColumn[]
   data: {}[]
   headerFixed?: boolean
@@ -32,10 +32,7 @@ type TableProps = HTMLAttributes<HTMLDivElement> & {
   }
 }
 
-const Table: React.ForwardRefRenderFunction<HTMLDivElement, TableProps> = (
-  props: TableProps,
-  ref
-) => {
+const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) {
   const { columns, data, headerFixed = true, pagination, ...restProps } = props
   const { totalRows, currentPage = 0, pageSize = 10 } = pagination
 
@@ -139,6 +136,6 @@ const Table: React.ForwardRefRenderFunction<HTMLDivElement, TableProps> = (
       </div>
     </>
   )
-}
+})
 
-export default forwardRef(Table)
+export default Table

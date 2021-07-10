@@ -7,15 +7,14 @@
  * 因此實現一個 workaround 的方式，開一個 css 接口，如此外部可傳入 tw 或是 css
  */
 
-import { forwardRef, HTMLAttributes, PropsWithChildren } from 'react'
+import { forwardRef, HTMLAttributes } from 'react'
 import 'twin.macro'
 
-type PaperProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>>
+export interface PaperProps extends HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
+}
 
-const Paper: React.ForwardRefRenderFunction<HTMLDivElement, PaperProps> = (
-  props: PaperProps,
-  ref
-) => {
+const Paper = forwardRef<HTMLDivElement, PaperProps>(function Paper(props: PaperProps, ref) {
   const { children, ...restProps } = props
   return (
     <div
@@ -26,6 +25,6 @@ const Paper: React.ForwardRefRenderFunction<HTMLDivElement, PaperProps> = (
       {children}
     </div>
   )
-}
+})
 
-export default forwardRef(Paper)
+export default Paper

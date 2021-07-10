@@ -15,7 +15,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 registerLocale('tw', zhTw)
 
-export type DatePickerProps = Omit<ReactDatePickerProps, 'onChange'>
+export interface DatePickerProps extends Omit<ReactDatePickerProps, 'onChange'> {}
 
 const DatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
   const [date, setDate] = useState<Date>()

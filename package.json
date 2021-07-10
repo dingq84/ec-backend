@@ -6,6 +6,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "export": "next export",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write \"{src,pages}/**/*.{ts,tsx}\"",
     "lint": "eslint \"{src,pages}/**/*.{ts,tsx}\"",

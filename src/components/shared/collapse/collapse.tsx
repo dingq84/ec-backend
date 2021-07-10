@@ -25,12 +25,11 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 // types
 import type { TransitionProps } from '@/types/components/transition'
 
-type CollapseProps = HTMLAttributes<HTMLDivElement> &
-  TransitionProps & {
-    inProps: boolean
-    orientation?: 'horizontal' | 'vertical'
-    collapsedSize?: string
-  }
+export interface CollapseProps extends HTMLAttributes<HTMLDivElement>, TransitionProps {
+  inProps: boolean
+  orientation?: 'horizontal' | 'vertical'
+  collapsedSize?: string
+}
 
 const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = (
   props: CollapseProps,
@@ -50,26 +49,26 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     children,
     ...restProps
   } = props
-  const nodeRef = useRef<HTMLDivElement>(null) // 控制 Transition component
+  const nodeRef = useRef<HTMLDivElement>(null!) // 控制 Transition component
   const handleRef = useForkRef<HTMLDivElement>(ref, nodeRef) // 這邊可將外部傳入的 ref 和這邊需要的 ref 合併成一個，可同時運作
-  const wrapperRef = useRef<HTMLDivElement>(null) // 控制 Wrapper component，用來控制橫向伸縮的 position
+  const wrapperRef = useRef<HTMLDivElement>(null!) // 控制 Wrapper component，用來控制橫向伸縮的 position
   const isHorizontal = orientation === 'horizontal'
   const size = isHorizontal ? 'width' : 'maxHeight'
 
   const getWrapperSize = () =>
-    wrapperRef.current![isHorizontal ? 'clientWidth' : 'clientHeight'] || 0
+    wrapperRef.current[isHorizontal ? 'clientWidth' : 'clientHeight'] || 0
 
   useEnhancedEffect(() => {
     if (inProps === false) {
-      nodeRef.current!.style[size] = collapsedSize
+      nodeRef.current.style[size] = collapsedSize
     }
   }, [collapsedSize])
 
   useEnhancedEffect(() => {
     if (inProps) {
-      nodeRef.current!.style[size] = `${getWrapperSize()}px`
+      nodeRef.current.style[size] = `${getWrapperSize()}px`
     } else {
-      nodeRef.current!.style[size] = `0px`
+      nodeRef.current.style[size] = `0px`
     }
   }, [])
 

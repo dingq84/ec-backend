@@ -8,7 +8,7 @@ export type SidebarItemProps = DOMAttributes<HTMLDivElement> & {
   isActive?: boolean // 現在是否在這層
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = (props: SidebarItemProps) => {
+const SidebarItem = (props: SidebarItemProps) => {
   const { label, prefix, suffix, isActive = false, ...restProps } = props
   return (
     <div

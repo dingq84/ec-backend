@@ -5,7 +5,7 @@ import 'twin.macro'
 // components
 import Modal from '@/components/shared/modal'
 
-type LoadingProps = {
+interface LoadingProps {
   isLoading: boolean
 }
 

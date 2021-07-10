@@ -16,12 +16,14 @@ import tw from 'twin.macro'
 import Fade from '@/components/shared/fade'
 
 // types
-import type { BackdropProps } from '@/types/components/backdrop'
+import type { FadeProps } from '@/components/shared/fade'
 
-const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropProps> = (
-  props: BackdropProps,
-  ref
-) => {
+export interface BackdropProps extends FadeProps {
+  invisible?: boolean
+  hidden?: boolean
+}
+
+const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(function Backdrop(props, ref) {
   const { children, invisible = false, hidden = false, ...restProps } = props
   return (
     <Fade {...restProps}>
@@ -37,6 +39,6 @@ const Backdrop: React.ForwardRefRenderFunction<HTMLDivElement, BackdropProps> = 
       </div>
     </Fade>
   )
-}
+})
 
-export default forwardRef(Backdrop)
+export default Backdrop

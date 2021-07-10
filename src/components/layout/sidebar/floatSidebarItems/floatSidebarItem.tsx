@@ -13,7 +13,7 @@ import SidebarItem from '@/components/layout/sidebar/sidebarItem'
 // types
 import { SidebarMenuType, SidebarItemsProps } from '@/types/components/sidebar'
 
-type FloatSidebarItemsProps = Omit<SidebarItemsProps, 'sidebarItems'> & {
+interface FloatSidebarItemsProps extends Omit<SidebarItemsProps, 'sidebarItems'> {
   item: SidebarMenuType
 }
 

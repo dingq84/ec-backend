@@ -11,7 +11,7 @@ import SidebarItem from '@/components/layout/sidebar/sidebarItem'
 import type { SidebarItemsProps } from '@/types/components/sidebar'
 import type { SidebarItemProps } from '@/components/layout/sidebar/sidebarItem'
 
-const SidebarItems: React.FC<SidebarItemsProps> = (props: SidebarItemsProps) => {
+const SidebarItems = (props: SidebarItemsProps) => {
   const { sidebarItems, toggleSidebarOpen, forwardTo } = props
   return (
     <>

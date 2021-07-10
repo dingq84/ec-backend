@@ -11,28 +11,27 @@ import { createPortal } from 'react-dom'
 import useForkRef from '@/hooks/useForkRef'
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-// types
-import type { PortalProps } from '@/types/components/portal'
-
 // utils
 import setRef from '@/utils/shared/setRef'
 
-function getContainer(container: PortalProps['container']) {
-  return typeof container === 'function' ? container() : container
+export interface PortalProps {
+  // 這邊不使用 ReactNode，原因為 TS 會一直警告 children 無 ref 和 props，
+  // https://github.com/Microsoft/TypeScript/issues/6471
+  // 上述 issue 解決方式為 any
+  children: any
+  disablePortal?: boolean
+  container?: HTMLElement
 }
 
-const Portal: React.ForwardRefRenderFunction<HTMLElement, PortalProps> = (
-  props: PortalProps,
-  ref
-) => {
+const Portal = forwardRef<HTMLElement, PortalProps>(function Portal(props, ref) {
   const { disablePortal = false, container, children } = props
   const [mountNode, setMountNode] = useState<HTMLElement>()
   const isValidChildren = isValidElement(children)
-  const handleRef = useForkRef(isValidChildren ? children.ref : null, ref)
+  const handleRef = useForkRef(isValidChildren ? (children as any).ref : null, ref)
 
   useEnhancedEffect(() => {
     if (!disablePortal) {
-      setMountNode(getContainer(container) || document.body)
+      setMountNode(container || document.body)
     }
   }, [container, disablePortal])
 
@@ -47,7 +46,7 @@ const Portal: React.ForwardRefRenderFunction<HTMLElement, PortalProps> = (
 
   if (disablePortal) {
     if (isValidChildren) {
-      return cloneElement(children, {
+      return cloneElement(children as any, {
         ref: handleRef
       })
     }
@@ -55,6 +54,6 @@ const Portal: React.ForwardRefRenderFunction<HTMLElement, PortalProps> = (
   }
 
   return mountNode ? createPortal(children, mountNode as Element) : null
-}
+})
 
-export default forwardRef(Portal)
+export default Portal

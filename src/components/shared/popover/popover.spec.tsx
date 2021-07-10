@@ -7,7 +7,7 @@ import Popover from '.'
 describe('test popover', () => {
   describe('test render', () => {
     it('should render nothing when open equals false', () => {
-      const { container } = render(<Popover open={false} />)
+      const { container } = render(<Popover open={false}>test</Popover>)
       expect(container).toBeEmptyDOMElement()
     })
 
@@ -39,7 +39,11 @@ describe('test popover', () => {
     })
 
     it('paper inline style should equal { top: "500px", left: "400px", transformOrigin: "0px 0px" } when default ', () => {
-      const { queryByTestId } = render(<Popover anchorEl={anchor} open />)
+      const { queryByTestId } = render(
+        <Popover anchorEl={anchor} open>
+          test
+        </Popover>
+      )
       const paper = queryByTestId('paper')
       const { style } = paper!
       expect(style.top).toBe('500px')
@@ -50,7 +54,9 @@ describe('test popover', () => {
     it(`paper inline style should equal { top: "300px", left: "450px", transformOrigin: "0px 0px"}
        when anchorOrigin equals { vertical: "top", horizontal: "center" } `, () => {
       const { queryByTestId } = render(
-        <Popover anchorEl={anchor} open anchorOrigin={{ vertical: 'top', horizontal: 'center' }} />
+        <Popover anchorEl={anchor} open anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          test
+        </Popover>
       )
       const paper = queryByTestId('paper')
       const { style } = paper!
@@ -68,7 +74,9 @@ describe('test popover', () => {
           open
           anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
           transformOrigin={{ vertical: 'center', horizontal: 20 }}
-        />
+        >
+          test
+        </Popover>
       )
 
       const paper = queryByTestId('paper')
@@ -82,7 +90,11 @@ describe('test popover', () => {
     })
 
     it('paper inline style should equal { top: "500px", left: "410px", transformOrigin: "0px 0px" } when horizontal space equals 10 ', () => {
-      const { queryByTestId } = render(<Popover anchorEl={anchor} open horizontalSpace={10} />)
+      const { queryByTestId } = render(
+        <Popover anchorEl={anchor} open horizontalSpace={10}>
+          test
+        </Popover>
+      )
       const paper = queryByTestId('paper')
       const { style } = paper!
       expect(style.top).toBe('500px')
@@ -91,7 +103,11 @@ describe('test popover', () => {
     })
 
     it('paper inline style should equal { top: "520px", left: "400px", transformOrigin: "0px 0px" } when vertical space equals 20 ', () => {
-      const { queryByTestId } = render(<Popover anchorEl={anchor} open verticalSpace={20} />)
+      const { queryByTestId } = render(
+        <Popover anchorEl={anchor} open verticalSpace={20}>
+          test
+        </Popover>
+      )
       const paper = queryByTestId('paper')
       const { style } = paper!
       expect(style.top).toBe('520px')
@@ -103,7 +119,11 @@ describe('test popover', () => {
   describe('test transition functions', () => {
     it('should execute onEnter when popover is opened', () => {
       const mockFn = jest.fn()
-      render(<Popover open backdropProps={{ onEnter: mockFn }} />)
+      render(
+        <Popover open backdropProps={{ onEnter: mockFn }}>
+          test
+        </Popover>
+      )
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
   })

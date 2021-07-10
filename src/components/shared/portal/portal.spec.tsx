@@ -67,12 +67,12 @@ describe('test portal', () => {
 
   it('should unmount when parent unmounted', () => {
     function Child() {
-      const containerRef = useRef<HTMLDivElement>(null)
+      const containerRef = useRef<HTMLDivElement>(null!)
 
       return (
         <div>
           <div ref={containerRef} />
-          <Portal container={() => containerRef.current}>
+          <Portal container={containerRef.current}>
             <div id="test1" />
           </Portal>
         </div>

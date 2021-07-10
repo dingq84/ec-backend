@@ -3,6 +3,9 @@
  * @link https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/Popover/Popover.js
  * 程式碼參考 Material-UI，完成最基本的 popover 功能，
  * 原本的 grow transition 改成使用 backdrop 自帶的 fade transition
+ *
+ * @modified
+ * [Ding.Chen-2021-06-23]: 新增根據 anchor 的寬度計算 paper width，並透過 autoWidth 控制是否啟動
  */
 
 import { forwardRef, useCallback, useRef } from 'react'
@@ -17,14 +20,14 @@ import useResize from '@/hooks/useResize'
 
 // types
 import type { HorizontalType, VerticalType } from '@/types/components/popover'
-import type { ModalProps } from '@/types/components/modal'
+import type { ModalProps } from '@/components/shared/modal'
 
 // utils
 import getOffsetTop from '@/utils/components/popover/getOffsetTop'
 import getOffsetLeft from '@/utils/components/popover/getOffsetLeft'
 import getTransformOriginValue from '@/utils/components/popover/getTransformOriginValue'
 
-type PopoverProps = ModalProps & {
+export interface PopoverProps extends ModalProps {
   anchorEl?: HTMLDivElement // 錨點 決定 popover 要定位在哪裡
   anchorOrigin?: {
     // 錨點的 origin
@@ -39,15 +42,16 @@ type PopoverProps = ModalProps & {
   horizontalSpace?: number // 錨點和 popover 的水平間距
   verticalSpace?: number // 錨點和 popover 的垂直間距
   hiddenBackdrop?: boolean // 隱藏 backdrop
+  autoWidth?: boolean // 自動計算 paper width
   paperProps?: {
     css: TwStyle[]
   }
 }
 
-const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
+const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
   props: PopoverProps,
   ref
-) => {
+) {
   const {
     open,
     children,
@@ -64,20 +68,21 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
     verticalSpace = 0,
     hiddenBackdrop = false,
     backdropProps = {},
+    autoWidth = true,
     paperProps = { css: [] },
     ...restProps
   } = props
-  const paperRef = useRef<HTMLDivElement>(null)
+  const paperRef = useRef<HTMLDivElement>(null!)
   const getAnchorOffset = useCallback(() => {
     // nodeType 1 為 Element，如果沒傳入 anchor element，則使用 body
     const anchorElement =
-      anchorEl && anchorEl.nodeType === 1 ? anchorEl : paperRef.current?.ownerDocument.body
-
-    const anchorRect = anchorElement!.getBoundingClientRect()
+      anchorEl && anchorEl.nodeType === 1 ? anchorEl : paperRef.current.ownerDocument.body
+    const anchorRect = anchorElement.getBoundingClientRect()
 
     return {
       top: anchorRect.top + getOffsetTop(anchorRect, anchorOrigin.vertical),
-      left: anchorRect.left + getOffsetLeft(anchorRect, anchorOrigin.horizontal)
+      left: anchorRect.left + getOffsetLeft(anchorRect, anchorOrigin.horizontal),
+      width: anchorRect.width
     }
   }, [anchorEl])
 
@@ -93,7 +98,9 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
   )
 
   const getPositioningStyle = useCallback(
-    (element: HTMLElement): Pick<CSSStyleDeclaration, 'top' | 'left' | 'transformOrigin'> => {
+    (
+      element: HTMLElement
+    ): Pick<CSSStyleDeclaration, 'top' | 'left' | 'transformOrigin' | 'width'> => {
       const elemRect = {
         width: element.offsetWidth,
         height: element.offsetHeight
@@ -106,7 +113,10 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       let top = `${anchorOffset.top - elemTransformOrigin.vertical + verticalSpace}px`
       let left = `${anchorOffset.left - elemTransformOrigin.horizontal + horizontalSpace}px`
 
-      return { top, left, transformOrigin: getTransformOriginValue(elemTransformOrigin) }
+      // Calculate paper width
+      const width = `${anchorOffset.width}px`
+
+      return { top, left, width, transformOrigin: getTransformOriginValue(elemTransformOrigin) }
     },
     [anchorEl, getAnchorOffset]
   )
@@ -117,15 +127,19 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       return
     }
 
-    const positioning = getPositioningStyle(element)
-    if (positioning.top !== null) {
-      element.style.top = positioning.top
+    const { top, left, width, transformOrigin } = getPositioningStyle(element)
+    if (top !== null) {
+      element.style.top = top
     }
-    if (positioning.left !== null) {
-      element.style.left = positioning.left
+    if (left !== null) {
+      element.style.left = left
     }
 
-    element.style.transformOrigin = positioning.transformOrigin
+    if (autoWidth) {
+      element.style.width = width
+    }
+
+    element.style.transformOrigin = transformOrigin
   }, [getPositioningStyle])
 
   const handleEntering = (node: HTMLElement, isAppearing: any) => {
@@ -161,6 +175,6 @@ const Popover: React.ForwardRefRenderFunction<HTMLDivElement, PopoverProps> = (
       </Paper>
     </Modal>
   )
-}
+})
 
-export default forwardRef(Popover)
+export default Popover

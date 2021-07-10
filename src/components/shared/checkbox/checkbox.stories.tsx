@@ -7,7 +7,7 @@ const Template: Story<CheckboxProps> = args => <Checkbox {...args} />
 const Default = Template.bind({})
 Default.args = {
   label: 'Checkbox label',
-  id: 'checkbox',
+  // id: 'checkbox',
   labelPosition: 'left',
   value: false,
   disabled: false

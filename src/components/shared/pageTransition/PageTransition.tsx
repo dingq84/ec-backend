@@ -16,7 +16,7 @@ import 'twin.macro'
 // components
 import Fade from '@/components/shared/fade'
 
-type PageTransitionProps = {
+interface PageTransitionProps {
   children: React.ReactNode
   className?: string
 }

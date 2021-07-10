@@ -8,7 +8,7 @@
 import { HTMLAttributes } from 'react'
 import 'twin.macro'
 
-type ImageProps = HTMLAttributes<HTMLImageElement> & {
+export interface ImageProps extends HTMLAttributes<HTMLImageElement> {
   src: string
   alt: string
 }

@@ -16,16 +16,21 @@ import useForkRef from '@/hooks/useForkRef'
 import useEventCallback from '@/hooks/useEventCallback'
 
 // types
-import type { ModalProps } from '@/types/components/modal'
+import type { PortalProps } from '@/components/shared/portal'
+import type { BackdropProps } from '@/components/shared/backdrop'
 
-const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
-  props: ModalProps,
-  ref
-) => {
+export interface ModalProps extends PortalProps {
+  open: boolean
+  onClose?: () => void | undefined
+  onBackdropClick?: () => void
+  backdropProps?: Partial<BackdropProps>
+}
+
+const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(props, ref) {
   const { open, children, onClose, onBackdropClick, backdropProps = {}, ...restProps } = props
   const { onEnter, onExited, ...restBackdropProps } = backdropProps
   const [exited, setExited] = useState(true)
-  const modalRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null!)
   const handleRef = useForkRef(modalRef, ref)
 
   const handleEnter = () => {
@@ -46,7 +51,7 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
 
   const handleMounted = () => {
     // Fix a bug on Chrome where the scroll isn't initially 0.
-    modalRef.current!.scrollTop = 0
+    modalRef.current.scrollTop = 0
   }
 
   const handlePortalRef = useEventCallback((node: HTMLElement) => {
@@ -67,11 +72,11 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     }
 
     if (onBackdropClick) {
-      onBackdropClick(event)
+      onBackdropClick()
     }
 
     if (onClose) {
-      onClose(event)
+      onClose()
     }
   }
 
@@ -98,6 +103,6 @@ const Modal: React.ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
       </div>
     </Portal>
   )
-}
+})
 
-export default forwardRef(Modal)
+export default Modal

@@ -10,7 +10,7 @@
  * [Ding.Chen-2021-06-22]: 重構 checkbox，取消原本的 svg 動畫，改用較為簡單方式處理
  */
 
-import { InputHTMLAttributes, ChangeEvent, useState, forwardRef } from 'react'
+import { HTMLAttributes, ChangeEvent, useState, forwardRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -18,21 +18,32 @@ import tw from 'twin.macro'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-export type CheckboxProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'value' | 'type' | 'onChange'
-> & {
+interface basicType extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
+  name?: string
   value?: boolean
   onChange?: (checked: boolean) => void
   labelPosition?: 'top' | 'left'
   error?: boolean
   errorMessage?: string
-} & ({ id: string; label: string } | { id?: undefined; label?: undefined })
+  disabled?: boolean
+  readOnly?: boolean
+}
 
-const Checkbox: React.ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> = (
+interface inputTypeWithIdLabel extends basicType {
+  id: string
+  label: string
+}
+interface inputTypeWithoutIdLabel extends basicType {
+  id?: string
+  label?: undefined
+}
+
+export type CheckboxProps = inputTypeWithoutIdLabel | inputTypeWithIdLabel
+
+const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
   props: CheckboxProps,
   ref
-) => {
+) {
   const {
     id,
     label,
@@ -64,11 +75,11 @@ const Checkbox: React.ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> 
       tw="space-x-1.5 inline-flex"
       css={[labelPosition === 'top' && tw`flex-col space-x-0 space-y-0.5 items-start`]}
     >
-      {label ? (
+      {label && (
         <label htmlFor={id} tw="text-sm text-black">
           {label}
         </label>
-      ) : null}
+      )}
       <div tw="relative font-size[0px]">
         <span
           tw="inline-block w-4 h-4 leading-none bg-transparent border border-solid border-blue-1 rounded"
@@ -93,6 +104,6 @@ const Checkbox: React.ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> 
       </div>
     </div>
   )
-}
+})
 
-export default forwardRef(Checkbox)
+export default Checkbox

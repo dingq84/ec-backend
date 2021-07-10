@@ -9,17 +9,16 @@
  * TODO: 待專案後續走向，決定使否需要此 component
  */
 
-import { ButtonHTMLAttributes, forwardRef } from 'react'
+import { HTMLAttributes, forwardRef } from 'react'
 import 'twin.macro'
 
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   label: string | React.ReactNode
+  type?: 'button' | 'submit'
+  disabled?: boolean
 }
 
-const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
-  props: ButtonProps,
-  ref
-) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(props: ButtonProps, ref) {
   const { label, className = '', type = 'button', ...restProps } = props
 
   return (
@@ -33,6 +32,6 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
       {label}
     </button>
   )
-}
+})
 
-export default forwardRef(Button)
+export default Button
