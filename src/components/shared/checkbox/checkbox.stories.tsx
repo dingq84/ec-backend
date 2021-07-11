@@ -7,11 +7,11 @@ const Template: Story<CheckboxProps> = args => <Checkbox {...args} />
 const Default = Template.bind({})
 Default.args = {
   label: 'Checkbox label',
-  // id: 'checkbox',
   labelPosition: 'left',
   value: false,
   disabled: false
 }
+
 Default.argTypes = {
   labelPosition: {
     options: ['top', 'left'],

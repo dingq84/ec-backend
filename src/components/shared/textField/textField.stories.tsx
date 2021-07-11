@@ -17,6 +17,7 @@ Default.args = {
   border: true,
   id: 'adornment'
 }
+
 Default.argTypes = {
   labelPosition: {
     options: ['top', 'left'],
