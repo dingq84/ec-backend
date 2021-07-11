@@ -12,7 +12,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
 // components
-import Collapse from '@/components/shared/collapse'
+import ErrorMessage from '@/components/shared/errorMessage'
 import Fade from '@/components/shared/fade'
 
 // hooks
@@ -130,9 +130,8 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           {adornment.end}
         </div>
       </div>
-      <Collapse inProps={error}>
-        <span tw="inline-block ml-1 h-3 leading-none text-red-500 text-xs">{errorMessage}</span>
-      </Collapse>
+
+      <ErrorMessage message={errorMessage} show={error} />
     </div>
   )
 }
