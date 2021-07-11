@@ -31,7 +31,7 @@ describe('test <TextField />', () => {
 
     it(`the label should be ${defaultProps.label}`, () => {
       const { container } = render(<TextField {...defaultProps} />)
-      expect(container.querySelector('label')).toHaveTextContent(defaultProps.label)
+      expect(container.querySelector('label')).toHaveTextContent(defaultProps.label!)
     })
   })
 

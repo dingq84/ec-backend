@@ -20,32 +20,19 @@ import TextField, { TextFieldProps } from '@/components/shared/textField'
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import useForkRef from '@/hooks/useForkRef'
 
-type Option = {
-  key: string
-  value: string
-}
+// types
+import type { Option } from '@/types/components/input'
 
 export interface SelectProps {
   options: Option[]
   value?: null | Option
   onChange?: (value: Option | Option[]) => void
-  clear?: boolean
-  disabled?: boolean
   multiple?: boolean
   inputProps?: TextFieldProps
 }
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, ref) {
-  const {
-    options,
-    onChange,
-    value: initialValue = '',
-    clear = true, // 以 select 的 clear 控制 textField
-    disabled = false, // 以 select 的 disable 控制 textField
-    multiple = false,
-    inputProps = {}
-  } = props
-  const { onClear, ...restInputProps } = inputProps
+  const { options, onChange, value: initialValue = '', multiple = false, inputProps = {} } = props
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('') // 顯示在 input 上
   const [selected, setSelected] = useState<Option[]>([]) // 實際控制的選項
@@ -88,19 +75,14 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
   const handleClear = () => {
     setValue('')
     setSelected([])
-
-    if (onClear) {
-      onClear()
-    }
   }
+
   return (
     <div tw="w-full">
       <TextField
+        {...inputProps}
         ref={handleRef}
-        {...restInputProps}
         readOnly
-        clear={clear}
-        disabled={disabled}
         onClick={openPopover}
         onClear={handleClear}
         adornment={{

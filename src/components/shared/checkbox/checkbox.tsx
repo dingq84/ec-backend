@@ -10,7 +10,7 @@
  * [Ding.Chen-2021-06-22]: 重構 checkbox，取消原本的 svg 動畫，改用較為簡單方式處理
  */
 
-import { HTMLAttributes, ChangeEvent, useState, forwardRef } from 'react'
+import { ChangeEvent, useState, forwardRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -18,27 +18,10 @@ import tw from 'twin.macro'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-interface basicType extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
-  name?: string
-  value?: boolean
-  onChange?: (checked: boolean) => void
-  labelPosition?: 'top' | 'left'
-  error?: boolean
-  errorMessage?: string
-  disabled?: boolean
-  readOnly?: boolean
-}
+// types
+import type { InputBasicType } from '@/types/components/input'
 
-interface inputTypeWithIdLabel extends basicType {
-  id: string
-  label: string
-}
-interface inputTypeWithoutIdLabel extends basicType {
-  id?: string
-  label?: undefined
-}
-
-export type CheckboxProps = inputTypeWithoutIdLabel | inputTypeWithIdLabel
+export interface CheckboxProps extends InputBasicType<boolean> {}
 
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
   props: CheckboxProps,
@@ -48,11 +31,11 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
     id,
     label,
     onChange,
-    error,
     errorMessage,
+    error = false,
+    disabled = false,
     labelPosition = 'left',
     value: initialValue = false,
-    disabled = false,
     ...restProps
   } = props
   const [value, setValue] = useState(initialValue)

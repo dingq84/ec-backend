@@ -6,7 +6,7 @@
  * enter -> entering -> entered -> exit -> exiting ->exited
  */
 
-type TransitionProps = {
+interface TransitionProps {
   appear?: boolean
   onEnter?: Function
   onEntering?: Function

@@ -13,14 +13,26 @@ import TextField from '@/components/shared/textField'
 // styles
 import 'react-datepicker/dist/react-datepicker.css'
 
+// types
+import type { TextFieldProps } from '@/components/shared/textField'
+
 registerLocale('tw', zhTw)
 
-export interface DatePickerProps extends Omit<ReactDatePickerProps, 'onChange'> {}
+export interface DatePickerProps extends Omit<ReactDatePickerProps, 'onChange'> {
+  onChange?: (date: Date) => void
+  inputProps?: TextFieldProps
+}
 
-const DatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
+const DatePicker = (props: DatePickerProps) => {
+  const { onChange, inputProps = {}, ...restProps } = props
   const [date, setDate] = useState<Date>()
+
   const handleChange = (date: Date) => {
     setDate(date)
+
+    if (onChange) {
+      onChange(date)
+    }
   }
 
   return (
@@ -30,8 +42,8 @@ const DatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
       dateFormat="yyyy/MM/dd"
       selected={date}
       onChange={handleChange}
-      customInput={<TextField onClear={() => setDate(undefined)} />}
-      {...props}
+      customInput={<TextField {...inputProps} onClear={() => setDate(undefined)} />}
+      {...restProps}
     />
   )
 }

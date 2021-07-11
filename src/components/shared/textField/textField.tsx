@@ -6,7 +6,7 @@
  * [Ding.Chen-2021-06-23]: 修改 start adornment 和 input 的 html 結構，為了達成 multiple select 數量過多時的 UI 呈現
  */
 
-import { ChangeEvent, HTMLAttributes, forwardRef, useState, Ref } from 'react'
+import { ChangeEvent, forwardRef, useState, Ref } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -18,37 +18,20 @@ import Fade from '@/components/shared/fade'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-interface basicType
-  extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange' | 'onClear' | 'id' | 'label'> {
+// types
+import type { InputBasicType } from '@/types/components/input'
+
+export interface TextFieldProps extends InputBasicType<string> {
   type?: 'text' | 'password'
-  value?: string
-  name?: string
-  error?: boolean // 判斷是否有錯誤，每個錯誤不一定需要錯誤訊息
-  errorMessage?: string // 錯誤訊息
   adornment?: {
     start?: JSX.Element
     end?: JSX.Element
   }
   clear?: boolean // 預設有 x 按鈕
   border?: boolean // 預設有 border
-  disabled?: boolean
-  readOnly?: boolean
   inputRef?: Ref<HTMLInputElement> // 掛載在 input 上面的 ref
-  labelPosition?: 'top' | 'left' // label 在 input 的上方或是下方，預設上方
-  onChange?: (value: string) => void
   onClear?: () => void
 }
-
-interface WithIdLabel extends basicType {
-  id: string
-  label: string
-}
-interface WithoutIdLabel extends basicType {
-  id?: string
-  label?: undefined
-}
-
-export type TextFieldProps = WithIdLabel | WithoutIdLabel
 
 const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> = (
   props: TextFieldProps,
@@ -94,6 +77,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
     }
 
     setValue('')
+
     if (onClear) {
       onClear()
     }
