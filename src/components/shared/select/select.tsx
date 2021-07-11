@@ -87,7 +87,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
         onClear={handleClear}
         adornment={{
           start: (
-            <>
+            <div tw="flex items-center space-x-1.5">
               {multiple
                 ? selected.map(item => (
                     <Tag
@@ -97,7 +97,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
                     />
                   ))
                 : null}
-            </>
+            </div>
           ),
           end: (
             <FontAwesomeIcon

@@ -103,10 +103,10 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           ]}
         >
           {/* 針對 start adornment 和 input 包起來，讓他可以有 wrap 的樣子，end adornment 和 clear button 維持垂直置中 */}
-          <div tw="flex items-center flex-grow flex-wrap space-x-1 space-y-1">
+          <div tw="flex items-center flex-grow flex-wrap space-x-1">
             {adornment.start}
             <input
-              tw="color[inherit] border-none flex-grow placeholder:(text-xs)"
+              tw="color[inherit] border-none flex-grow h-7 leading-loose placeholder:(text-xs)"
               id={id}
               value={value}
               onChange={handleChange}
