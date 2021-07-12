@@ -20,7 +20,15 @@ interface FloatSidebarItemsProps extends Omit<SidebarItemsProps, 'sidebarItems'>
 const FloatSidebarItems = (props: FloatSidebarItemsProps) => {
   const { item, toggleSidebarOpen, forwardTo } = props
   const ref = useRef<HTMLDivElement>(null)
-  const { isOpen, name, key, isActive, prefix, children = [] } = item
+  const { isOpen, name, key, isActive, prefix, href, children = [] } = item
+
+  const handleClick = () => {
+    if (children.length) {
+      return
+    }
+
+    forwardTo(href!)
+  }
 
   return (
     <div
@@ -35,6 +43,7 @@ const FloatSidebarItems = (props: FloatSidebarItemsProps) => {
       <Popover
         anchorEl={ref.current!}
         open={isOpen || false}
+        autoWidth={false}
         anchorOrigin={{
           horizontal: 'left',
           vertical: 'top'
@@ -45,7 +54,7 @@ const FloatSidebarItems = (props: FloatSidebarItemsProps) => {
           css: [tw`p-0 rounded-l-none flex-col w-60 bg-white`]
         }}
       >
-        <SidebarItem label={name} isActive={isActive} />
+        <SidebarItem label={name} isActive={isActive} onClick={handleClick} />
         <SidebarItems
           sidebarItems={children}
           toggleSidebarOpen={toggleSidebarOpen}
