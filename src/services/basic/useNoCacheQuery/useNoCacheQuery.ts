@@ -14,7 +14,8 @@ export function useNoCacheQuery<
     ...options,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    retry: false
+    retry: false,
+    cacheTime: 0
   })
 }
 
