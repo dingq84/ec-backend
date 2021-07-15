@@ -1,11 +1,9 @@
+import React, { Fragment } from 'react'
 import { AppProps } from 'next/app'
 import { Provider as ReduxProvider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-
-// components
-import PageTransition from '@/components/shared/pageTransition'
 
 // states
 import { store } from '@/states/global/store'
@@ -13,17 +11,30 @@ import { store } from '@/states/global/store'
 // styles
 import '@/styles/globals.css'
 
+// utils
+import withAuth from '@/utils/shared/withAuth'
+
 config.autoAddCss = false // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
 const queryClient = new QueryClient()
 
-function MyApp({ Component, pageProps }: AppProps) {
+type MyAppProps = AppProps & {
+  Component: {
+    layout?: ({ children }: { children: React.ReactNode }) => JSX.Element
+    auth?: boolean
+  }
+}
+
+function MyApp({ Component, pageProps }: MyAppProps) {
+  const Layout = Component.layout || Fragment
+  const ProtectedComponent = Component.auth ? withAuth(Component) : Component
+
   return (
     <QueryClientProvider client={queryClient}>
       <ReduxProvider store={store}>
-        <PageTransition>
-          <Component {...pageProps} />
-        </PageTransition>
+        <Layout>
+          <ProtectedComponent {...pageProps} />
+        </Layout>
       </ReduxProvider>
     </QueryClientProvider>
   )
