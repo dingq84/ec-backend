@@ -40,14 +40,14 @@ function Login() {
 
   return (
     <LoginLayout>
-      <Paper tw="bg-white-1">
+      <Paper tw="bg-white-1 px-9 py-7">
         <div tw="w-full sm:(w-72)">
-          <h1 tw="text-black text-center text-4xl relative after:(content inline-block absolute w-1/4 border-t-2 border-gray-400 -bottom-4 left-1/2 transform[translateX(-50%)])">
+          <h1 tw="text-black text-center text-4xl relative font-normal after:(content inline-block absolute w-1/4 border-t-2 border-gray-400 -bottom-4 left-1/2 transform[translateX(-50%)])">
             後台管理
           </h1>
           <form tw="mt-12 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
             <TextField
-              ref={register}
+              inputRef={register}
               id="account"
               name="account"
               label="Account"
@@ -57,7 +57,7 @@ function Login() {
               tw="mb-4"
             />
             <TextField
-              ref={register}
+              inputRef={register}
               id="password"
               name="password"
               type="password"
