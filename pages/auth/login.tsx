@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import 'twin.macro'
@@ -9,6 +11,9 @@ import 'twin.macro'
 import Button from '@/components/shared/button'
 import Paper from '@/components/shared/paper'
 import TextField from '@/components/shared/textField'
+
+// hooks
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // layouts
 import LoginLayout from '@/layouts/login'
@@ -25,13 +30,22 @@ const schema = yup.object().shape({
 
 function Login() {
   const router = useRouter()
+  const [inputType, setInputType] = useState<'text' | 'password'>('password')
   const { register, handleSubmit, errors, clearErrors, setValue } = useForm<SignInForm>({
     resolver: yupResolver(schema)
   })
 
-  useEffect(() => {
+  useEnhancedEffect(() => {
     clearErrors()
   }, [])
+
+  const handleInputTypeChange = (): void => {
+    if (inputType === 'text') {
+      setInputType('password')
+    } else {
+      setInputType('text')
+    }
+  }
 
   const onSubmit = (data: SignInForm): void => {
     console.log(data)
@@ -50,7 +64,7 @@ function Login() {
               inputRef={register}
               id="account"
               name="account"
-              label="Account"
+              label="帳號"
               error={Boolean(errors.account?.message)}
               errorMessage={errors.account?.message}
               onClear={() => setValue('account', '')}
@@ -60,11 +74,20 @@ function Login() {
               inputRef={register}
               id="password"
               name="password"
-              type="password"
-              label="Password"
+              type={inputType}
+              label="密碼"
               error={Boolean(errors.password?.message)}
               errorMessage={errors.password?.message}
               onClear={() => setValue('password', '')}
+              adornment={{
+                end: (
+                  <FontAwesomeIcon
+                    tw="cursor-pointer"
+                    icon={inputType === 'text' ? faEyeSlash : faEye}
+                    onClick={handleInputTypeChange}
+                  />
+                )
+              }}
             />
             <Button label="Sign In" className="btn mt-8 mx-auto" type="submit" />
           </form>
