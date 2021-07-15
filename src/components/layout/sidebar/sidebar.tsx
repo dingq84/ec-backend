@@ -25,8 +25,8 @@ import SidebarItems from '@/components/layout/sidebar/sidebarItems'
 import SIDEBAR_MENU from '@/constants/components/sidebar'
 
 // hooks
-import useIsMobile from '@/hooks/useIsMobile'
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+import useIsMobile from '@/hooks/useIsMobile'
 
 // states
 import { useAppSelector } from '@/states/global/hooks'
@@ -35,27 +35,32 @@ import { useAppSelector } from '@/states/global/hooks'
 import { SidebarMenuType } from '@/types/components/sidebar'
 
 // utils
-import findRouteIndex from '@/utils/components/sidebar/findRouteIndex'
 import addProperties from '@/utils/components/sidebar/addProperties'
+import findRouteIndex from '@/utils/components/sidebar/findRouteIndex'
 
 const Sidebar: React.FC = () => {
   const router = useRouter()
-  const { asPath } = router
-  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
   const isMobile = useIsMobile()
-  // 手機版完全收合起來，桌機會保留 icon 的寬度
-  const collapsedSize = isMobile ? '0px' : '48px'
-  // 只有桌機版的收合模式為 float
-  const isFloat = isMobile === false && sidebarIsExtend === false
-  // 目前停留的 sidebar item index
-  const activeRouteIndex = findRouteIndex(SIDEBAR_MENU, asPath)
+  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
   const [sidebarItems, setSidebarItems] = useState<SidebarMenuType[]>([])
+  // 只有桌機版的收合模式為 float
+  const [isFloat, setIsFloat] = useState(isMobile === false && sidebarIsExtend === false)
+  // 手機版完全收合起來，桌機會保留 icon 的寬度
+  const [collapsedSize, setCollapsedSize] = useState(isMobile ? '0px' : '48px')
+
+  useEnhancedEffect(() => {
+    setIsFloat(isMobile === false && sidebarIsExtend === false)
+  }, [isMobile, sidebarIsExtend])
+
+  useEnhancedEffect(() => {
+    setCollapsedSize(isMobile ? '0px' : '48px')
+  }, [isMobile])
 
   useEnhancedEffect(() => {
     setSidebarItems(
       addProperties({
         sidebarMenu: SIDEBAR_MENU,
-        targetRouteIndex: activeRouteIndex,
+        targetRouteIndex: findRouteIndex(SIDEBAR_MENU, router.asPath),
         plugins: {
           open: !isFloat,
           active: true
@@ -64,11 +69,33 @@ const Sidebar: React.FC = () => {
     )
   }, [isFloat])
 
+  useEnhancedEffect(() => {
+    function handleStart(url: string) {
+      setSidebarItems(
+        addProperties({
+          sidebarMenu: SIDEBAR_MENU,
+          targetRouteIndex: findRouteIndex(SIDEBAR_MENU, url),
+          plugins: {
+            open: false,
+            active: true
+          }
+        })
+      )
+    }
+
+    router.events.on('routeChangeStart', handleStart)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+    }
+  }, [router])
+
   const toggleSidebarOpen = (key: string, open: boolean = false): void => {
+    const targetRouteIndex = open ? key : key.slice(0, key.length - 1)
     setSidebarItems(
       addProperties({
         sidebarMenu: sidebarItems,
-        targetRouteIndex: !open ? key : key.slice(0, key.length - 1),
+        targetRouteIndex,
         plugins: {
           open: true
         }

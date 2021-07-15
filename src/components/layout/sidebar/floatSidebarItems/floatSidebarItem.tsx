@@ -2,6 +2,7 @@
  * @author Ding.Chen 2021-06-20
  * FloatSidebarItem 針對 float 模式的 icon 顯示
  */
+
 import { useRef } from 'react'
 import tw from 'twin.macro'
 
@@ -22,12 +23,20 @@ const FloatSidebarItems = (props: FloatSidebarItemsProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const { isOpen, name, key, isActive, prefix, href, children = [] } = item
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     if (children.length) {
       return
     }
 
     forwardTo(href!)
+  }
+
+  const handleMouseEnter = (): void => {
+    toggleSidebarOpen(key!, true)
+  }
+
+  const handleMouseLeave = (): void => {
+    toggleSidebarOpen(key!, false)
   }
 
   return (
@@ -36,8 +45,8 @@ const FloatSidebarItems = (props: FloatSidebarItemsProps) => {
       tw="w-full flex items-center justify-center px-3 py-2 text-lg text-gray-1 hover:(cursor-pointer bg-white-2)"
       key={name}
       css={[isActive && tw`text-primary`]}
-      onMouseEnter={() => toggleSidebarOpen(key!, isOpen)}
-      onMouseLeave={() => toggleSidebarOpen(key!, isOpen)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {prefix}
       <Popover

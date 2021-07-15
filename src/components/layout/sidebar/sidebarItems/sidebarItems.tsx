@@ -21,7 +21,7 @@ const SidebarItems = (props: SidebarItemsProps) => {
           draft.label = name
           if (children.length) {
             draft.suffix = <ChevronDown isOpen={isOpen || false} />
-            draft.onClick = () => toggleSidebarOpen(key!, isOpen)
+            draft.onClick = () => toggleSidebarOpen(key!, !isOpen)
           } else {
             draft.onClick = () => forwardTo(href!)
           }
