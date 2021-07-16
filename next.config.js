@@ -1,14 +1,21 @@
 const withPlugins = require('next-compose-plugins')
 const optimizedImages = require('next-optimized-images')
 
-module.exports = withPlugins([
-  [
-    optimizedImages,
-    {
-      optimizeImagesInDev: true,
-      env: {
-        API_URL: 'https://jsonplaceholder.typicode.com/'
-      }
-    }
-  ]
-])
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    disableStaticImages: true
+  },
+  env: {
+    API_URL: 'https://jsonplaceholder.typicode.com/'
+  }
+}
+
+const nextOptimizedImage = [
+  optimizedImages,
+  {
+    optimizeImagesInDev: true
+  }
+]
+
+module.exports = withPlugins([nextConfig, nextOptimizedImage])

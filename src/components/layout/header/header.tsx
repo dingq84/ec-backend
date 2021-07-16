@@ -51,7 +51,7 @@ const Header = () => {
           data-testid="logo"
         >
           <Image
-            src={isDesktopAndCollapsed ? 'icons/logo-small.png' : 'icons/logo.png'}
+            src={isDesktopAndCollapsed ? 'images/logo-small.png' : 'images/logo.png'}
             alt="logo image"
           />
         </a>
