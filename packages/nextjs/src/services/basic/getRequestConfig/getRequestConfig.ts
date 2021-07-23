@@ -7,7 +7,7 @@ import { AxiosRequestConfig } from 'axios'
 
 // utils
 import isFormData from '@/utils/services/isFormData'
-import produce from '@reduxjs/toolkit/node_modules/immer'
+import produce from 'immer'
 import createFormData from '@/utils/services/createFormData'
 
 function getRequestConfig(config: AxiosRequestConfig = {}): AxiosRequestConfig {

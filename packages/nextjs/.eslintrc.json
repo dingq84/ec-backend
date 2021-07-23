@@ -6,7 +6,6 @@
     "jest": true
   },
   "extends": ["plugin:react/recommended", "eslint-config-prettier"],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -28,6 +27,7 @@
     }
   ],
   "plugins": ["react", "@typescript-eslint", "eslint-plugin-prettier"],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "prettier/prettier": ["error"],
     "no-console": "off",

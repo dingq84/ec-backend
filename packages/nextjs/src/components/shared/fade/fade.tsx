@@ -46,18 +46,20 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
   const foreignRef = useForkRef(children.ref, ref)
   const handleRef = useForkRef(nodeRef, foreignRef)
 
-  const normalizedTransitionCallback = (callback?: Function) => (maybeIsAppearing?: any): void => {
-    if (callback) {
-      const node = nodeRef.current
+  const normalizedTransitionCallback =
+    (callback?: Function) =>
+    (maybeIsAppearing?: any): void => {
+      if (callback) {
+        const node = nodeRef.current
 
-      // onEnterXxx and onExitXxx callbacks have a different arguments.length value.
-      if (maybeIsAppearing === undefined) {
-        callback(node)
-      } else {
-        callback(node, maybeIsAppearing)
+        // onEnterXxx and onExitXxx callbacks have a different arguments.length value.
+        if (maybeIsAppearing === undefined) {
+          callback(node)
+        } else {
+          callback(node, maybeIsAppearing)
+        }
       }
     }
-  }
 
   const reflow = (node: HTMLElement) => node.scrollTop
 
