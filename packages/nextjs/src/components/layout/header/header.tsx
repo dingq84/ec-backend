@@ -31,7 +31,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(setSidebar(!isMobile))
-  }, [isMobile])
+  }, [dispatch, isMobile])
 
   const handleClick = (): void => {
     dispatch(toggleSidebar())

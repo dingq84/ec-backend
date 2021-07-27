@@ -20,9 +20,10 @@ Default.argTypes = {
   }
 }
 
-export default {
+const defaultSetting = {
   component: Drawer,
   title: 'components/shared/drawer'
 }
 
+export default defaultSetting
 export { Default }

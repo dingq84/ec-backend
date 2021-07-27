@@ -12,11 +12,6 @@ Default.args = {
   clear: true
 }
 
-export default {
-  component: Tag,
-  title: 'components/shared/tag'
-}
-
 const ManyTags = () => (
   <div className="flex-center" tw="space-x-1.5 justify-start">
     <Tag label="apple" />
@@ -25,4 +20,10 @@ const ManyTags = () => (
   </div>
 )
 
+const defaultSetting = {
+  component: Tag,
+  title: 'components/shared/tag'
+}
+
+export default defaultSetting
 export { Default, ManyTags }

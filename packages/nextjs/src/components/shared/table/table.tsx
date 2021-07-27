@@ -37,8 +37,8 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
   const { totalRows, currentPage = 0, pageSize = 10 } = pagination
 
   // 官方建議將 column 和 data 做 useMemo
-  const memoColumns = useMemo(() => columns, [])
-  const memoData = useMemo(() => data, [])
+  const memoColumns = useMemo(() => columns, [columns])
+  const memoData = useMemo(() => data, [data])
   const defaultColumn = useMemo(
     () => ({
       minWidth: 30,

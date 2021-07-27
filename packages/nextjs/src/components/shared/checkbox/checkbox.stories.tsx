@@ -19,9 +19,10 @@ Default.argTypes = {
   }
 }
 
-export default {
+const defaultSetting = {
   component: Checkbox,
   title: 'components/shared/checkbox'
 }
 
+export default defaultSetting
 export { Default }

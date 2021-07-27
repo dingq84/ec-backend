@@ -84,7 +84,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
       left: anchorRect.left + getOffsetLeft(anchorRect, anchorOrigin.horizontal),
       width: anchorRect.width
     }
-  }, [anchorEl])
+  }, [anchorEl, anchorOrigin.vertical, anchorOrigin.horizontal])
 
   // Returns the base transform origin using the element
   const getTransformOrigin = useCallback(
@@ -118,7 +118,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
 
       return { top, left, width, transformOrigin: getTransformOriginValue(elemTransformOrigin) }
     },
-    [anchorEl, getAnchorOffset]
+    [getAnchorOffset, getTransformOrigin, verticalSpace, horizontalSpace]
   )
 
   const setPositioningStyles = useCallback(() => {
@@ -140,7 +140,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
     }
 
     element.style.transformOrigin = transformOrigin
-  }, [getPositioningStyle])
+  }, [autoWidth, getPositioningStyle])
 
   const handleEntering = (node: HTMLElement, isAppearing: any) => {
     if (backdropProps.onEntering) {

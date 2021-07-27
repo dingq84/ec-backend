@@ -44,8 +44,10 @@ Error.args = {
   errorMessage: 'please try again!'
 }
 
-export default {
+const defaultSetting = {
   component: TextField,
   title: 'components/shared/textfield'
 }
+
+export default defaultSetting
 export { Default, Adornment, Error }

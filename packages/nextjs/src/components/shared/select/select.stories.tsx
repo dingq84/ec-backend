@@ -15,9 +15,10 @@ Default.args = {
   ]
 }
 
-export default {
+const defaultSetting = {
   component: Select,
   title: 'components/shared/select'
 }
 
+export default defaultSetting
 export { Default }
