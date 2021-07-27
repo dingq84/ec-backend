@@ -1,28 +1,32 @@
-# TypeScript & Styled Components Next.js example
+# Next.js with Clean Architecture
 
-This is a really simple project that show the usage of Next.js with TypeScript and Styled Components.
 
-## Deploy your own
+專案為 e-commerce admin website, 處理大部分的電子商務後台管控，專案不架構同於以往前端專案，採納 clean architecture ，原因有下列幾點：
+ <ol>
+  <li>不同廠商之間的 e-commerce admin website 功能其實差不多，主要差異為畫面的呈現</li>
+  <li>後台框架不一定採用 Next.js，可能為 Vue、Angular 等等，但功能可能幾乎一樣，需要將專案設計成不依賴框架的架構</li>
+  <li>因為 JavaScript 的自由性，很常讓程式走向不一致，造成日後擴充、維護的困難，因此希望強加一種限制在專案上</li>
+ </ol>
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+## Documentations
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-typescript-styled-components&project-name=with-typescript-styled-components&repository-name=with-typescript-styled-components)
-
-## How to use it?
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-typescript-styled-components with-typescript-styled-components-app
-# or
-yarn create next-app --example with-typescript-styled-components with-typescript-styled-components-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+### Clean Architecture
+  <ul>
+    <li>
+      <a href="https://www.freecodecamp.org/news/a-quick-introduction-to-clean-architecture-990c014448d2/">
+       A quick introduction to clean architecture
+      </a>
+    </li>
+    <br />
+    <li>
+      <a href="https://github.com/falsy/react-with-clean-architecture">
+        React with Clean architecture
+      </a>
+    </li>
+  </ul>
 
 ## Notes
 
 This is an amalgamation of the 2 existing examples:
 
-- [with-typescript](https://github.com/vercel/next.js/tree/canary/examples/with-typescript)
-- [with-styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components)
+- [React with Clean architecture](https://github.com/falsy/react-with-clean-architecture)
