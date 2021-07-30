@@ -1,6 +1,8 @@
 const withPlugins = require('next-compose-plugins')
 const optimizedImages = require('next-optimized-images')
 
+const withTM = require('next-transpile-modules')(['@ec-backend/core'])
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -18,4 +20,4 @@ const nextOptimizedImage = [
   }
 ]
 
-module.exports = withPlugins([nextConfig, nextOptimizedImage])
+module.exports = withPlugins([nextConfig, nextOptimizedImage, withTM])

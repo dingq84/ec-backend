@@ -21,6 +21,7 @@
   },
   "scripts": {
     "nextjs": "yarn workspace @ec-backend/nextjs",
+    "core": "yarn workspace @ec-backend/core",
     "prepare": "husky install packages/nextjs/.husky"
   },
   "devDependencies": {

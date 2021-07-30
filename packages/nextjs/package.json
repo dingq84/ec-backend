@@ -75,6 +75,7 @@
     "imagemin-svgo": "^9.0.0",
     "next-compose-plugins": "^2.2.1",
     "next-optimized-images": "^2.6.2",
+    "next-transpile-modules": "^8.0.0",
     "postcss": "^8.2.14",
     "prettier": "^2.2.1",
     "styled-components": "^5.2.1",

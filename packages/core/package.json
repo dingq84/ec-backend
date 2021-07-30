@@ -1,0 +1,25 @@
+{
+  "name": "@ec-backend/core",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Dean",
+  "main": "src/index.ts",
+  "homepage": "https://github.com/dingq84/ec-backend#readme",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "scripts": {
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.2",
+    "typescript": "4.3.2"
+  }
+}
