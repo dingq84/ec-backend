@@ -1,7 +1,7 @@
 export interface ITokenUseCase {
   login(): Promise<string>
   getToken(): Promise<string>
-  setToken(token: string): void
+  setToken(accessToken: string, refreshToken: string): void
   removeToken(): void
   refreshToken(): Promise<string>
 }

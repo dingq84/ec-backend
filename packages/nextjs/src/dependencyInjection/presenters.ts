@@ -1,5 +1,5 @@
 // adapters
-import TokenPresenter from '@ec-backend/core/src/adapters/presenters/Token'
+import TokenPresenter from '@ec-backend/core/src/auth/adapters/presenters/Token'
 
 // interfaces
 import { IPresenters } from '@/dependencyInjection/interfaces/IPresenters'

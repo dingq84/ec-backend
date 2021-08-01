@@ -1,6 +1,6 @@
 // interfaces
-import { ITokenUseCase } from '@/domains/useCases/interfaces/IToken'
-import { ITokenRepository } from '@/domains/useCases/repositories-interfaces/IToken'
+import { ITokenUseCase } from '@/auth/domains/useCases/interfaces/IToken'
+import { ITokenRepository } from '@/auth/domains/useCases/repositories-interfaces/IToken'
 
 class TokenUseCase implements ITokenUseCase {
   constructor(private readonly tokenRepository: ITokenRepository) {}
@@ -11,12 +11,12 @@ class TokenUseCase implements ITokenUseCase {
     // 透過 refreshToken api 取得新的 accessToken
     // https://stackoverflow.com/questions/64379817/nextjs-auth-token-stored-in-memory-refresh-token-in-http-only-cookie
     const { accessToken, refreshToken } = await this.tokenRepository.login()
-    this.setToken(refreshToken)
+    this.setToken(accessToken, refreshToken)
     return accessToken
   }
 
-  setToken(token: string): void {
-    this.tokenRepository.setToken(token)
+  setToken(accessToken: string, refreshToken: string): void {
+    this.tokenRepository.setToken(accessToken, refreshToken)
   }
 
   getToken(): Promise<string> {
@@ -29,7 +29,7 @@ class TokenUseCase implements ITokenUseCase {
 
   async refreshToken(): Promise<string> {
     const { accessToken, refreshToken } = await this.tokenRepository.refreshToken()
-    this.setToken(refreshToken)
+    this.setToken(accessToken, refreshToken)
     return accessToken
   }
 }

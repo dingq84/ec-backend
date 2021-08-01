@@ -1,5 +1,5 @@
 // domain
-import TokenUseCases from '@ec-backend/core/src/domains/useCases/Token'
+import TokenUseCases from '@ec-backend/core/src/auth/domains/useCases/Token'
 
 // interfaces
 import { IUseCases } from '@/dependencyInjection/interfaces/IUseCases'
