@@ -9,7 +9,7 @@ const nextConfig = {
     disableStaticImages: true
   },
   env: {
-    API_URL: 'https://jsonplaceholder.typicode.com/'
+    API_URL: 'http://localhost:8080'
   }
 }
 

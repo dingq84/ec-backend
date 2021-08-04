@@ -1,7 +1,4 @@
-// adapters
-import TokenPresenter from '@ec-backend/core/src/auth/adapters/presenters/Token'
-
-// interfaces
+import TokenPresenter from '@/auth/adapters/presenters/Token'
 import { IPresenters } from '@/dependencyInjection/interfaces/IPresenters'
 import { IUseCases } from '@/dependencyInjection/interfaces/IUseCases'
 

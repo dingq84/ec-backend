@@ -1,19 +1,24 @@
-// interfaces
-import { ITokenPresenter } from '@/auth/adapters/presenters/interfaces/Token'
+import { Either } from 'fp-ts/lib/Either'
+
+import { DataError } from '@/common/types/DataError'
+import { ITokenPresenter } from '@/auth/adapters/presenters/interfaces/IToken'
 import { ITokenUseCase } from '@/auth/domains/useCases/interfaces/IToken'
 
 class TokenPresenter implements ITokenPresenter {
   constructor(private readonly useCases: ITokenUseCase) {}
 
-  async login(): Promise<string> {
-    return await this.useCases.login()
+  async login(parameters: {
+    account: string
+    password: string
+  }): Promise<Either<DataError, string>> {
+    return await this.useCases.login(parameters)
   }
 
-  removeToken(): void {
-    this.useCases.removeToken()
+  async logout(): Promise<Either<DataError, void>> {
+    return await this.useCases.logout()
   }
 
-  async refreshToken(): Promise<string> {
+  async refreshToken(): Promise<Either<DataError, string>> {
     return await this.useCases.refreshToken()
   }
 }

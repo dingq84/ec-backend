@@ -8,13 +8,14 @@
  * 但還是先設計成 Singleton，避免未來問題
  */
 
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { produce } from 'immer'
+import { Either, left, right } from 'fp-ts/lib/Either'
+import * as TE from 'fp-ts/lib/TaskEither'
+import { flow, pipe } from 'fp-ts/lib/function'
 
-// interfaces
-import { IHttp, RequestConfig } from './interfaces/IHttp'
-
-// utils
+import { IHttp, RequestConfig, ResponseResult, StatusCode } from './interfaces/IHttp'
+import { DataError, ErrorTypes } from '@/common/types/DataError'
 import createFormData from '@/common/utils/createFormData'
 import isFormData from '@/common/utils/isFormData'
 
@@ -71,12 +72,40 @@ class Http implements IHttp {
     this._token = token
   }
 
-  // TODO: error handler
-  async request<T>(config: RequestConfig): Promise<T> {
-    const instance = this.getAxiosInstance(config)
-    const requestConfig = this.getRequestConfig(config)
-    const result = await instance(requestConfig)
-    return result.data as T
+  private processResponse<T extends unknown>(
+    response: ResponseResult<T>
+  ): Either<DataError, ResponseResult<T>> {
+    switch (response.statusCode) {
+      case StatusCode.success:
+        return right(response)
+      case StatusCode.tokenCancel:
+        return left({ kind: ErrorTypes.authenticated })
+      case StatusCode.tokenExpired:
+        return left({ kind: ErrorTypes.tokenExpired })
+      default:
+        return left({ kind: ErrorTypes.unexpected, error: new Error(response.statusMessage) })
+    }
+  }
+
+  private apiCall<T>(
+    config: RequestConfig
+  ): TE.TaskEither<DataError, AxiosResponse<ResponseResult<T>>> {
+    return TE.tryCatch(
+      () => {
+        const instance = this.getAxiosInstance(config)
+        const requestConfig = this.getRequestConfig(config)
+        return instance(requestConfig)
+      },
+      () => ({ kind: ErrorTypes.network })
+    )
+  }
+
+  async request<T>(config: RequestConfig): Promise<Either<DataError, ResponseResult<T>>> {
+    return await pipe(
+      this.apiCall<T>(config),
+      TE.map(response => response.data),
+      TE.chain(flow(response => this.processResponse<T>(response), TE.fromEither))
+    )()
   }
 }
 

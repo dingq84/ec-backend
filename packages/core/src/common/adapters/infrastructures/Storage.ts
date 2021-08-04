@@ -15,7 +15,7 @@ class Storage implements IStorage {
     this.storage = storage
   }
 
-  get(name: string): Promise<string> {
+  get(name: string): Promise<string | null> {
     return new Promise(resolve => {
       resolve(this.storage.getItem(name))
     })

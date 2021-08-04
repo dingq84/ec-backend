@@ -1,7 +1,4 @@
-// adapters
-import TokenRepository from '@ec-backend/core/src/auth/adapters/repositories/Token'
-
-// interfaces
+import TokenRepository from '@/auth/adapters/repositories/Token'
 import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
 import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
 

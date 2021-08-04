@@ -18,6 +18,8 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 // layouts
 import LoginLayout from '@/layouts/login'
 
+import core from '@ec-backend/core/src'
+
 type SignInForm = {
   account: string
   password: string
@@ -47,9 +49,14 @@ function Login() {
     }
   }
 
-  const onSubmit = (data: SignInForm): void => {
-    console.log(data)
-    router.push('/')
+  const onSubmit = async (data: SignInForm): Promise<void> => {
+    const result = await core.token.login(data)
+
+    if (result._tag === 'Right') {
+      router.push('/')
+    } else {
+      // TODO: Error handler
+    }
   }
 
   return (

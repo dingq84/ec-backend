@@ -1,7 +1,4 @@
-// domain
-import TokenUseCases from '@ec-backend/core/src/auth/domains/useCases/Token'
-
-// interfaces
+import TokenUseCases from '@/auth/domains/useCases/Token'
 import { IUseCases } from '@/dependencyInjection/interfaces/IUseCases'
 import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
 
