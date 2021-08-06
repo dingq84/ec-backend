@@ -21,6 +21,14 @@ class TokenPresenter implements ITokenPresenter {
   async refreshToken(): Promise<Either<DataError, string>> {
     return await this.useCases.refreshToken()
   }
+
+  async getRefreshToken(): Promise<string | null> {
+    return await this.useCases.getRefreshToken()
+  }
+
+  getAccessToken(): string {
+    return this.useCases.getAccessToken()
+  }
 }
 
 export default TokenPresenter

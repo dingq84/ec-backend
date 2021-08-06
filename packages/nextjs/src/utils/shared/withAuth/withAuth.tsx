@@ -9,14 +9,21 @@
 import 'twin.macro'
 import Link from 'next/link'
 
+// constants
+import { API_KEY } from '@/constants/services/api'
+
 // components
 import Modal from '@/components/shared/modal'
 import Paper from '@/components/shared/paper'
 import Button from '@/components/shared/button'
 import Loading from '@/components/shared/loading'
 
+// core
+import core from '@ec-backend/core'
+import { isLeft } from 'fp-ts/lib/Either'
+
 // services
-import isLogged from '@/services/auth/isLogged'
+import useNoCacheQuery from '@/services/useNoCacheQuery'
 
 const DefaultAccessDeniedComponent = () => (
   <Modal open>
@@ -34,13 +41,27 @@ function withAuth<T extends {}>(
   AccessDeniedComponent: React.ComponentType<{}> = DefaultAccessDeniedComponent // Access denied Component
 ) {
   return function WrapperComponent(props: T) {
-    const { isLoading, isError } = isLogged()
+    const accessToken = core.auth.token.getAccessToken()
+    const { isLoading: refreshTokenIsLoading } = useNoCacheQuery(
+      'refreshToken',
+      () => core.auth.token.refreshToken(),
+      {
+        enabled: !accessToken
+      }
+    )
+    const { data, isLoading, isError } = useNoCacheQuery(
+      API_KEY.isLogged,
+      () => core.auth.me.getMe(),
+      {
+        enabled: !refreshTokenIsLoading
+      }
+    )
 
-    if (isLoading) {
+    if (isLoading || refreshTokenIsLoading) {
       return <Loading isLoading />
     }
 
-    if (isError) {
+    if (isError || (data && isLeft(data))) {
       return <AccessDeniedComponent />
     }
 

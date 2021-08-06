@@ -5,13 +5,14 @@
 
 import { either } from 'fp-ts'
 import { flow } from 'fp-ts/lib/function'
-import { Either, left } from 'fp-ts/lib/Either'
+import { Either } from 'fp-ts/lib/Either'
 
+import { ApiUrl } from '@/common/constants/api'
 import TokenDTO, { ITokenDTO, ITokenParameters } from '@/auth/domains/dto/TokenDTO'
 import { IHttp, ResponseResult } from '@/common/adapters/infrastructures/interfaces/IHttp'
 import { IStorage } from '@/common/adapters/infrastructures/interfaces/IStorage'
 import { ITokenRepository } from '@/auth/domains/useCases/repositories-interfaces/IToken'
-import { DataError, ErrorTypes } from '@/common/types/DataError'
+import { DataError } from '@/common/types/DataError'
 
 class TokenRepository implements ITokenRepository {
   constructor(private readonly storage: IStorage, private readonly http: IHttp) {}
@@ -23,7 +24,7 @@ class TokenRepository implements ITokenRepository {
     const { account, password } = parameters
     const result = await this.http.request<ITokenParameters>({
       method: 'POST',
-      url: '/auth/login',
+      url: ApiUrl.login,
       data: {
         account,
         password
@@ -38,7 +39,7 @@ class TokenRepository implements ITokenRepository {
   async logout(): Promise<Either<DataError, void>> {
     const result = await this.http.request<void>({
       method: 'POST',
-      url: '/auth/logout',
+      url: ApiUrl.logout,
       withAuth: true
     })
 
@@ -46,32 +47,36 @@ class TokenRepository implements ITokenRepository {
   }
 
   async refreshToken(): Promise<Either<DataError, ITokenDTO>> {
-    const refreshToken = await this.storage.get('token')
-
-    if (refreshToken === null) {
-      return left({ kind: ErrorTypes.authenticated })
-    }
-
+    const refreshToken = await this.getRefreshToken()
     const result = await this.http.request<ITokenParameters>({
       method: 'POST',
-      url: '/auth/refreshToken',
+      url: ApiUrl.refreshToken,
       data: {
         refreshToken
       }
     })
+
     return flow(
       either.map((response: ResponseResult<ITokenParameters>) => new TokenDTO(response.data))
     )(result)
   }
 
-  setToken(accessToken: string, refreshToken: string): void {
-    this.storage.set('token', refreshToken)
-    this.http.storeToken(accessToken)
+  async getRefreshToken(): Promise<string | null> {
+    return await this.storage.get('refreshToken')
   }
 
-  removeToken(): void {
-    this.storage.remove('token')
-    this.http.storeToken('')
+  setRefreshToken(accessToken: string, refreshToken: string): void {
+    this.storage.set('refreshToken', refreshToken)
+    this.http.token = accessToken
+  }
+
+  removeRefreshToken(): void {
+    this.storage.remove('refreshToken')
+    this.http.token = ''
+  }
+
+  getAccessToken(): string {
+    return this.http.token
   }
 }
 

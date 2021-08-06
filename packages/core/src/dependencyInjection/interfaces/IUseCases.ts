@@ -1,6 +1,10 @@
 // interfaces
+import { IMeUseCase } from '@/auth/domains/useCases/interfaces/IMe'
 import { ITokenUseCase } from '@/auth/domains/useCases/interfaces/IToken'
 
 export interface IUseCases {
-  token: ITokenUseCase
+  auth: {
+    token: ITokenUseCase
+    me: IMeUseCase
+  }
 }

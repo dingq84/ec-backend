@@ -6,4 +6,6 @@ export interface ITokenPresenter {
   login(parameters: { account: string; password: string }): Promise<Either<DataError, string>>
   logout(): Promise<Either<DataError, void>>
   refreshToken(): Promise<Either<DataError, string>>
+  getRefreshToken(): Promise<string | null>
+  getAccessToken(): string
 }

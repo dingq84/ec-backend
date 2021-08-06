@@ -6,4 +6,6 @@ export interface ITokenUseCase {
   login(parameters: { account: string; password: string }): Promise<Either<DataError, string>>
   refreshToken(): Promise<Either<DataError, string>>
   logout(): Promise<Either<DataError, void>>
+  getRefreshToken(): Promise<string | null>
+  getAccessToken(): string
 }

@@ -14,9 +14,8 @@ import '@/styles/globals.css'
 // utils
 import withAuth from '@/utils/shared/withAuth'
 
-config.autoAddCss = false // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
-
 const queryClient = new QueryClient()
+config.autoAddCss = false // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
 type MyAppProps = AppProps & {
   Component: {

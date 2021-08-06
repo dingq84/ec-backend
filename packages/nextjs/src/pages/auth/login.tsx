@@ -1,3 +1,4 @@
+import { isLeft } from 'fp-ts/Either'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
@@ -12,13 +13,14 @@ import Button from '@/components/shared/button'
 import Paper from '@/components/shared/paper'
 import TextField from '@/components/shared/textField'
 
+// core
+import core from '@ec-backend/core/src'
+
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // layouts
 import LoginLayout from '@/layouts/login'
-
-import core from '@ec-backend/core/src'
 
 type SignInForm = {
   account: string
@@ -50,12 +52,12 @@ function Login() {
   }
 
   const onSubmit = async (data: SignInForm): Promise<void> => {
-    const result = await core.token.login(data)
+    const result = await core.auth.token.login(data)
 
-    if (result._tag === 'Right') {
-      router.push('/')
+    if (isLeft(result)) {
+      console.log(result.left)
     } else {
-      // TODO: Error handler
+      router.push('/')
     }
   }
 

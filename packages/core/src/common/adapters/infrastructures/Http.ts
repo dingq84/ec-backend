@@ -10,7 +10,7 @@
 
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { produce } from 'immer'
-import { Either, left, right } from 'fp-ts/lib/Either'
+import { Either, left, right, map } from 'fp-ts/lib/Either'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { flow, pipe } from 'fp-ts/lib/function'
 
@@ -27,27 +27,29 @@ class Http implements IHttp {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  private getAxiosInstance(config: RequestConfig): AxiosInstance {
-    config = produce(config, draft => {
-      if (!config.baseURL) {
-        draft.baseURL = process.env.API_URL as string
+  private getAxiosInstance(config: RequestConfig): Either<DataError, AxiosInstance> {
+    if (!config.baseURL) {
+      config.baseURL = process.env.API_URL as string
+    }
+
+    // 無 headers 時，指定空物件，方便後續新增
+    if (!config.headers) {
+      config.headers = {}
+    }
+
+    if (!config.headers || !config.headers['Content-Type']) {
+      config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+    }
+
+    if (config.withAuth) {
+      if (!this._token) {
+        return left({ kind: ErrorTypes.authenticated })
       }
 
-      // 無 headers 時，指定空物件，方便後續新增
-      if (!config.headers) {
-        draft.headers = {}
-      }
+      config.headers.Authorization = `Bearer ${this._token}`
+    }
 
-      if (!config.headers || !config.headers['Content-Type']) {
-        draft.headers['Content-Type'] = 'application/json;charset=UTF-8'
-      }
-
-      if (config.withAuth) {
-        draft.headers.Authorization = `Bearer ${this._token}`
-      }
-    })
-
-    return axios.create(config)
+    return right(axios.create(config))
   }
 
   private getRequestConfig(config: RequestConfig): RequestConfig {
@@ -58,18 +60,6 @@ class Http implements IHttp {
     }
 
     return config
-  }
-
-  static getInstance(): IHttp {
-    if (!Http.instance) {
-      Http.instance = new Http()
-    }
-
-    return Http.instance
-  }
-
-  storeToken(token: string): void {
-    this._token = token
   }
 
   private processResponse<T extends unknown>(
@@ -88,22 +78,41 @@ class Http implements IHttp {
   }
 
   private apiCall<T>(
-    config: RequestConfig
+    config: RequestConfig,
+    instance: AxiosInstance
   ): TE.TaskEither<DataError, AxiosResponse<ResponseResult<T>>> {
     return TE.tryCatch(
-      () => {
-        const instance = this.getAxiosInstance(config)
-        const requestConfig = this.getRequestConfig(config)
-        return instance(requestConfig)
-      },
+      () => instance(config),
       () => ({ kind: ErrorTypes.network })
     )
   }
 
+  get token(): string {
+    return this._token
+  }
+
+  set token(token: string) {
+    this._token = token
+  }
+
+  static getInstance(): IHttp {
+    if (!Http.instance) {
+      Http.instance = new Http()
+    }
+
+    return Http.instance
+  }
+
   async request<T>(config: RequestConfig): Promise<Either<DataError, ResponseResult<T>>> {
+    const requestConfig = this.getRequestConfig(config)
+
     return await pipe(
-      this.apiCall<T>(config),
-      TE.map(response => response.data),
+      this.getAxiosInstance(config),
+      flow(
+        map((instance: AxiosInstance) => this.apiCall<T>(requestConfig, instance)),
+        TE.fromEither
+      ),
+      TE.chain(TE.map(response => response.data)),
       TE.chain(flow(response => this.processResponse<T>(response), TE.fromEither))
     )()
   }

@@ -1,10 +1,10 @@
 import { either } from 'fp-ts'
-import { Either } from 'fp-ts/lib/Either'
+import { Either, isRight, left } from 'fp-ts/lib/Either'
 import { flow } from 'fp-ts/function'
 
 import { ITokenUseCase } from '@/auth/domains/useCases/interfaces/IToken'
 import { ITokenRepository } from '@/auth/domains/useCases/repositories-interfaces/IToken'
-import { DataError } from '@/common/types/DataError'
+import { DataError, ErrorTypes } from '@/common/types/DataError'
 import { ITokenDTO } from '../dto/TokenDTO'
 
 class TokenUseCase implements ITokenUseCase {
@@ -20,9 +20,9 @@ class TokenUseCase implements ITokenUseCase {
     // https://stackoverflow.com/questions/64379817/nextjs-auth-token-stored-in-memory-refresh-token-in-http-only-cookie
     const result = await this.tokenRepository.login(parameters)
 
-    if (result._tag === 'Right') {
+    if (isRight(result)) {
       const { accessToken, refreshToken } = result.right
-      this.tokenRepository.setToken(accessToken, refreshToken)
+      this.tokenRepository.setRefreshToken(accessToken, refreshToken)
     }
 
     return flow(either.map((response: ITokenDTO) => response.accessToken))(result)
@@ -31,22 +31,36 @@ class TokenUseCase implements ITokenUseCase {
   async logout(): Promise<Either<DataError, void>> {
     const result = await this.tokenRepository.logout()
 
-    if (result._tag === 'Right') {
-      this.tokenRepository.removeToken()
+    if (isRight(result)) {
+      this.tokenRepository.removeRefreshToken()
     }
 
     return result
   }
 
   async refreshToken(): Promise<Either<DataError, string>> {
+    const refreshToken = await this.getRefreshToken()
+
+    if (refreshToken === null) {
+      return left({ kind: ErrorTypes.authenticated })
+    }
+
     const result = await this.tokenRepository.refreshToken()
 
-    if (result._tag === 'Right') {
+    if (isRight(result)) {
       const { accessToken, refreshToken } = result.right
-      this.tokenRepository.setToken(accessToken, refreshToken)
+      this.tokenRepository.setRefreshToken(accessToken, refreshToken)
     }
 
     return flow(either.map((response: ITokenDTO) => response.accessToken))(result)
+  }
+
+  async getRefreshToken(): Promise<string | null> {
+    return await this.tokenRepository.getRefreshToken()
+  }
+
+  getAccessToken(): string {
+    return this.tokenRepository.getAccessToken()
   }
 }
 

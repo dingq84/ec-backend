@@ -10,7 +10,10 @@ const cUseCases = UseCases(cRepositories)
 const cPresenters = presenters(cUseCases)
 
 const core: IPresenters = {
-  token: cPresenters.token
+  auth: {
+    token: cPresenters.auth.token,
+    me: cPresenters.auth.me
+  }
 }
 
 export default core

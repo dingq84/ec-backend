@@ -23,6 +23,6 @@ export interface ResponseResult<T> {
 }
 
 export interface IHttp {
-  storeToken(toke: string): void
+  token: string
   request<T>(requestConfig: RequestConfig): Promise<Either<DataError, ResponseResult<T>>>
 }

@@ -1,5 +1,5 @@
-import Storage from '@/common/adapters/infrastructures/Storage'
 import Http from '@/common/adapters/infrastructures/Http'
+import Storage from '@/common/adapters/infrastructures/Storage'
 import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
 
 function createInfrastructure(): IInfrastructures {
