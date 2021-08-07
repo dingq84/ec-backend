@@ -41,7 +41,9 @@ function withAuth<T extends {}>(
   AccessDeniedComponent: React.ComponentType<{}> = DefaultAccessDeniedComponent // Access denied Component
 ) {
   return function WrapperComponent(props: T) {
+    // 1. 確認 accessToken 是否存在，存在的話跳至 3
     const accessToken = core.auth.token.getAccessToken()
+    // 2. 如果不存在 accessToken，執行 refresh token api
     const { isLoading: refreshTokenIsLoading } = useNoCacheQuery(
       'refreshToken',
       () => core.auth.token.refreshToken(),
@@ -49,6 +51,7 @@ function withAuth<T extends {}>(
         enabled: !accessToken
       }
     )
+    // 3. 執行 me api
     const { data, isLoading, isError } = useNoCacheQuery(
       API_KEY.isLogged,
       () => core.auth.me.getMe(),
