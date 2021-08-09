@@ -42,6 +42,8 @@ const Sidebar: React.FC = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
+  // const s = useAppSelector(state => state.me.menu)
+  // console.log(s)
   const [sidebarItems, setSidebarItems] = useState<SidebarMenuType[]>([])
   // 只有桌機版的收合模式為 float
   const [isFloat, setIsFloat] = useState(isMobile === false && sidebarIsExtend === false)

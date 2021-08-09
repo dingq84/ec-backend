@@ -8,32 +8,24 @@ import { faUserCog } from '@fortawesome/free-solid-svg-icons'
 const SIDEBAR_MENU = [
   {
     prefix: <FontAwesomeIcon icon={faUserCog} />,
+    id: 1,
     name: '訂單管理',
     href: '/'
   },
   {
     prefix: <FontAwesomeIcon icon={faUserCog} />,
+    id: 2,
     name: '會員管理',
     children: [
       {
         prefix: <FontAwesomeIcon icon={faUserCog} />,
+        id: 3,
         name: '會員列表與詳細頁',
-        href: '/account/info',
-        children: [
-          {
-            prefix: <FontAwesomeIcon icon={faUserCog} />,
-            name: '會員列表與詳細頁',
-            href: '/account/info/a'
-          },
-          {
-            prefix: <FontAwesomeIcon icon={faUserCog} />,
-            name: '匯出會員資訊',
-            href: '/account/info/b'
-          }
-        ]
+        href: '/account/info'
       },
       {
         prefix: <FontAwesomeIcon icon={faUserCog} />,
+        id: 4,
         name: '匯出會員資訊',
         href: '/account/export'
       }
@@ -41,11 +33,13 @@ const SIDEBAR_MENU = [
   },
   {
     prefix: <FontAwesomeIcon icon={faUserCog} />,
+    id: 5,
     name: '商品管理',
     href: '/product'
   },
   {
     prefix: <FontAwesomeIcon icon={faUserCog} />,
+    id: 6,
     name: '促銷管理',
     href: '/promote'
   }

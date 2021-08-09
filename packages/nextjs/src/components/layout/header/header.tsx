@@ -5,7 +5,8 @@
  */
 
 import Link from 'next/link'
-import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/router'
+import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -14,22 +15,30 @@ import tw from 'twin.macro'
 import Image from '@/components/shared/image'
 import Popover from '@/components/shared/popover'
 
+// core
+import core from '@ec-backend/core/src'
+
 // hooks
 import useIsMobile from '@/hooks/useIsMobile'
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // states
 import { toggleSidebar, setSidebar } from '@/states/global/settings'
+import { clearMe } from '@/states/global/me'
 import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
+import { isRight } from 'fp-ts/lib/Either'
 
 const Header = () => {
   const isMobile = useIsMobile()
   const anchorEl = useRef<HTMLDivElement>(null!)
   const [popoverIsOpen, setPopoverIsOpen] = useState(false)
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
+  const user = useAppSelector(state => state.me.user)
   const isDesktopAndCollapsed = isMobile === false && sidebarIsExtend === false
 
-  useEffect(() => {
+  useEnhancedEffect(() => {
     dispatch(setSidebar(!isMobile))
   }, [dispatch, isMobile])
 
@@ -39,6 +48,14 @@ const Header = () => {
 
   const togglePopover = (isOpen: boolean): void => {
     setPopoverIsOpen(isOpen)
+  }
+
+  const logOut = async () => {
+    const result = await core.auth.token.logout()
+    if (isRight(result)) {
+      dispatch(clearMe())
+      router.push('/auth/login')
+    }
   }
 
   return (
@@ -73,7 +90,7 @@ const Header = () => {
           className="flex-center"
           onClick={() => togglePopover(true)}
         >
-          <button tw="px-4 color[inherit]">Alexander Pierce</button>
+          <button tw="px-4 color[inherit]">{user?.name || ''}</button>
           <FontAwesomeIcon
             icon={faChevronDown}
             tw="text-sm transition-transform duration-300 color[inherit]"
@@ -91,9 +108,10 @@ const Header = () => {
       >
         <ul tw="all:(py-1.5 inline-block)">
           <li>
-            <Link href="/auth/login">
-              <a className="text-black">Sign out</a>
-            </Link>
+            <span className="text-black">個人資訊</span>
+          </li>
+          <li onClick={logOut}>
+            <span className="text-black">登出</span>
           </li>
         </ul>
       </Popover>

@@ -8,9 +8,10 @@
 
 import 'twin.macro'
 import Link from 'next/link'
+import { isLeft, isRight } from 'fp-ts/lib/Either'
 
 // constants
-import { API_KEY } from '@/constants/services/api'
+import { ApiKey } from '@/constants/services/api'
 
 // components
 import Modal from '@/components/shared/modal'
@@ -20,10 +21,16 @@ import Loading from '@/components/shared/loading'
 
 // core
 import core from '@ec-backend/core'
-import { isLeft } from 'fp-ts/lib/Either'
+
+// hooks
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // services
 import useNoCacheQuery from '@/services/useNoCacheQuery'
+
+// states
+import { setMe } from '@/states/global/me'
+import { useAppDispatch } from '@/states/global/hooks'
 
 const DefaultAccessDeniedComponent = () => (
   <Modal open>
@@ -53,12 +60,20 @@ function withAuth<T extends {}>(
     )
     // 3. 執行 me api
     const { data, isLoading, isError } = useNoCacheQuery(
-      API_KEY.isLogged,
+      ApiKey.isLogged,
       () => core.auth.me.getMe(),
       {
         enabled: !refreshTokenIsLoading
       }
     )
+    const dispatch = useAppDispatch()
+
+    useEnhancedEffect(() => {
+      // 在每次檢查是否登入時，都會更新 me 的 state
+      if (data && isRight(data)) {
+        dispatch(setMe(data.right))
+      }
+    }, [data, dispatch])
 
     if (isLoading || refreshTokenIsLoading) {
       return <Loading isLoading />

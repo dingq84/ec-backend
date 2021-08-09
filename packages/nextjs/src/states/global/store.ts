@@ -1,10 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // reducers
-import settings from './settings'
+import me from '@/states/global/me'
+import settings from '@/states/global/settings'
 
 export const store = configureStore({
-  reducer: { settings }
+  reducer: { me, settings },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

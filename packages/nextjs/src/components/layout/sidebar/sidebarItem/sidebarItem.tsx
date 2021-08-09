@@ -2,6 +2,7 @@ import { DOMAttributes } from 'react'
 import tw from 'twin.macro'
 
 export type SidebarItemProps = DOMAttributes<HTMLDivElement> & {
+  id?: number
   label: string // link 的名稱
   prefix?: React.ReactNode // link 名稱前面的 component
   suffix?: React.ReactNode // link 名稱後面的 component
@@ -9,7 +10,7 @@ export type SidebarItemProps = DOMAttributes<HTMLDivElement> & {
 }
 
 const SidebarItem = (props: SidebarItemProps) => {
-  const { label, prefix, suffix, isActive = false, ...restProps } = props
+  const { label, prefix, suffix, isActive = false, id, ...restProps } = props
   return (
     <div
       tw="w-full flex text-blue-2 justify-start text-sm items-center px-3 py-2 hover:(cursor-pointer bg-purple-1)"
