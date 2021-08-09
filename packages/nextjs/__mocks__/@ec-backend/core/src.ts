@@ -3,7 +3,7 @@ import { either } from 'fp-ts/lib'
 const auth = {
   token: {
     logout() {
-      either.right('success')
+      return either.right('success')
     }
   },
   me: {}
