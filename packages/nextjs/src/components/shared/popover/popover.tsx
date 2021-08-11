@@ -28,7 +28,7 @@ import getOffsetLeft from '@/utils/components/popover/getOffsetLeft'
 import getTransformOriginValue from '@/utils/components/popover/getTransformOriginValue'
 
 export interface PopoverProps extends ModalProps {
-  anchorEl?: HTMLDivElement // 錨點 決定 popover 要定位在哪裡
+  anchorEl?: HTMLElement // 錨點 決定 popover 要定位在哪裡
   anchorOrigin?: {
     // 錨點的 origin
     horizontal: HorizontalType

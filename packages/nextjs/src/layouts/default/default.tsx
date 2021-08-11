@@ -18,7 +18,7 @@ import Header from '@/components/layout/header'
 import Sidebar from '@/components/layout/sidebar'
 import PageTransition from '@/components/shared/pageTransition'
 
-type DefaultLayoutProps = {
+interface DefaultLayoutProps {
   children: React.ReactNode
 }
 
@@ -26,11 +26,11 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
   const { children } = props
 
   return (
-    <div tw="h-screen flex flex-col">
-      <Header />
-      <div tw="flex flex-grow min-h-0">
-        <Sidebar />
-        <PageTransition tw="flex-grow min-w-0 bg-white-1">{children}</PageTransition>
+    <div tw="h-screen flex">
+      <Sidebar />
+      <div tw="flex flex-col flex-grow min-h-0">
+        <Header />
+        <PageTransition tw="flex-grow min-w-0 bg-b0">{children}</PageTransition>
       </div>
       <footer></footer>
     </div>

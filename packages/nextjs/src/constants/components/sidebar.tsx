@@ -27,7 +27,21 @@ const SIDEBAR_MENU = [
         prefix: <FontAwesomeIcon icon={faUserCog} />,
         id: 4,
         name: '匯出會員資訊',
-        href: '/account/export'
+        href: '/account/export',
+        children: [
+          {
+            prefix: <FontAwesomeIcon icon={faUserCog} />,
+            id: 7,
+            name: '會員列表與詳細頁',
+            href: '/account/info'
+          },
+          {
+            prefix: <FontAwesomeIcon icon={faUserCog} />,
+            id: 8,
+            name: '匯出會員資訊',
+            href: '/account/export'
+          }
+        ]
       }
     ]
   },
@@ -35,7 +49,15 @@ const SIDEBAR_MENU = [
     prefix: <FontAwesomeIcon icon={faUserCog} />,
     id: 5,
     name: '商品管理',
-    href: '/product'
+    href: '/product',
+    children: [
+      {
+        prefix: <FontAwesomeIcon icon={faUserCog} />,
+        id: 12,
+        name: '商品管理',
+        href: '/product'
+      }
+    ]
   },
   {
     prefix: <FontAwesomeIcon icon={faUserCog} />,

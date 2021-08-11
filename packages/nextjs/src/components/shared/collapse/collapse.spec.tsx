@@ -98,7 +98,7 @@ describe('test <Collapse />', () => {
       expect(handleEntering.mock.calls[0][1]).toBe(false)
 
       jest.runAllTimers()
-      expect(handleEntered.mock.calls[0][0].style.maxHeight).toBe(`${600 * 5}px`)
+      expect(handleEntered.mock.calls[0][0].style.maxHeight).toBe('unset')
       expect(handleEntered.mock.calls[0][1]).toBe(false)
       expect(handleEntered).toHaveBeenCalledTimes(1)
     })

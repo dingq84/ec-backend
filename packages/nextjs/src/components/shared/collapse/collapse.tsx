@@ -40,6 +40,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     collapsedSize = '0px',
     timeout = 300,
     inProps,
+    appear = false,
     onEnter,
     onEntering,
     onEntered,
@@ -68,7 +69,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     if (inProps) {
       nodeRef.current.style[size] = `${getWrapperSize()}px`
     } else {
-      nodeRef.current.style[size] = `0px`
+      nodeRef.current.style[size] = '0px'
     }
   }, [])
 
@@ -115,8 +116,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     if (isHorizontal) {
       node.style[size] = `${getWrapperSize()}px` // 因為 width auto 的動畫效果不如預期，改良為 wrapper 的 width
     } else {
-      // TODO: 設定成 none，會有 transition 消失的問題，因此設定一個大值
-      node.style[size] = `${getWrapperSize() * 5}px`
+      node.style[size] = 'unset'
     }
 
     if (onEntered) {
@@ -132,15 +132,19 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     }
   })
 
-  const handleExited = normalizedTransitionCallback(onExited)
-
   const handleExiting = normalizedTransitionCallback((node: HTMLElement) => {
+    // 先維持原本的寬或高，等下一次再改成 collapsed size
+    node.style[size] = `${getWrapperSize()}px`
     node.style.transitionDuration = `${timeout}ms`
+
     node.style[size] = collapsedSize
+
     if (onExiting) {
       onExiting(node)
     }
   })
+
+  const handleExited = normalizedTransitionCallback(onExited)
 
   return (
     <Transition
@@ -153,6 +157,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
       onExit={handleExit}
       onExited={handleExited}
       onExiting={handleExiting}
+      appear={appear}
     >
       {(status: Status, childProps: Object) => (
         <div
