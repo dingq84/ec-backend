@@ -1,6 +1,6 @@
 interface ConstantsSidebarMenuType {
   id: number
-  prefix: any
+  prefix?: any
   name: string
   href?: string
   children?: ConstantsSidebarMenuType[]

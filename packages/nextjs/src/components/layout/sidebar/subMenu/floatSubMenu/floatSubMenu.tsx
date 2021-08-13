@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 import tw, { css } from 'twin.macro'
 
 // components
@@ -80,15 +82,18 @@ const FloatSubMenu = (props: FloatSubMenuProps) => {
         hiddenBackdrop
         horizontalSpace={40}
         paperProps={{
-          css: [tw`py-3 px-3 rounded-l-none flex-col w-50 bg-dp`]
+          css: [tw`p-0 rounded-l-none w-50 bg-transparent`]
         }}
       >
-        <span tw="text-b0 leading-none text-base w-full px-2 py-4 hover:(cursor-pointer)">
-          {name}
-        </span>
-        {children.length
-          ? children.map(child => <StaticSubMenu key={child.id} menu={child} />)
-          : null}
+        <div tw="w-full ml-5 bg-db2 rounded py-2 px-4 relative">
+          <FontAwesomeIcon icon={faCaretLeft} tw="text-3xl absolute text-db2 -left-2.5 top-2" />
+          <span tw="text-b0 leading-none text-base w-full px-2 py-4 hover:(cursor-pointer)">
+            {name}
+          </span>
+          {children.length
+            ? children.map(child => <StaticSubMenu key={child.id} menu={child} tw="text-sm" />)
+            : null}
+        </div>
       </Popover>
     </li>
   )

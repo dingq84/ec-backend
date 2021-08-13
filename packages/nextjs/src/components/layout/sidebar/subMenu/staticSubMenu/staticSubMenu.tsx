@@ -52,9 +52,9 @@ const StaticSubMenu = (props: FloatSubMenuProps) => {
         <ul tw="space-y-2">
           {children.map(item =>
             item.children ? (
-              <StaticSubMenu key={item.id} menu={item} open={open} tw="-mt-4" />
+              <StaticSubMenu key={item.id} menu={item} open={open} tw="-mt-4" {...restProps} />
             ) : (
-              <MenuItem key={item.id} {...item} tw="-mt-4">
+              <MenuItem key={item.id} {...item} tw="-mt-4" {...restProps}>
                 {item.name}
               </MenuItem>
             )
@@ -63,7 +63,9 @@ const StaticSubMenu = (props: FloatSubMenuProps) => {
       </Collapse>
     </>
   ) : (
-    <MenuItem {...menu}>{menu.name}</MenuItem>
+    <MenuItem {...menu} {...restProps}>
+      {menu.name}
+    </MenuItem>
   )
 }
 

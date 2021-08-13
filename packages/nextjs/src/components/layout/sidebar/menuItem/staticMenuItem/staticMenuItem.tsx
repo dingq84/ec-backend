@@ -31,7 +31,7 @@ const StaticMenuItem = (props: StaticMenuItemProps) => {
       >
         {prefix ? <span tw="mr-2.5 color[inherit]">{prefix}</span> : null}
 
-        <span tw="color[inherit] select-none leading-none text-base">{children}</span>
+        <span tw="color[inherit] select-none leading-none font-size[inherit]">{children}</span>
 
         {suffix ? <span tw="ml-auto color[inherit]">{suffix}</span> : null}
       </div>
