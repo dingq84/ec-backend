@@ -58,7 +58,7 @@ const FloatSubMenu = (props: FloatSubMenuProps) => {
     >
       <div
         tw="text-b0 hover:(cursor-pointer)"
-        css={[isOpen && tw`cursor-pointer bg-purple-1`]}
+        css={[isOpen && tw`cursor-pointer bg-p1`]}
         {...restProps}
       >
         {prefix ? (

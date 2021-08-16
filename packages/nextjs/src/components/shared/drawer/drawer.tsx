@@ -2,10 +2,11 @@ import { useState, useRef } from 'react'
 import tw from 'twin.macro'
 
 // components
-
 import Collapse from '@/components/shared/collapse'
 import Modal from '@/components/shared/modal'
 import Paper from '@/components/shared/paper'
+
+// hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 export interface DrawerProps {

@@ -86,19 +86,19 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
   return (
     <div className={className} ref={ref}>
       <div
-        tw="w-full text-blue-1 flex flex-col"
+        tw="w-full text-b1 flex flex-col"
         css={[labelPosition === 'left' && tw`flex-row space-y-0 space-x-1.5 items-center`]}
       >
         {label ? (
-          <label tw="text-sm text-black" htmlFor={id}>
+          <label tw="text-lg font-normal text-black mb-1" htmlFor={id}>
             {label}
           </label>
         ) : null}
         <div
-          tw="border border-solid border-blue-1 py-1 px-2 text-sm rounded flex items-center space-x-1"
+          tw="py-1.5 px-2.5 rounded flex items-center space-x-1 bg-b1"
           css={[
-            error && tw`border-red-500`,
-            disabled && tw`bg-gray-1 text-black`,
+            error && tw`border-r1 border border-solid`,
+            disabled && tw`bg-g2 text-black`,
             border === false && `border-none`
           ]}
         >
@@ -106,7 +106,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           <div tw="flex items-center flex-grow flex-wrap space-x-1">
             {adornment.start}
             <input
-              tw="color[inherit] border-none flex-grow h-7 leading-loose placeholder:(text-xs)"
+              tw="text-black font-normal border-none rounded flex-grow h-6 text-base placeholder:(text-g3)"
               id={id}
               value={value}
               onChange={handleChange}
@@ -131,7 +131,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
         </div>
       </div>
 
-      <ErrorMessage message={errorMessage} show={error} />
+      <ErrorMessage message={errorMessage} show={error && Boolean(errorMessage)} />
     </div>
   )
 }

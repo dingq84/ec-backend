@@ -65,12 +65,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
       )}
       <div tw="relative font-size[0px]">
         <span
-          tw="inline-block w-4 h-4 leading-none bg-transparent border border-solid border-blue-1 rounded"
+          tw="inline-block w-4 h-4 leading-none bg-transparent border border-solid border-g3 rounded"
           css={[error && tw`border-red-500`]}
         ></span>
         <FontAwesomeIcon
           tw="text-xs text-primary opacity-0 transition-opacity duration-300 absolute top-0.5 left-0.5"
-          css={[value && tw`opacity-100`, disabled && tw`text-gray-2`]}
+          css={[value && tw`opacity-100`, disabled && tw`text-g2`]}
           icon={faCheck}
         />
         <input
