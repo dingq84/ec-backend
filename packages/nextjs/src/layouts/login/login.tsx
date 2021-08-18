@@ -18,8 +18,14 @@ function LoginLayout(props: LoginLayoutProps) {
     <div css={[gradient]} tw="min-width[1366px]  h-screen flex flex-col">
       <header tw="py-5 mx-5 flex-shrink-0">
         <span tw="inline-flex items-center">
-          <Image src="/images/logo.svg" alt="logo" layout="fill" />
-          <Image src="/images/logoWord.svg" alt="vivy admin website" tw="pl-2" layout="fill" />
+          <Image src="/images/logo.svg" alt="logo" width={24} height={20} />
+          <Image
+            src="/images/logoWord.svg"
+            alt="vivy admin website"
+            tw="pl-2"
+            width={64}
+            height={18}
+          />
         </span>
       </header>
 
@@ -33,7 +39,7 @@ function LoginLayout(props: LoginLayoutProps) {
               future world.
             </small>
           </div>
-          <Image src="/images/robot.png" alt="robot" />
+          <Image src="/images/robot.png" alt="robot" width={611} height={670} />
         </div>
 
         <div tw="w-2/5">{children}</div>
