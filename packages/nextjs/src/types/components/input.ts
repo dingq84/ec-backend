@@ -12,7 +12,6 @@ interface InputBasicType<T> extends Omit<HTMLAttributes<HTMLInputElement>, 'onCh
   value?: T
   onChange?: (value: T) => void
   error?: boolean // 是否有錯誤
-  errorMessage?: string // 錯誤訊息
   disabled?: boolean
   readOnly?: boolean
   labelPosition?: 'top' | 'left'
