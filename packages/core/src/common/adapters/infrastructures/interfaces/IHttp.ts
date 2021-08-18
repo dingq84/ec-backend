@@ -1,17 +1,14 @@
 import { AxiosRequestConfig } from 'axios'
 import { Either } from 'fp-ts/lib/Either'
 
+// constants
+import { StatusCode } from '@/common/constants/statusCode'
+
 // types
-import { DataError } from '@/common/types/DataError'
+import { IErrorParameters } from '@/common/domains/dto/ErrorDTO'
 
 export interface RequestConfig extends AxiosRequestConfig {
   withAuth?: boolean
-}
-
-export enum StatusCode {
-  success = '0000',
-  tokenCancel = '1001',
-  tokenExpired = '1002'
 }
 
 export interface ResponseResult<T> {
@@ -24,5 +21,5 @@ export interface ResponseResult<T> {
 
 export interface IHttp {
   token: string
-  request<T>(requestConfig: RequestConfig): Promise<Either<DataError, ResponseResult<T>>>
+  request<T>(requestConfig: RequestConfig): Promise<Either<IErrorParameters, ResponseResult<T>>>
 }

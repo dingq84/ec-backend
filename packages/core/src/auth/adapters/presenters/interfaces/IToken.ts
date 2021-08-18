@@ -1,11 +1,11 @@
 import { Either } from 'fp-ts/lib/Either'
 
-import { DataError } from '@/common/types/DataError'
+import { IErrorDTO } from '@/common/domains/dto/ErrorDTO'
 
 export interface ITokenPresenter {
-  login(parameters: { account: string; password: string }): Promise<Either<DataError, string>>
-  logout(): Promise<Either<DataError, void>>
-  refreshToken(): Promise<Either<DataError, string>>
+  login(parameters: { account: string; password: string }): Promise<Either<IErrorDTO, string>>
+  logout(): Promise<Either<IErrorDTO, void>>
+  refreshToken(): Promise<Either<IErrorDTO, string>>
   getRefreshToken(): Promise<string | null>
   getAccessToken(): string
 }

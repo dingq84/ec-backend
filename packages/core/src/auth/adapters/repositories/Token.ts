@@ -12,7 +12,8 @@ import TokenDTO, { ITokenDTO, ITokenParameters } from '@/auth/domains/dto/TokenD
 import { IHttp, ResponseResult } from '@/common/adapters/infrastructures/interfaces/IHttp'
 import { IStorage } from '@/common/adapters/infrastructures/interfaces/IStorage'
 import { ITokenRepository } from '@/auth/domains/useCases/repositories-interfaces/IToken'
-import { DataError } from '@/common/types/DataError'
+import { IErrorDTO, IErrorParameters } from '@/common/domains/dto/ErrorDTO'
+import TokenErrorDTO from '@/auth/domains/dto/TokenErrorDTO'
 
 class TokenRepository implements ITokenRepository {
   constructor(private readonly storage: IStorage, private readonly http: IHttp) {}
@@ -20,7 +21,7 @@ class TokenRepository implements ITokenRepository {
   async login(parameters: {
     account: string
     password: string
-  }): Promise<Either<DataError, ITokenDTO>> {
+  }): Promise<Either<IErrorDTO, ITokenDTO>> {
     const { account, password } = parameters
     const result = await this.http.request<ITokenParameters>({
       method: 'POST',
@@ -32,21 +33,31 @@ class TokenRepository implements ITokenRepository {
     })
 
     return flow(
+      (data: Either<IErrorParameters, ResponseResult<ITokenParameters>>) =>
+        either.mapLeft((error: IErrorParameters) => new TokenErrorDTO(error))<
+          ResponseResult<ITokenParameters>
+        >(data),
       either.map((response: ResponseResult<ITokenParameters>) => new TokenDTO(response.data))
     )(result)
   }
 
-  async logout(): Promise<Either<DataError, void>> {
+  async logout(): Promise<Either<IErrorDTO, void>> {
     const result = await this.http.request<void>({
       method: 'POST',
       url: ApiUrl.logout,
       withAuth: true
     })
 
-    return flow(either.map((response: ResponseResult<void>) => response.data))(result)
+    return flow(
+      (data: Either<IErrorParameters, ResponseResult<void>>) =>
+        either.mapLeft((error: IErrorParameters) => new TokenErrorDTO(error))<ResponseResult<void>>(
+          data
+        ),
+      either.map((response: ResponseResult<void>) => response.data)
+    )(result)
   }
 
-  async refreshToken(): Promise<Either<DataError, ITokenDTO>> {
+  async refreshToken(): Promise<Either<IErrorDTO, ITokenDTO>> {
     const refreshToken = await this.getRefreshToken()
     const result = await this.http.request<ITokenParameters>({
       method: 'POST',
@@ -57,6 +68,10 @@ class TokenRepository implements ITokenRepository {
     })
 
     return flow(
+      (data: Either<IErrorParameters, ResponseResult<ITokenParameters>>) =>
+        either.mapLeft((error: IErrorParameters) => new TokenErrorDTO(error))<
+          ResponseResult<ITokenParameters>
+        >(data),
       either.map((response: ResponseResult<ITokenParameters>) => new TokenDTO(response.data))
     )(result)
   }

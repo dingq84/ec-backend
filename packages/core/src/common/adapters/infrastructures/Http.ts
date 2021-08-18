@@ -14,10 +14,11 @@ import { Either, left, right, map } from 'fp-ts/lib/Either'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { flow, pipe } from 'fp-ts/lib/function'
 
-import { IHttp, RequestConfig, ResponseResult, StatusCode } from './interfaces/IHttp'
-import { DataError, ErrorTypes } from '@/common/types/DataError'
 import createFormData from '@/common/utils/createFormData'
 import isFormData from '@/common/utils/isFormData'
+import { IHttp, RequestConfig, ResponseResult } from './interfaces/IHttp'
+import { StatusCode } from '@/common/constants/statusCode'
+import { IErrorParameters } from '@/common/domains/dto/ErrorDTO'
 
 class Http implements IHttp {
   private static instance: IHttp
@@ -27,7 +28,7 @@ class Http implements IHttp {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  private getAxiosInstance(config: RequestConfig): Either<DataError, AxiosInstance> {
+  private getAxiosInstance(config: RequestConfig): Either<IErrorParameters, AxiosInstance> {
     if (!config.baseURL) {
       config.baseURL = process.env.API_URL as string
     }
@@ -43,7 +44,7 @@ class Http implements IHttp {
 
     if (config.withAuth) {
       if (!this._token) {
-        return left({ kind: ErrorTypes.authenticated })
+        return left({ statusMessage: '請先登入', statusCode: StatusCode.tokenCancel })
       }
 
       config.headers.Authorization = `Bearer ${this._token}`
@@ -64,26 +65,34 @@ class Http implements IHttp {
 
   private processResponse<T extends unknown>(
     response: ResponseResult<T>
-  ): Either<DataError, ResponseResult<T>> {
-    switch (response.statusCode) {
+  ): Either<IErrorParameters, ResponseResult<T>> {
+    const { statusCode, statusMessage, data } = response
+    switch (statusCode) {
       case StatusCode.success:
         return right(response)
-      case StatusCode.tokenCancel:
-        return left({ kind: ErrorTypes.authenticated })
-      case StatusCode.tokenExpired:
-        return left({ kind: ErrorTypes.tokenExpired })
       default:
-        return left({ kind: ErrorTypes.unexpected, error: new Error(response.statusMessage) })
+        return left({ statusCode, statusMessage, data })
     }
   }
 
   private apiCall<T>(
     config: RequestConfig,
     instance: AxiosInstance
-  ): TE.TaskEither<DataError, AxiosResponse<ResponseResult<T>>> {
+  ): TE.TaskEither<IErrorParameters, AxiosResponse<ResponseResult<T>>> {
     return TE.tryCatch(
       () => instance(config),
-      () => ({ kind: ErrorTypes.network })
+      (reason: unknown) => {
+        const statusMessage = String(reason).toLowerCase()
+        if (statusMessage.includes('401')) {
+          return { statusCode: StatusCode.tokenCancel, statusMessage }
+        } else if (statusMessage.includes('403')) {
+          return { statusCode: StatusCode.unauthorized, statusMessage }
+        } else if (statusMessage.includes('network')) {
+          return { statusCode: StatusCode.network, statusMessage }
+        }
+
+        return { statusCode: StatusCode.system, statusMessage }
+      }
     )
   }
 
@@ -103,7 +112,7 @@ class Http implements IHttp {
     return Http.instance
   }
 
-  async request<T>(config: RequestConfig): Promise<Either<DataError, ResponseResult<T>>> {
+  async request<T>(config: RequestConfig): Promise<Either<IErrorParameters, ResponseResult<T>>> {
     const requestConfig = this.getRequestConfig(config)
 
     return await pipe(
