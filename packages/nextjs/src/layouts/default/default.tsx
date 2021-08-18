@@ -30,7 +30,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
       <Sidebar />
       <div tw="flex flex-col flex-grow min-h-0">
         <Header />
-        <PageTransition tw="flex-grow min-w-0 bg-b0">{children}</PageTransition>
+        <PageTransition tw="flex-grow min-w-0 bg-blue-1">{children}</PageTransition>
       </div>
       <footer></footer>
     </div>

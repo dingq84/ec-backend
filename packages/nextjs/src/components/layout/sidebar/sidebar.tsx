@@ -27,7 +27,7 @@ import SIDEBAR_MENU from '@/constants/components/sidebar'
 const Sidebar = () => {
   return (
     <aside
-      className="bg-gradient-to-b from-db1 via-dp to-p2"
+      className="bg-gradient-to-b from-blue-8 via-blue-purple-1 to-primary"
       tw="py-5 overflow-y-auto flex flex-col flex-shrink-0"
     >
       <Container>

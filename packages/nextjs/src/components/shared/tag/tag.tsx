@@ -32,7 +32,8 @@ const Tag = forwardRef<HTMLButtonElement, TagProps>(function Tag(props, ref) {
       className={`btn-outline ${className}`}
       tw="rounded-3xl py-0.5"
       css={[
-        disabled && tw`border-transparent bg-g2 text-black pointer-events-none cursor-not-allowed`
+        disabled &&
+          tw`border-transparent bg-gray-2 text-black pointer-events-none cursor-not-allowed`
       ]}
       label={
         <>

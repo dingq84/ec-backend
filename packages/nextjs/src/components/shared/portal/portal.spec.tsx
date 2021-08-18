@@ -5,7 +5,7 @@ import { render } from '@testing-library/react'
 import Portal from '.'
 
 describe('test portal', () => {
-  it('should have access to the mountNode when disabledPortal={false}', () => {
+  it('should have access to the mountNode when disableblue-purple-1ortal={false}', () => {
     const refSpy = jest.fn()
     const { unmount } = render(
       <Portal ref={refSpy}>
@@ -18,7 +18,7 @@ describe('test portal', () => {
     expect(refSpy.mock.calls).toEqual([[document.body], [null]])
   })
 
-  it('should have access to the mountNode when disabledPortal={true}', () => {
+  it('should have access to the mountNode when disableblue-purple-1ortal={true}', () => {
     const refSpy = jest.fn()
     const { unmount } = render(
       <Portal disablePortal ref={refSpy}>
@@ -31,7 +31,7 @@ describe('test portal', () => {
     expect(refSpy.mock.calls).toEqual([[mountNode], [null]])
   })
 
-  it('should have access to the mountNode when switching disabledPortal', () => {
+  it('should have access to the mountNode when switching disableblue-purple-1ortal', () => {
     const refSpy = jest.fn()
     const { rerender, unmount } = render(
       <Portal disablePortal ref={refSpy}>

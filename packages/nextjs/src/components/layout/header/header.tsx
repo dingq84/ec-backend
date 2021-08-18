@@ -41,7 +41,7 @@ const Header = () => {
   }
 
   return (
-    <header tw="relative bg-b0 flex flex-col md:flex-row">
+    <header tw="relative bg-blue-1 flex flex-col md:flex-row">
       <nav tw="flex justify-between text-black flex-grow pr-3">
         <div
           ref={anchorEl}

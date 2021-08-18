@@ -26,7 +26,7 @@ const StaticMenuItem = (props: StaticMenuItemProps) => {
   return (
     <li tw="list-none w-full" css={[isActive && tw`rounded-lg`, isActive && activeGradient]}>
       <div
-        tw="w-full flex text-b0 justify-start text-base items-center px-2 py-4 hover:(cursor-pointer)"
+        tw="w-full flex text-blue-1 justify-start text-base items-center px-2 py-4 hover:(cursor-pointer)"
         {...restProps}
       >
         {prefix ? <span tw="mr-2.5 color[inherit]">{prefix}</span> : null}

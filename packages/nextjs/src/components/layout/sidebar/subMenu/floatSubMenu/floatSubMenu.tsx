@@ -57,8 +57,8 @@ const FloatSubMenu = (props: FloatSubMenuProps) => {
       tw="w-full list-none mt-3.5"
     >
       <div
-        tw="text-b0 hover:(cursor-pointer)"
-        css={[isOpen && tw`cursor-pointer bg-p1`]}
+        tw="text-blue-1 hover:(cursor-pointer)"
+        css={[isOpen && tw`cursor-pointer bg-purple-1`]}
         {...restProps}
       >
         {prefix ? (
@@ -85,9 +85,9 @@ const FloatSubMenu = (props: FloatSubMenuProps) => {
           css: [tw`p-0 rounded-l-none w-50 bg-transparent`]
         }}
       >
-        <div tw="w-full ml-5 bg-db2 rounded py-2 px-4 relative">
-          <FontAwesomeIcon icon={faCaretLeft} tw="text-3xl absolute text-db2 -left-2.5 top-2" />
-          <span tw="text-b0 leading-none text-base w-full px-2 py-4 hover:(cursor-pointer)">
+        <div tw="w-full ml-5 bg-blue-7 rounded py-2 px-4 relative">
+          <FontAwesomeIcon icon={faCaretLeft} tw="text-3xl absolute text-blue-7 -left-2.5 top-2" />
+          <span tw="text-blue-1 leading-none text-base w-full px-2 py-4 hover:(cursor-pointer)">
             {name}
           </span>
           {children.length

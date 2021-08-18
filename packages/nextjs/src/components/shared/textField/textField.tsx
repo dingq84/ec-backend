@@ -12,7 +12,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
 // components
-import ErrorMessage from '@/components/shared/errorMessage'
 import Fade from '@/components/shared/fade'
 
 // hooks
@@ -42,7 +41,6 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
     label,
     onClear,
     onChange,
-    errorMessage,
     adornment = {
       start: null,
       end: null
@@ -86,7 +84,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
   return (
     <div className={className} ref={ref}>
       <div
-        tw="w-full text-b1 flex flex-col"
+        tw="w-full text-blue-2 flex flex-col"
         css={[labelPosition === 'left' && tw`flex-row space-y-0 space-x-1.5 items-center`]}
       >
         {label ? (
@@ -95,10 +93,10 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           </label>
         ) : null}
         <div
-          tw="py-1.5 px-2.5 rounded flex items-center space-x-1 bg-b1"
+          tw="py-1.5 px-2.5 rounded flex items-center space-x-1 bg-blue-2"
           css={[
-            error && tw`border-r1 border border-solid`,
-            disabled && tw`bg-g2 text-black`,
+            error && tw`border-red-1 border border-solid`,
+            disabled && tw`bg-gray-2 text-black`,
             border === false && `border-none`
           ]}
         >
@@ -106,7 +104,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           <div tw="flex items-center flex-grow flex-wrap space-x-1">
             {adornment.start}
             <input
-              tw="text-black font-normal border-none rounded flex-grow h-6 text-base placeholder:(text-g3)"
+              tw="text-black font-normal border-none rounded flex-grow h-6 text-base placeholder:(text-gray-3)"
               id={id}
               value={value}
               onChange={handleChange}
@@ -130,8 +128,6 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           {adornment.end}
         </div>
       </div>
-
-      <ErrorMessage message={errorMessage} show={error && Boolean(errorMessage)} />
     </div>
   )
 }

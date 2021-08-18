@@ -51,7 +51,7 @@ const Container = (props: ContainerProps) => {
         <button
           className="flex-center"
           onClick={handleClick}
-          tw="absolute left-full top-12 py-2 px-2.5 rounded-full text-g3 bg-white w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 shadow-md border border-solid border-g2 hover:(bg-p1 text-b0 border-p1)"
+          tw="absolute left-full top-12 py-2 px-2.5 rounded-full text-gray-3 bg-white w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 shadow-md border border-solid border-gray-2 hover:(bg-purple-1 text-blue-1 border-purple-1)"
         >
           <FontAwesomeIcon
             icon={faChevronLeft}

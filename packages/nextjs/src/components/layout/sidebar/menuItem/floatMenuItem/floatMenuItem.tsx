@@ -36,7 +36,7 @@ const FloatMenuItem = (props: FloatMenuItemProps) => {
 
   return (
     <li ref={ref} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} tw="list-none">
-      <div tw="text-b0 hover:(cursor-pointer)" {...restProps}>
+      <div tw="text-blue-1 hover:(cursor-pointer)" {...restProps}>
         {prefix ? (
           <span
             tw="text-lg color[inherit] inline-flex w-10 h-10 justify-center items-center cursor-pointer rounded-lg"
@@ -59,9 +59,12 @@ const FloatMenuItem = (props: FloatMenuItemProps) => {
             css: [tw`p-0 rounded-l-none w-50 bg-transparent`]
           }}
         >
-          <div tw="w-full ml-5 bg-db2 rounded py-2 px-4 relative">
-            <FontAwesomeIcon icon={faCaretLeft} tw="text-3xl absolute text-db2 -left-2.5 top-2" />
-            <span tw="text-b0 w-full leading-none text-base hover:(cursor-pointer)">
+          <div tw="w-full ml-5 bg-blue-7 rounded py-2 px-4 relative">
+            <FontAwesomeIcon
+              icon={faCaretLeft}
+              tw="text-3xl absolute text-blue-7 -left-2.5 top-2"
+            />
+            <span tw="text-blue-1 w-full leading-none text-base hover:(cursor-pointer)">
               {children}
             </span>
           </div>

@@ -116,7 +116,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
         paperProps={{ css: [tw`p-0`] }}
         verticalSpace={10}
       >
-        <ul tw="w-full max-h-32 overflow-y-auto all:(inline-block text-black-1 w-full h-10 py-2 px-3 hover:(bg-p1 cursor-pointer))">
+        <ul tw="w-full max-h-32 overflow-y-auto all:(inline-block text-black w-full h-10 py-2 px-3 hover:(bg-purple-1 cursor-pointer))">
           {options.map(option => (
             <li key={`option-${option.key}`} onClick={() => handleClick(option)}>
               {option.value}

@@ -40,8 +40,7 @@ const Error = Template.bind({})
 Error.args = {
   label: 'error',
   id: 'error',
-  error: true,
-  errorMessage: 'please try again!'
+  error: true
 }
 
 const defaultSetting = {

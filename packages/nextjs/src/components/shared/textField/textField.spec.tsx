@@ -73,11 +73,4 @@ describe('test <TextField />', () => {
     fireEvent.click(clearSvg!)
     expect(clearFn).toHaveBeenCalledTimes(1)
   })
-
-  it('should display error message', () => {
-    jest.useFakeTimers()
-    const { container } = render(<TextField {...defaultProps} error errorMessage="error message" />)
-    jest.runAllTimers()
-    expect(container.lastElementChild).toHaveTextContent('error message')
-  })
 })

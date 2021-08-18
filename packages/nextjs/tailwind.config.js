@@ -1,15 +1,9 @@
-const { fontFamily } = require('tailwindcss/defaultTheme')
-
 module.exports = {
   purge: ['./src/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
   mode: 'jit',
   theme: {
     extend: {
-      fontFamily: {
-        ...fontFamily,
-        sans: ['Roboto', 'ui-sans-serif', 'system-ui']
-      },
       transitionProperty: {
         width: 'width'
       },
@@ -21,34 +15,34 @@ module.exports = {
         50: '200px'
       },
       colors: {
-        primary: '#2757ff',
-        'white-1': '#F7F7FA',
-        'white-2': '#e4e7ed',
-        'white-3': '#f5f5f5',
-        'blue-2': '#687193',
-        'blue-3': '#3d4254',
-        'gray-2': '#828282',
-        'gray-3': '#4f4f4f',
-        'black-1': '#0e1726',
+        primary: '#393091',
+        'gray-1': '#828282',
+        'gray-2': '#E0E0E0',
+        'gray-3': '#8A8EA1',
         'purple-1': '#8153E9',
-
-        'gray-1': '#e0e0e0',
-        'blue-1': '#8A8EA1',
-        p1: '#8153E9',
-        p2: '#393091',
-        pb: '#5C5EEE',
-        db1: '#191B2C',
-        db2: '#18173B',
-        dp: '#161054',
-        tiffany: '#42E8E0',
-        gb1: '#D5D6DF',
-        gb2: '#687193',
-        gb3: '#3D4254',
-        b0: '#F7F7FA',
-        b1: '#E9EBF6',
-        b2: '#DDE2F6',
-        b4: '#B9C6FB',
-        b5: '#2757FF'
+        'purple-blue-1': '#5C5EEE',
+        'blue-purple-1': '#161054',
+        'blue-green-1': '#42E8E0',
+        'blue-gray-1': '#D5D6DF',
+        'blue-gray-2': '#687193',
+        'blue-gray-3': '#3D4254',
+        'blue-1': '#F7F7FA',
+        'blue-2': '#E9EBF6',
+        'blue-3': '#DDE2F6',
+        'blue-4': '#B9C6FB',
+        'blue-5': '#2757FF',
+        'blue-6': '#4B47C0',
+        'blue-7': '#18173B',
+        'blue-8': '#191B2C',
+        'blue-9': '#E7EFF9',
+        'blue-10': '#276FE0',
+        'green-1': '#EDF7EF',
+        'green-2': '#66BA6B',
+        'yellow-1': '#FDF8EB',
+        'yellow-2': '#E39836',
+        'red-1': '#F16e6e',
+        'red-2': '#F8ECEA',
+        'red-3': '#DB593B'
       }
     }
   },
