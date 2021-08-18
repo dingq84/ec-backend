@@ -35,7 +35,8 @@ const Toast = (props: ToastProps) => {
     level = 'info',
     position = 'leftBottom'
   } = props
-  const [open, setOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [toastOpen, setToastOpen] = useState(false)
   const timer = useRef(0)
 
   useEnhancedEffect(() => {
@@ -52,28 +53,34 @@ const Toast = (props: ToastProps) => {
 
   useEnhancedEffect(() => {
     if (show) {
+      setModalOpen(show)
       setTimeout(() => {
-        setOpen(show)
+        setToastOpen(show)
       }, 300)
     } else {
-      setOpen(show)
+      setToastOpen(show)
+      setTimeout(() => {
+        setModalOpen(show)
+      }, 300)
     }
   }, [show])
 
   const closeToast = (): void => {
-    setOpen(false)
+    setModalOpen(false)
+    setToastOpen(false)
     clearTimeout(timer.current)
   }
 
   return (
     <Modal
-      open={show}
+      open={modalOpen}
       backdropProps={{
-        invisible: true
+        invisible: true,
+        hidden: true
       }}
     >
       <div
-        tw="rounded-lg border border-solid py-1.5 px-3 inline-flex items-center justify-center absolute transition-all duration-300"
+        tw="rounded-lg border border-solid py-1.5 px-3 inline-flex items-center justify-center fixed transition-all duration-300"
         css={[
           level === 'info' && tw`border-blue-10 bg-blue-9`,
           level === 'warning' && tw`border-red-3 bg-red-2`,
@@ -84,13 +91,13 @@ const Toast = (props: ToastProps) => {
           position === 'leftBottom' && tw`bottom-10 -left-full`,
           position === 'bottom' && tw`-bottom-full left-1/2 transform -translate-x-1/2`,
           position === 'rightBottom' && tw`bottom-10 -right-full`,
-          position === 'right' && tw`transform -translate-y-1/2 -right-full`,
+          position === 'right' && tw`bottom-1/2 transform -translate-y-1/2 -right-full`,
           position === 'rightTop' && tw`top-10 -right-full`,
           position === 'top' && tw`-top-full left-1/2 transform -translate-x-1/2`,
-          open === true && position.includes('left') && tw`left-20`,
-          open === true && position.includes('right') && tw`right-20`,
-          open === true && position === 'bottom' && tw`bottom-10`,
-          open === true && position === 'top' && tw`top-10`
+          toastOpen === true && position.includes('left') && tw`left-20`,
+          toastOpen === true && position.includes('right') && tw`right-20`,
+          toastOpen === true && position === 'bottom' && tw`bottom-10`,
+          toastOpen === true && position === 'top' && tw`top-10`
         ]}
       >
         <Image src={`/icons/${level}.svg`} alt="toast icon" width={24} height={24} />
