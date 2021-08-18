@@ -16,8 +16,8 @@
     "test-modified": "jest -o",
     "test-all": "yarn lint && yarn type-check && yarn test",
     "update-snapshot": "jest --updateSnapshot",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -s ./public -p 9001",
+    "build-storybook": "build-storybook "
   },
   "engines": {
     "node": ">=15.x"
@@ -30,10 +30,10 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@reduxjs/toolkit": "^1.5.1",
     "immer": "^9.0.3",
-    "next": "latest",
-    "react": "^17.0.1",
+    "next": "^11.1.0",
+    "react": "^17.0.2",
     "react-datepicker": "^4.1.1",
-    "react-dom": "^17.0.1",
+    "react-dom": "^17.0.2",
     "react-hook-form": "^6.15.5",
     "react-query": "^3.17.2",
     "react-redux": "^7.2.3",
@@ -68,18 +68,14 @@
     "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-prettier": "^3.3.1",
     "fp-ts": "^2.11.1",
-    "imagemin-optipng": "^8.0.0",
-    "imagemin-svgo": "^9.0.0",
     "next-compose-plugins": "^2.2.1",
-    "next-optimized-images": "^2.6.2",
     "next-transpile-modules": "^8.0.0",
     "postcss": "^8.2.14",
     "prettier": "^2.2.1",
     "styled-components": "^5.2.1",
     "tailwindcss": "^2.1.2",
     "tsconfig-paths-webpack-plugin": "^3.5.1",
-    "typescript": "4.3.2",
-    "webp-loader": "^0.6.0"
+    "typescript": "4.3.2"
   },
   "license": "SEE LICENSE IN ../../LICENSE",
   "babelMacros": {
