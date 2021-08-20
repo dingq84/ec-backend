@@ -1,21 +1,10 @@
-/**
- * @author Ding.Chen 2021-06-21
- * 建立一個文字欄位，做為專案輸入匡的通用樣式，並提供 adornment 傳入，可應用在 select、date picker 等 components 裡面
- *
- * @modified
- * [Ding.Chen-2021-06-23]: 修改 start adornment 和 input 的 html 結構，為了達成 multiple select 數量過多時的 UI 呈現
- */
-
-import { ChangeEvent, forwardRef, useState, Ref } from 'react'
+import { ChangeEvent, forwardRef, Ref } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
 // components
 import Fade from '@/components/shared/fade'
-
-// hooks
-import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // types
 import type { InputBasicType } from '@/types/components/input'
@@ -48,7 +37,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
     error = false,
     disabled = false,
     clear = true,
-    value: initialValue = '',
+    value = '',
     labelPosition = 'top',
     className = '',
     border = true,
@@ -56,14 +45,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
     ...restProps
   } = props
 
-  const [value, setValue] = useState(initialValue)
-  useEnhancedEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value)
-
     if (onChange) {
       onChange(event.target.value)
     }
@@ -73,8 +55,6 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
     if (disabled) {
       return
     }
-
-    setValue('')
 
     if (onClear) {
       onClear()

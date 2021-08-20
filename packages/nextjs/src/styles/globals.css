@@ -46,10 +46,10 @@
 
 @layer components {
   .btn {
-    @apply rounded px-6 py-2 bg-primary text-white hover:bg-opacity-80 focus:bg-opacity-80 disabled:pointer-events-none disabled:bg-gray-2;
+    @apply rounded-lg px-6 py-2 bg-primary text-white hover:bg-opacity-80 focus:bg-opacity-80 disabled:pointer-events-none disabled:bg-gray-2;
   }
   .btn-outline {
-    @apply rounded px-4 py-2 text-primary border border-solid border-primary focus:bg-primary focus:text-white hover:bg-primary hover:text-white disabled:pointer-events-none disabled:bg-gray-2;
+    @apply rounded-lg px-4 py-2 text-primary border border-solid border-primary focus:bg-primary focus:text-white hover:bg-primary hover:text-white disabled:pointer-events-none disabled:bg-gray-2;
   }
   .btn-text {
     @apply text-primary hover:opacity-80 focus:opacity-80 disabled:pointer-events-none disabled:text-gray-2;

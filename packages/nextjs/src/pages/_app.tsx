@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { AppProps } from 'next/app'
 import { Provider as ReduxProvider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 
@@ -35,6 +36,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           <ProtectedComponent {...pageProps} />
         </Layout>
       </ReduxProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }
