@@ -20,6 +20,8 @@ module.exports = {
         'gray-2': '#E0E0E0',
         'gray-3': '#8A8EA1',
         'purple-1': '#8153E9',
+        'purple-2': '#393091',
+        'purple-3': '#C0BFF6',
         'purple-blue-1': '#5C5EEE',
         'blue-purple-1': '#161054',
         'blue-green-1': '#42E8E0',
