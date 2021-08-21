@@ -6,6 +6,9 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 
+// components
+import ErrorDialog from '@/components/page/common/errorDialog'
+
 // states
 import { store } from '@/states/global/store'
 
@@ -35,6 +38,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <Layout>
           <ProtectedComponent {...pageProps} />
         </Layout>
+        <ErrorDialog />
       </ReduxProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

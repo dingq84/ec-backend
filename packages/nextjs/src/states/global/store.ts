@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // reducers
+import error from '@/states/global/error'
 import me from '@/states/global/me'
 import settings from '@/states/global/settings'
 
 export const store = configureStore({
-  reducer: { me, settings },
+  reducer: { error, me, settings },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false
