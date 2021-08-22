@@ -1,3 +1,4 @@
+import AccountPresenter from '@/admin/adapters/presenters/Account'
 import MePresenter from '@/auth/adapters/presenters/Me'
 import TokenPresenter from '@/auth/adapters/presenters/Token'
 import { IPresenters } from '@/dependencyInjection/interfaces/IPresenters'
@@ -8,6 +9,9 @@ function createPresenters(useCases: IUseCases): IPresenters {
     auth: {
       token: new TokenPresenter(useCases.auth.token),
       me: new MePresenter(useCases.auth.me)
+    },
+    admin: {
+      account: new AccountPresenter(useCases.admin.account)
     }
   }
 }

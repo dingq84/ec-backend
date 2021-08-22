@@ -7,11 +7,17 @@
 
 export enum StatusCode {
   network = 'client-0001',
+  // 登入
   emptyAccountOrPassword = 'client-0002',
   wrongAccountFormat = 'client-0003',
-
-  // 帳號或密碼錯誤
   wrongAccountOrPassword = '1001',
+
+  // 變更密碼
+  wrongPasswordFormat = 'client-004',
+  passwordIsNotSame = 'client-005',
+  wrongPassword = '1302',
+  newPasswordIsSameAsOldPassword = '1303',
+
   // 帳號已被停權
   accountFrozen = '1003',
   // 成功

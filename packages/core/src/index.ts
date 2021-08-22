@@ -13,6 +13,9 @@ const core: IPresenters = {
   auth: {
     token: cPresenters.auth.token,
     me: cPresenters.auth.me
+  },
+  admin: {
+    account: cPresenters.admin.account
   }
 }
 

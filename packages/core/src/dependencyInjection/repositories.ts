@@ -1,3 +1,4 @@
+import AccountRepository from '@/admin/adapters/repositories/Account'
 import MeRepository from '@/auth/adapters/repositories/Me'
 import TokenRepository from '@/auth/adapters/repositories/Token'
 import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
@@ -8,6 +9,9 @@ function createRepositories(infrastructures: IInfrastructures): IRepositories {
     auth: {
       token: new TokenRepository(infrastructures.storage, infrastructures.http),
       me: new MeRepository(infrastructures.http)
+    },
+    admin: {
+      account: new AccountRepository(infrastructures.http)
     }
   }
 }

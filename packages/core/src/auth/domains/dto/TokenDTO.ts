@@ -1,8 +1,3 @@
-/**
- * @author Ding.Chen 2021-07-30
- * 這邊主要是將外部資料進行轉換，再注入進系統內
- */
-
 export interface ITokenParameters {
   accessToken: string
   refreshToken: string
