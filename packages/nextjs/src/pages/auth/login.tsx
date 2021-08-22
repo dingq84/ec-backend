@@ -8,7 +8,6 @@ import 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
-import Dialog from '@/components/shared/dialog'
 import Paper from '@/components/shared/paper'
 import TextField from '@/components/shared/textField'
 import Toast from '@/components/shared/toast'
@@ -19,6 +18,10 @@ import { StatusCode } from '@ec-backend/core/src/common/constants/statusCode'
 
 // layouts
 import LoginLayout from '@/layouts/login'
+
+// states
+import { useAppDispatch } from '@/states/global/hooks'
+import { setMessage } from '@/states/global/error'
 
 interface LoginData {
   account: string
@@ -33,7 +36,7 @@ interface ErrorState {
 
 type Action =
   | { type: 'localError'; payload: { message: string; target: Array<keyof LoginData> } }
-  | { type: 'globalError'; payload: { message: string } }
+  | { type: 'globalError' }
   | { type: 'reset' }
 
 const initialValue: ErrorState = {
@@ -45,9 +48,9 @@ const initialValue: ErrorState = {
 const reducer = (state: ErrorState, action: Action): ErrorState => {
   switch (action.type) {
     case 'localError':
-      return { ...action.payload, type: 'local' }
+      return { ...state, ...action.payload, type: 'local' }
     case 'globalError':
-      return { ...action.payload, type: 'global', target: ['account', 'password'] }
+      return { ...state, type: 'global', target: ['account', 'password'] }
     case 'reset':
       return initialValue
     default:
@@ -60,6 +63,7 @@ function Login() {
   const [inputType, setInputType] = useState<'text' | 'password'>('password')
   const [data, setData] = useState<LoginData>({ account: '', password: '' })
   const [errors, dispatch] = useReducer(reducer, initialValue)
+  const reduxDispatch = useAppDispatch()
 
   const accountRef = useRef<HTMLInputElement>(null!)
   const mutation = useMutation((data: LoginData) => core.auth.token.login(data))
@@ -97,8 +101,8 @@ function Login() {
     // 反白帳號
     accountRef.current.focus()
     accountRef.current.select()
-
     // 錯誤為帳號密碼的問題，視為局部錯誤，其餘為全局錯誤
+
     if (
       [
         StatusCode.emptyAccountOrPassword,
@@ -112,9 +116,12 @@ function Login() {
       }
 
       dispatch({ type: 'localError', payload: { message: errorMessage, target } })
-    } else {
-      dispatch({ type: 'globalError', payload: { message: errorMessage.replace(/,/g, ',\n') } })
+      return
     }
+
+    const message = errorMessage.replace(/,/g, ',\n')
+    dispatch({ type: 'globalError' })
+    reduxDispatch(setMessage({ message }))
   }
 
   return (
@@ -124,22 +131,6 @@ function Login() {
         message={errors.message}
         level="warning"
         position="leftBottom"
-      />
-
-      <Dialog
-        open={Boolean(errors.message && errors.type === 'global')}
-        modalProps={{
-          onClose: resetError
-        }}
-        content={
-          <div tw="py-5 w-full">
-            <h1 tw="font-medium text-black text-2xl mb-8 text-center">系統提醒</h1>
-            <p tw="text-lg font-normal text-black text-center mb-10 whitespace-pre">
-              {errors.message}
-            </p>
-          </div>
-        }
-        close={resetError}
       />
 
       <Paper tw="bg-white height[calc(100% - 64px)] px-12 width[450px] flex-col">

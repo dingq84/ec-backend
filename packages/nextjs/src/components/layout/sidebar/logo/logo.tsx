@@ -14,9 +14,15 @@ const Logo = () => {
         tw="inline-flex justify-center mb-14"
         css={[isFloat && tw`pl-0 w-full`, !isFloat && tw`pl-3`]}
       >
-        <Image src="/images/logo.svg" alt="logo" layout="fill" />
+        <Image src="/images/logo.svg" alt="logo" width={24} height={20} />
         {!isFloat ? (
-          <Image src="/images/logoWord.svg" alt="vivy admin website" tw="pl-2" layout="fill" />
+          <Image
+            src="/images/logoWord.svg"
+            alt="vivy admin website"
+            tw="pl-2"
+            width={64}
+            height={18}
+          />
         ) : null}
       </a>
     </Link>

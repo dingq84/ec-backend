@@ -26,13 +26,12 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
   const { children } = props
 
   return (
-    <div tw="h-screen flex">
+    <div tw="h-screen w-screen flex">
       <Sidebar />
-      <div tw="flex flex-col flex-grow min-h-0">
+      <div tw="flex flex-col min-h-0 overflow-auto py-5 px-6 bg-blue-1">
         <Header />
-        <PageTransition tw="flex-grow min-w-0 bg-blue-1">{children}</PageTransition>
+        <PageTransition tw="flex-grow min-w-0">{children}</PageTransition>
       </div>
-      <footer></footer>
     </div>
   )
 }

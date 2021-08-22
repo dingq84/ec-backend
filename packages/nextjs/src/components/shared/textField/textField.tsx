@@ -15,6 +15,7 @@ export interface TextFieldProps extends InputBasicType<string> {
     start?: JSX.Element
     end?: JSX.Element
   }
+  hint?: string
   clear?: boolean // 預設有 x 按鈕
   border?: boolean // 預設有 border
   inputRef?: Ref<HTMLInputElement> // 掛載在 input 上面的 ref
@@ -34,6 +35,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
       start: null,
       end: null
     },
+    hint = '',
     error = false,
     disabled = false,
     clear = true,
@@ -68,7 +70,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
         css={[labelPosition === 'left' && tw`flex-row space-y-0 space-x-1.5 items-center`]}
       >
         {label ? (
-          <label tw="text-lg font-normal text-black mb-1" htmlFor={id}>
+          <label tw="text-base font-normal text-black mb-1" htmlFor={id}>
             {label}
           </label>
         ) : null}
@@ -107,6 +109,8 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           </Fade>
           {adornment.end}
         </div>
+
+        {hint ? <small tw="text-gray-1 font-normal">{hint}</small> : ''}
       </div>
     </div>
   )
