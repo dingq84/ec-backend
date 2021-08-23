@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
 import { reset } from '@/states/global/error'
 
 const ErrorDialog = () => {
-  const message = useAppSelector(state => state.error.message)
+  const message = useAppSelector(state => state.error.message).replace(/,/g, ',\n')
   const dispatch = useAppDispatch()
 
   const close = (): void => {

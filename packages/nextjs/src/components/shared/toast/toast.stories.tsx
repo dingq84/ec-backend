@@ -8,7 +8,7 @@ const Default = Template.bind({})
 Default.args = {
   show: false,
   level: 'info',
-  close: true,
+  manualClose: true,
   position: 'leftBottom',
   message: 'This is an example of toast',
   closeTimeout: 3000,

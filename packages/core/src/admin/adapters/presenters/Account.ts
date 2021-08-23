@@ -16,7 +16,7 @@ class AccountPresenter implements IAccountPresenter {
 
     if (newPassword1 !== newPassword2) {
       const statusMessage = '新密碼與再次輸入的新密碼需一致。'
-      left(
+      return left(
         new AccountErrorDTO({
           statusCode: StatusCode.passwordIsNotSame,
           statusMessage,
@@ -30,7 +30,7 @@ class AccountPresenter implements IAccountPresenter {
 
     if (oldPassword === newPassword1) {
       const statusMessage = '舊密碼與新密碼必須不一致。'
-      left(
+      return left(
         new AccountErrorDTO({
           statusCode: StatusCode.newPasswordIsSameAsOldPassword,
           statusMessage,
@@ -45,13 +45,15 @@ class AccountPresenter implements IAccountPresenter {
 
     const schema = Joi.string()
       .regex(/^[a-zA-Z0-9]+$/)
+      .regex(/\d/)
+      .regex(/[a-z]/i)
       .min(6)
       .max(12)
     const validResult = schema.validate(newPassword1)
 
     if (validResult.error) {
       const statusMessage = '密碼格式錯誤，請重新輸入。'
-      left(
+      return left(
         new AccountErrorDTO({
           statusCode: StatusCode.wrongPasswordFormat,
           statusMessage,

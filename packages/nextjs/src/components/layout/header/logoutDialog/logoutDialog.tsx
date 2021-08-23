@@ -1,43 +1,19 @@
-import { useRouter } from 'next/router'
-import { useMutation } from 'react-query'
-import { isRight } from 'fp-ts/lib/Either'
 import 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
 import Dialog from '@/components/shared/dialog'
-
-// core
-import core from '@ec-backend/core/src'
-
-// states
-import { useAppDispatch } from '@/states/global/hooks'
-import { setMessage } from '@/states/global/error'
-import { clearMe } from '@/states/global/me'
-
 interface LogoutDialogProps {
   open: boolean
   close: () => void
+  logout: () => Promise<void>
 }
 const LogoutDialog = (props: LogoutDialogProps) => {
-  const { open, close } = props
-  const router = useRouter()
-  const dispatch = useAppDispatch()
-  const mutation = useMutation(() => core.auth.token.logout())
+  const { open, close, logout } = props
 
-  const logout = async (): Promise<void> => {
-    const result = await mutation.mutateAsync()
+  const handleClick = (): void => {
     close()
-
-    if (isRight(result)) {
-      dispatch(clearMe())
-      router.push('/auth/login')
-      return
-    }
-
-    const { errorMessage } = result.left
-    const message = errorMessage.replace(/,/g, ',\n')
-    dispatch(setMessage({ message }))
+    logout()
   }
 
   return (
@@ -57,7 +33,7 @@ const LogoutDialog = (props: LogoutDialogProps) => {
       Footer={
         <div className="flex-center">
           <Button label="取消" className="btn-outline" onClick={close} />
-          <Button label="確認" className="btn" tw="ml-10" onClick={logout} />
+          <Button label="確認" className="btn" tw="ml-10" onClick={handleClick} />
         </div>
       }
       close={close}

@@ -5,25 +5,38 @@
  */
 
 import { useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { useMutation } from 'react-query'
+import { isRight } from 'fp-ts/lib/Either'
 import tw from 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
+import Dialog from '@/components/shared/dialog'
 import Popover from '@/components/shared/popover'
 import ModifyPasswordDialog from '@/components/layout/header/modifyPasswordDialog'
 import LogoutDialog from '@/components/layout/header/logoutDialog'
 
+// core
+import core from '@ec-backend/core/src'
+
 // states
-import { useAppSelector } from '@/states/global/hooks'
+import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
+import { clearMe } from '@/states/global/me'
+import { setMessage } from '@/states/global/error'
 
 const Header = () => {
   const anchorEl = useRef<HTMLSpanElement>(null!)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
   const [modifyPasswordDialogOpen, setModifyPasswordDialogOpen] = useState(false)
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false)
+  const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.me.user)
+  const mutation = useMutation(() => core.auth.token.logout())
+  const router = useRouter()
 
   const userName = user?.name ? `嗨${user.name}，您好!` : ''
   const accountName = user?.account || ''
@@ -31,6 +44,19 @@ const Header = () => {
 
   const togglePopover = (open: boolean): void => {
     setPopoverOpen(open)
+  }
+
+  const logout = async (): Promise<void> => {
+    const result = await mutation.mutateAsync()
+
+    if (isRight(result)) {
+      dispatch(clearMe())
+      router.push('/auth/login')
+      return
+    }
+
+    const { errorMessage } = result.left
+    dispatch(setMessage({ message: errorMessage }))
   }
 
   const openLogoutDialog = (): void => {
@@ -49,6 +75,16 @@ const Header = () => {
 
   const closeModifyPasswordDialog = (): void => {
     setModifyPasswordDialogOpen(false)
+  }
+
+  const modifyPasswordSuccess = (): void => {
+    closeModifyPasswordDialog()
+    setSuccessDialogOpen(true)
+  }
+
+  const redirectLogin = (): void => {
+    setSuccessDialogOpen(false)
+    logout()
   }
 
   return (
@@ -100,9 +136,30 @@ const Header = () => {
           </ul>
         </Popover>
       </header>
-      <LogoutDialog open={logoutDialogOpen} close={closeLogoutDialog} />
+
+      <LogoutDialog open={logoutDialogOpen} close={closeLogoutDialog} logout={logout} />
+
       {modifyPasswordDialogOpen ? (
-        <ModifyPasswordDialog open={modifyPasswordDialogOpen} close={closeModifyPasswordDialog} />
+        <ModifyPasswordDialog
+          open={modifyPasswordDialogOpen}
+          close={closeModifyPasswordDialog}
+          success={modifyPasswordSuccess}
+        />
+      ) : null}
+
+      {successDialogOpen ? (
+        <Dialog
+          open={successDialogOpen}
+          content={
+            <div tw="py-5 w-full">
+              <h1 tw="font-medium text-black text-2xl mb-8 text-center">系統提醒</h1>
+              <p tw="text-lg font-normal text-black text-center mb-10 whitespace-pre">
+                已重設您的密碼，現在請您重新登入帳號
+              </p>
+            </div>
+          }
+          close={redirectLogin}
+        />
       ) : null}
     </>
   )

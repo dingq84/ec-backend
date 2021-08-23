@@ -10,7 +10,8 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 export interface ToastProps {
   show: boolean
   message: string
-  close?: boolean
+  close?: () => void
+  manualClose?: boolean
   autoClose?: boolean
   closeTimeout?: number
   position?:
@@ -29,7 +30,8 @@ const Toast = (props: ToastProps) => {
   const {
     show,
     message,
-    close = true,
+    close,
+    manualClose = true,
     autoClose = true,
     closeTimeout = 3000,
     level = 'info',
@@ -41,6 +43,7 @@ const Toast = (props: ToastProps) => {
 
   useEnhancedEffect(() => {
     if (autoClose && show) {
+      console.log('tt')
       timer.current = window.setTimeout(() => {
         closeToast()
       }, closeTimeout)
@@ -49,7 +52,7 @@ const Toast = (props: ToastProps) => {
     return () => {
       clearTimeout(timer.current)
     }
-  }, [show])
+  }, [show, autoClose])
 
   useEnhancedEffect(() => {
     if (show) {
@@ -69,6 +72,10 @@ const Toast = (props: ToastProps) => {
     setModalOpen(false)
     setToastOpen(false)
     clearTimeout(timer.current)
+
+    if (close) {
+      close()
+    }
   }
 
   return (
@@ -102,7 +109,7 @@ const Toast = (props: ToastProps) => {
       >
         <Image src={`/icons/${level}.svg`} alt="toast icon" width={24} height={24} />
         <span tw="ml-2 font-normal text-sm text-black select-none">{message}</span>
-        {close ? (
+        {manualClose ? (
           <Button
             className="btn-text"
             tw="ml-10"
