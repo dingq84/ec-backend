@@ -21,7 +21,7 @@ import LoginLayout from '@/layouts/login'
 
 // states
 import { useAppDispatch } from '@/states/global/hooks'
-import { setMessage } from '@/states/global/error'
+import { setError } from '@/states/global/error'
 
 interface LoginData {
   account: string
@@ -121,7 +121,7 @@ function Login() {
 
     const message = errorMessage.replace(/,/g, ',\n')
     dispatch({ type: 'globalError' })
-    reduxDispatch(setMessage({ message }))
+    reduxDispatch(setError({ message }))
   }
 
   return (

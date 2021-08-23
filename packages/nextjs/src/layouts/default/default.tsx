@@ -28,7 +28,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
   return (
     <div tw="h-screen w-screen flex">
       <Sidebar />
-      <div tw="flex flex-col min-h-0 overflow-auto py-5 px-6 bg-blue-1">
+      <div tw="flex flex-col min-h-0 overflow-auto py-5 px-6 bg-blue-1 flex-grow">
         <Header />
         <PageTransition tw="flex-grow min-w-0">{children}</PageTransition>
       </div>

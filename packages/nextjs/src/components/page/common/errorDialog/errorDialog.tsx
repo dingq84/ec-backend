@@ -9,10 +9,15 @@ import { reset } from '@/states/global/error'
 
 const ErrorDialog = () => {
   const message = useAppSelector(state => state.error.message).replace(/,/g, ',\n')
+  const callback = useAppSelector(state => state.error.callback)
   const dispatch = useAppDispatch()
 
   const close = (): void => {
     dispatch(reset())
+
+    if (callback) {
+      callback()
+    }
   }
 
   return (

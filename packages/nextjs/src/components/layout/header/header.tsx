@@ -25,7 +25,7 @@ import core from '@ec-backend/core/src'
 // states
 import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
 import { clearMe } from '@/states/global/me'
-import { setMessage } from '@/states/global/error'
+import { setError } from '@/states/global/error'
 
 const Header = () => {
   const anchorEl = useRef<HTMLSpanElement>(null!)
@@ -56,7 +56,7 @@ const Header = () => {
     }
 
     const { errorMessage } = result.left
-    dispatch(setMessage({ message: errorMessage }))
+    dispatch(setError({ message: errorMessage }))
   }
 
   const openLogoutDialog = (): void => {

@@ -1,1 +1,1 @@
-export { default, setMessage, reset } from './error'
+export { default, setError, reset } from './error'

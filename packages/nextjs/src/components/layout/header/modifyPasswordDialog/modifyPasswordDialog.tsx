@@ -17,7 +17,7 @@ import { StatusCode } from '@/common/constants/statusCode'
 
 // states
 import { useAppDispatch } from '@/states/global/hooks'
-import { setMessage } from '@/states/global/error'
+import { setError } from '@/states/global/error'
 
 // password initialState and reducer
 interface PasswordInitialState {
@@ -187,7 +187,7 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
         })
         break
       default:
-        reduxDispatch(setMessage({ message: errorMessage }))
+        reduxDispatch(setError({ message: errorMessage }))
     }
   }
 

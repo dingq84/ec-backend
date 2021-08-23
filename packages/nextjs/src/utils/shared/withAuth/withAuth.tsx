@@ -7,16 +7,13 @@
  */
 
 import 'twin.macro'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { isLeft, isRight } from 'fp-ts/lib/Either'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
 
 // components
-import Modal from '@/components/shared/modal'
-import Paper from '@/components/shared/paper'
-import Button from '@/components/shared/button'
 import Loading from '@/components/shared/loading'
 
 // core
@@ -31,28 +28,17 @@ import useNoCacheQuery from '@/services/useNoCacheQuery'
 // states
 import { setMe } from '@/states/global/me'
 import { useAppDispatch } from '@/states/global/hooks'
+import { setError } from '@/states/global/error'
 
-const DefaultAccessDeniedComponent = () => (
-  <Modal open>
-    <Paper tw="flex flex-col w-80">
-      <h1 tw="text-2xl mb-6">Please Log in</h1>
-      <Link href="/auth/login" passHref>
-        <Button label="Sign in" className="btn" />
-      </Link>
-    </Paper>
-  </Modal>
-)
-
-function withAuth<T extends {}>(
-  Component: React.ComponentType<T>, // Protected Component
-  AccessDeniedComponent: React.ComponentType<{}> = DefaultAccessDeniedComponent // Access denied Component
-) {
+function withAuth<T extends {}>(Component: React.ComponentType<T>) {
   return function WrapperComponent(props: T) {
+    const router = useRouter()
+    const dispatch = useAppDispatch()
     // 1. 確認 accessToken 是否存在，存在的話跳至 3
     const accessToken = core.auth.token.getAccessToken()
     // 2. 如果不存在 accessToken，執行 refresh token api
     const { isLoading: refreshTokenIsLoading } = useNoCacheQuery(
-      'refreshToken',
+      ApiKey.refreshToken,
       () => core.auth.token.refreshToken(),
       {
         enabled: !accessToken
@@ -66,7 +52,6 @@ function withAuth<T extends {}>(
         enabled: !refreshTokenIsLoading
       }
     )
-    const dispatch = useAppDispatch()
 
     useEnhancedEffect(() => {
       // 在每次檢查是否登入時，都會更新 me 的 state
@@ -80,7 +65,15 @@ function withAuth<T extends {}>(
     }
 
     if (isError || (data && isLeft(data))) {
-      return <AccessDeniedComponent />
+      dispatch(
+        setError({
+          message: '請先進行登入',
+          callback: () => {
+            router.push('/auth/login')
+          }
+        })
+      )
+      return null
     }
 
     return <Component {...props} />
