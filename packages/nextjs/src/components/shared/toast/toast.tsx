@@ -101,10 +101,10 @@ const Toast = (props: ToastProps) => {
           position === 'right' && tw`bottom-1/2 transform -translate-y-1/2 -right-full`,
           position === 'rightTop' && tw`top-10 -right-full`,
           position === 'top' && tw`-top-full left-1/2 transform -translate-x-1/2`,
-          toastOpen === true && position.includes('left') && tw`left-20`,
-          toastOpen === true && position.includes('right') && tw`right-20`,
-          toastOpen === true && position === 'bottom' && tw`bottom-10`,
-          toastOpen === true && position === 'top' && tw`top-10`
+          toastOpen && position.includes('left') && tw`left-20`,
+          toastOpen && position.includes('right') && tw`right-20`,
+          toastOpen && position === 'bottom' && tw`bottom-10`,
+          toastOpen && position === 'top' && tw`top-10`
         ]}
       >
         <Image src={`/icons/toast/${level}.svg`} alt="toast icon" width={24} height={24} />

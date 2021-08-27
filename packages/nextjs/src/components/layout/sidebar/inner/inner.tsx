@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment } from 'react'
+import { useState, Fragment } from 'react'
 import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
@@ -34,8 +34,9 @@ const Inner = (props: InnerProps) => {
   const { items, open: propOpen = false, ...restProps } = props
   const [open, setOpen] = useState(false)
   // 儲存渲染時是否是 isActive，不用 useState 是防止重新渲染
-  const isActive = useRef(false)
+  const [active, setActive] = useState(false)
   const router = useRouter()
+  const { href, children } = items[0]
   const { pathname } = router
 
   useEnhancedEffect(() => {
@@ -45,7 +46,25 @@ const Inner = (props: InnerProps) => {
   }, [propOpen])
 
   useEnhancedEffect(() => {
-    setOpen(isActive.current)
+    const onRouteChangeDone = (value: string): void => {
+      const isActive = value === href || hasActiveChildren(children || [], value)
+      setActive(isActive)
+    }
+
+    router.events.on('routeChangeComplete', onRouteChangeDone)
+
+    return () => {
+      router.events.off('routeChangeComplete', onRouteChangeDone)
+    }
+  }, [router.events])
+
+  useEnhancedEffect(() => {
+    const isActive = pathname === href || hasActiveChildren(children || [], pathname)
+    setActive(isActive)
+
+    if (isActive) {
+      setOpen(isActive)
+    }
   }, [])
 
   const toggleOpen = (): void => {
@@ -62,13 +81,12 @@ const Inner = (props: InnerProps) => {
     <>
       {items.map(item => {
         const { children, name, id, prefix, href } = item
-        isActive.current = pathname === href || hasActiveChildren(children || [], pathname)
 
         if (children) {
           return (
             <Fragment key={id}>
               <StyledDiv
-                css={[(open || isActive.current) && tw`opacity-100!`]}
+                css={[(open || active) && tw`opacity-100!`]}
                 {...restProps}
                 onClick={toggleOpen}
               >
@@ -94,7 +112,7 @@ const Inner = (props: InnerProps) => {
           <StyledDiv
             key={id}
             {...restProps}
-            css={[isActive.current && tw`opacity-100!`]}
+            css={[active && tw`opacity-100!`]}
             onClick={() => handleClick(href)}
           >
             <Prefix url={prefix} tw="mr-3 text-xs pl-2.5" />

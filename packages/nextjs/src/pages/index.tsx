@@ -8,11 +8,11 @@ import Paper from '@/components/shared/paper'
 import Table from '@/components/shared/table'
 import TextField from '@/components/shared/textField'
 
-// mocks
-import accountData from '@/mocks/accountData.json'
-
 // layouts
 import DefaultLayout from '@/layouts/default'
+
+// mocks
+import accountData from '@/mocks/accountData.json'
 
 const Home = () => {
   return (

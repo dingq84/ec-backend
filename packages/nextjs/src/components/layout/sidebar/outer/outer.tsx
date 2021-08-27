@@ -70,22 +70,38 @@ const Outer = (props: OuterProps) => {
   // 分兩次解構，為了下方可以直接使用排除 children、prefix 的 menu
   const { children, prefix, ...restMenu } = menu
   const { name, href } = restMenu
-  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
   const router = useRouter()
   const { pathname } = router
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(false)
   const ref = useRef<HTMLDivElement>(null!)
+  const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
 
   useEnhancedEffect(() => {
     const isActive = pathname === href || hasActiveChildren(children || [], pathname)
-    if (sidebarIsExtend && isActive) {
-      setOpen(true)
-    } else {
-      setOpen(false)
-    }
     setActive(isActive)
+
+    if (children) {
+      setOpen(sidebarIsExtend && isActive)
+    }
   }, [sidebarIsExtend])
+
+  useEnhancedEffect(() => {
+    const onRouteChangeDone = (value: string): void => {
+      const isActive = value === href || hasActiveChildren(children || [], value)
+      setActive(isActive)
+
+      if (children) {
+        setOpen(isActive)
+      }
+    }
+
+    router.events.on('routeChangeComplete', onRouteChangeDone)
+
+    return () => {
+      router.events.off('routeChangeComplete', onRouteChangeDone)
+    }
+  }, [router.events])
 
   const handleClick = (): void => {
     if (children) {
