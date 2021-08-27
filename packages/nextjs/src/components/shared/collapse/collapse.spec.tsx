@@ -1,5 +1,5 @@
 import Collapse from '.'
-import { render, queryByRole, fireEvent } from '@testing-library/react'
+import { render, queryByTestId, fireEvent } from '@testing-library/react'
 import { useState } from 'react'
 
 describe('test <Collapse />', () => {
@@ -12,14 +12,14 @@ describe('test <Collapse />', () => {
     it('should render a root around the wrapper', () => {
       const { container } = render(<Collapse {...defaultProps} />)
       const root = container.firstElementChild as HTMLElement
-      expect(queryByRole(container, 'root')).toEqual(root)
+      expect(queryByTestId(container, 'root')).toEqual(root)
     })
 
     it('should render a wrapper around the wrapper inner', () => {
       const { container } = render(<Collapse {...defaultProps} />)
       const root = container.firstElementChild as HTMLElement
       const wrapper = root.firstElementChild as HTMLElement
-      expect(queryByRole(root, 'wrapper')).toEqual(wrapper)
+      expect(queryByTestId(root, 'wrapper')).toEqual(wrapper)
     })
   })
 
@@ -168,9 +168,9 @@ describe('test <Collapse />', () => {
           </>
         )
       }
-      const { queryByTestId, queryByRole, container } = render(<WrapperComponent />)
-      const root = queryByRole('root', container) as HTMLElement
-      const wrapper = queryByRole('wrapper', container) as HTMLElement
+      const { queryByTestId } = render(<WrapperComponent />)
+      const root = queryByTestId('root') as HTMLElement
+      const wrapper = queryByTestId('wrapper') as HTMLElement
       jest.spyOn(wrapper, 'clientWidth', 'get').mockReturnValue(600)
       fireEvent.click(queryByTestId('button') as HTMLButtonElement)
       jest.runAllTimers()

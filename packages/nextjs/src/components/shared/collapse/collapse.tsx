@@ -161,8 +161,8 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
     >
       {(status: Status, childProps: Object) => (
         <div
+          data-testid="root"
           ref={handleRef}
-          role="root"
           css={[
             tw`overflow-hidden transition-timing-function[cubic-bezier(0.4, 0, 0.2, 1)] transition-delay[0ms]`,
             orientation === 'horizontal' && tw`transition-property[width]`,
@@ -174,7 +174,7 @@ const Collapse: React.ForwardRefRenderFunction<HTMLDivElement, CollapseProps> = 
           {...childProps}
           {...restProps}
         >
-          <div role="wrapper" ref={wrapperRef}>
+          <div ref={wrapperRef} data-testid="wrapper">
             {children}
           </div>
         </div>

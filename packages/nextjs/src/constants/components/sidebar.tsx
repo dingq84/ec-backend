@@ -10,7 +10,7 @@ const SIDEBAR_MENU = [
     prefix: <FontAwesomeIcon icon={faUserCog} />,
     id: 1,
     name: '訂單管理',
-    href: '/'
+    href: '/wqee'
   },
   {
     prefix: <FontAwesomeIcon icon={faUserCog} />,
@@ -35,7 +35,7 @@ const SIDEBAR_MENU = [
           {
             id: 8,
             name: '匯出會員資訊',
-            href: '/account/export'
+            href: '/'
           }
         ]
       }
