@@ -1,10 +1,9 @@
-interface ConstantsSidebarMenuType {
+interface SidebarMenuType {
   id: number
-  prefix?: any
+  prefix?: string
   name: string
   href?: string
-  children?: ConstantsSidebarMenuType[]
-  suffix?: any
+  children?: SidebarMenuType[]
 }
 
-export type { ConstantsSidebarMenuType }
+export type { SidebarMenuType }

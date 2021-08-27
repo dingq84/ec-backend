@@ -1,7 +1,7 @@
 // types
-import { ConstantsSidebarMenuType } from '@/types/components/sidebar'
+import { SidebarMenuType } from '@/types/components/sidebar'
 
-function hasActiveChildren(list: ConstantsSidebarMenuType[], targetPath: string): boolean {
+function hasActiveChildren(list: SidebarMenuType[], targetPath: string): boolean {
   return list.some(item => {
     if (item.href === targetPath) {
       return true

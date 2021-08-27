@@ -58,6 +58,6 @@
     @apply flex justify-center items-center;
   }
   .scroll-y {
-    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-y-auto;
+    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-y-auto;
   }
 }

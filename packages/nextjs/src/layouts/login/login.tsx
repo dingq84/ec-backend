@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Image from 'next/image'
 import { css } from 'twin.macro'
 
@@ -16,6 +17,11 @@ function LoginLayout(props: LoginLayoutProps) {
 
   return (
     <div css={[gradient]} tw="min-width[1366px]  h-screen flex flex-col">
+      <Head>
+        <title>E-commerce backstage</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <header tw="py-5 mx-5 flex-shrink-0">
         <span tw="inline-flex items-center">
           <Image src="/images/logo.svg" alt="logo" width={24} height={20} />

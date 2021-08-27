@@ -20,7 +20,7 @@ import ModifyPasswordDialog from '@/components/layout/header/modifyPasswordDialo
 import LogoutDialog from '@/components/layout/header/logoutDialog'
 
 // core
-import core from '@ec-backend/core/src'
+import core from '@ec-backstage/core/src'
 
 // states
 import { useAppSelector, useAppDispatch } from '@/states/global/hooks'

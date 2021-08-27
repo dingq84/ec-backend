@@ -13,8 +13,8 @@ import TextField from '@/components/shared/textField'
 import Toast from '@/components/shared/toast'
 
 // core
-import core from '@ec-backend/core/src'
-import { StatusCode } from '@ec-backend/core/src/common/constants/statusCode'
+import core from '@ec-backstage/core/src'
+import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 
 // layouts
 import LoginLayout from '@/layouts/login'

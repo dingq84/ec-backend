@@ -1,10 +1,10 @@
 {
-  "name": "ec-backend",
+  "name": "ec-backstage",
   "private": true,
   "version": "1.0.0",
   "keywords": [],
   "author": "dingq84@gmail.com",
-  "description": "EC-backend",
+  "description": "EC-backstage",
   "license": "MIT",
   "workspaces":{
     "packages": ["packages/*"],
@@ -20,8 +20,8 @@
     ]
   },
   "scripts": {
-    "nextjs": "yarn workspace @ec-backend/nextjs",
-    "core": "yarn workspace @ec-backend/core",
+    "nextjs": "yarn workspace @ec-backstage/nextjs",
+    "core": "yarn workspace @ec-backstage/core",
     "prepare": "husky install packages/nextjs/.husky"
   },
   "devDependencies": {

@@ -8,6 +8,7 @@ import tw, { css } from 'twin.macro'
 import Collapse from '@/components/shared/collapse'
 import Inner from '@/components/layout/sidebar/inner'
 import Popover from '@/components/shared/popover/popover'
+import Prefix from '@/components/layout/sidebar/prefix'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
@@ -16,7 +17,7 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import { useAppSelector } from '@/states/global/hooks'
 
 // types
-import { ConstantsSidebarMenuType } from '@/types/components/sidebar'
+import { SidebarMenuType } from '@/types/components/sidebar'
 
 // utils
 import hasActiveChildren from '@/utils/components/sidebar/hasActiveChildren'
@@ -61,7 +62,7 @@ const liBackgroundGradient = css`
 `
 
 interface OuterProps extends HTMLAttributes<HTMLDivElement> {
-  menu: ConstantsSidebarMenuType
+  menu: SidebarMenuType
 }
 
 const Outer = (props: OuterProps) => {
@@ -117,21 +118,14 @@ const Outer = (props: OuterProps) => {
         ref={ref}
         tw="flex text-blue-1 opacity-40 justify-start items-center px-2 py-4 font-size[0px] hover:(cursor-pointer) rounded-lg"
         css={[
-          sidebarIsExtend === false && tw`py-2`,
+          sidebarIsExtend === false && tw`py-2 justify-center`,
           sidebarIsExtend ? divHoverExtendGradient : divHoverShrinkGradient,
           (open || active) && sidebarIsExtend && divExtendGradientGradient,
           (open || active) && sidebarIsExtend === false && divShrinkGradientGradient
         ]}
         onClick={handleClick}
       >
-        {prefix ? (
-          <span
-            tw="w-4 mr-2.5 color[inherit] text-center"
-            css={[sidebarIsExtend === false && tw`w-6 h-6 mr-0 text-base`]}
-          >
-            {prefix}
-          </span>
-        ) : null}
+        <Prefix url={prefix} css={[sidebarIsExtend === false && tw`mr-0`]} />
         <Collapse inProps={sidebarIsExtend} orientation="horizontal">
           <div tw="w-32 mx-1 flex items-center justify-between">
             <span tw="color[inherit] select-none text-base leading-none text-center">{name}</span>
@@ -176,9 +170,9 @@ const Outer = (props: OuterProps) => {
           >
             <FontAwesomeIcon
               icon={faCaretLeft}
-              tw="text-3xl! absolute text-blue-7 -left-2.5 top-2"
+              tw="text-3xl! absolute text-blue-7 -left-2.5 top-1"
             />
-            <Inner items={[restMenu, ...(children || [])]} open={open} tw="text-sm" />
+            <Inner items={[restMenu, ...(children || [])]} open={open} tw="text-sm h-8" />
           </div>
         </Popover>
       ) : null}

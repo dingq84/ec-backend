@@ -30,11 +30,11 @@ const Sidebar = () => {
   }
 
   return (
-    <aside css={[backgroundGradient]} tw="py-5 overflow-y-auto flex flex-col flex-shrink-0 px-3">
+    <aside css={[backgroundGradient]} tw="py-5 flex flex-col flex-shrink-0 px-3">
       <button
         className="flex-center btn-outline"
         onClick={handleClick}
-        tw="absolute transition-all duration-300 left-50 top-16 rounded-full text-gray-3 bg-white p-0 w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 shadow-md border border-solid border-gray-1 hover:(text-blue-1 border-purple-1)"
+        tw="absolute transition-all duration-300 left-52 top-16 rounded-full text-gray-3 bg-white p-0 w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 shadow-md border border-solid border-gray-1 hover:(text-blue-1 border-purple-1)"
         css={[sidebarIsExtend === false && tw`left-20 -translate-x-full`]}
         role="presentation"
       >
@@ -54,11 +54,13 @@ const Sidebar = () => {
         </a>
       </Link>
 
-      <ul>
-        {SIDEBAR_MENU.map(menu => (
-          <Outer menu={menu} key={menu.id} />
-        ))}
-      </ul>
+      <div className="scroll-y">
+        <ul tw="flex-grow" css={[sidebarIsExtend && tw`mr-3`]}>
+          {SIDEBAR_MENU.map(menu => (
+            <Outer menu={menu} key={menu.id} />
+          ))}
+        </ul>
+      </div>
     </aside>
   )
 }

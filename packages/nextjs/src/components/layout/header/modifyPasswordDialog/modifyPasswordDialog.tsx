@@ -12,7 +12,7 @@ import TextField from '@/components/shared/textField'
 import Toast, { ToastProps } from '@/components/shared/toast'
 
 // core
-import core from '@ec-backend/core/src'
+import core from '@ec-backstage/core/src'
 import { StatusCode } from '@/common/constants/statusCode'
 
 // states

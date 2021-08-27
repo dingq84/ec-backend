@@ -107,7 +107,7 @@ const Toast = (props: ToastProps) => {
           toastOpen === true && position === 'top' && tw`top-10`
         ]}
       >
-        <Image src={`/icons/${level}.svg`} alt="toast icon" width={24} height={24} />
+        <Image src={`/icons/toast/${level}.svg`} alt="toast icon" width={24} height={24} />
         <span tw="ml-2 font-normal text-sm text-black select-none">{message}</span>
         {manualClose ? (
           <Button

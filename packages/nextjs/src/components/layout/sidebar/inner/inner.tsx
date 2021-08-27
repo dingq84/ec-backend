@@ -6,12 +6,13 @@ import tw, { styled } from 'twin.macro'
 
 // components
 import Collapse from '@/components/shared/collapse'
+import Prefix from '@/components/layout/sidebar/prefix'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // types
-import { ConstantsSidebarMenuType } from '@/types/components/sidebar'
+import { SidebarMenuType } from '@/types/components/sidebar'
 
 // utils
 import hasActiveChildren from '@/utils/components/sidebar/hasActiveChildren'
@@ -25,7 +26,7 @@ const StyledSpan = styled.span`
 `
 
 interface InnerProps {
-  items: ConstantsSidebarMenuType[]
+  items: SidebarMenuType[]
   open?: boolean
 }
 
@@ -47,8 +48,14 @@ const Inner = (props: InnerProps) => {
     setOpen(isActive.current)
   }, [])
 
-  const handleClick = (): void => {
+  const toggleOpen = (): void => {
     setOpen(!open)
+  }
+
+  const handleClick = (href?: string) => {
+    if (href && pathname !== href) {
+      router.push(href)
+    }
   }
 
   return (
@@ -63,13 +70,9 @@ const Inner = (props: InnerProps) => {
               <StyledDiv
                 css={[(open || isActive.current) && tw`opacity-100!`]}
                 {...restProps}
-                onClick={handleClick}
+                onClick={toggleOpen}
               >
-                {prefix ? (
-                  <span tw="w-4 mr-3 text-xs leading-none pl-2.5 color[inherit] text-center">
-                    {prefix}
-                  </span>
-                ) : null}
+                <Prefix url={prefix} tw="mr-3 text-xs pl-2.5" />
                 <StyledSpan>{name}</StyledSpan>
 
                 <span tw="pr-3 inline-block">
@@ -88,12 +91,13 @@ const Inner = (props: InnerProps) => {
         }
 
         return (
-          <StyledDiv key={id} {...restProps} css={[isActive.current && tw`opacity-100!`]}>
-            {prefix ? (
-              <span tw="w-4 mr-3 text-xs leading-none pl-2.5 color[inherit] text-center">
-                {prefix}
-              </span>
-            ) : null}
+          <StyledDiv
+            key={id}
+            {...restProps}
+            css={[isActive.current && tw`opacity-100!`]}
+            onClick={() => handleClick(href)}
+          >
+            <Prefix url={prefix} tw="mr-3 text-xs pl-2.5" />
             <StyledSpan>{name}</StyledSpan>
           </StyledDiv>
         )

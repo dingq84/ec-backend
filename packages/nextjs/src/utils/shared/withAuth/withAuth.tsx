@@ -17,7 +17,7 @@ import { ApiKey } from '@/constants/services/api'
 import Loading from '@/components/shared/loading'
 
 // core
-import core from '@ec-backend/core'
+import core from '@ec-backstage/core/src'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'

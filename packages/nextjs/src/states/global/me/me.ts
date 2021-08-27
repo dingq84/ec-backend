@@ -4,13 +4,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import SIDEBAR_MENU from '@/constants/components/sidebar'
 
 // cores
-import { IMeDTO } from '@ec-backend/core/src/auth/domains/dto/MeDTO'
+import { IMeDTO } from '@ec-backstage/core/src/auth/domains/dto/MeDTO'
 
 // types
-import { ConstantsSidebarMenuType } from '@/types/components/sidebar'
+import { SidebarMenuType } from '@/types/components/sidebar'
 
 interface initialState {
-  menu: ConstantsSidebarMenuType[]
+  menu: SidebarMenuType[]
   user: IMeDTO['user']
 }
 
@@ -32,7 +32,7 @@ const initialState: initialState = {
 //   }, [] as number[])
 // }
 
-// function filterUnAuthorizedSidebar(list: ConstantsSidebarMenuType[], authorizedList: number[]) {
+// function filterUnAuthorizedSidebar(list: SidebarMenuType[], authorizedList: number[]) {
 //   return list.filter(item => {
 //     if (!authorizedList.includes(item.id)) {
 //       return false

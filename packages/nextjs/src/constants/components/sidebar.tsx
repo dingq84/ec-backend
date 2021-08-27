@@ -1,64 +1,73 @@
-/**
- * @author Ding.Chen 2021-06-18
- * 後台完整 sidebar menu，根據 api 提供的權限做過濾
- */
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCog } from '@fortawesome/free-solid-svg-icons'
+import { SidebarMenuType } from '@/types/components/sidebar'
 
-const SIDEBAR_MENU = [
+const SIDEBAR_MENU: SidebarMenuType[] = [
   {
-    prefix: <FontAwesomeIcon icon={faUserCog} />,
     id: 1,
-    name: '訂單管理',
-    href: '/wqee'
+    name: '首頁',
+    href: '/',
+    prefix: 'home.svg'
   },
   {
-    prefix: <FontAwesomeIcon icon={faUserCog} />,
     id: 2,
-    name: '會員管理',
-    children: [
-      {
-        id: 3,
-        name: '會員列表與詳細頁',
-        href: '/account/info'
-      },
-      {
-        id: 4,
-        name: '匯出會員資訊',
-        href: '/account/export',
-        children: [
-          {
-            id: 7,
-            name: '會員列表與詳細頁',
-            href: '/account/info'
-          },
-          {
-            id: 8,
-            name: '匯出會員資訊',
-            href: '/'
-          }
-        ]
-      }
-    ]
+    name: '訂單管理',
+    href: '/order',
+    prefix: 'order.svg'
   },
   {
-    prefix: <FontAwesomeIcon icon={faUserCog} />,
-    id: 5,
+    id: 3,
     name: '商品管理',
-    href: '/product',
+    href: '/commodity',
+    prefix: 'commodity.svg'
+  },
+  {
+    id: 4,
+    name: '促銷管理',
+    href: '/promotion',
+    prefix: 'promotion.svg'
+  },
+  {
+    id: 5,
+    name: '物流管理',
+    href: '/logistics',
+    prefix: 'logistics.svg'
+  },
+  {
+    id: 6,
+    name: '會員管理',
+    href: '/account',
+    prefix: 'account.svg'
+  },
+  {
+    id: 7,
+    name: '角色權限管理',
+    href: '/role',
+    prefix: 'role.svg'
+  },
+  {
+    id: 8,
+    name: '廣告管理',
+    href: '/advertisement',
+    prefix: 'advertisement.svg',
     children: [
       {
         id: 12,
-        name: '商品管理',
-        href: '/product'
+        name: '廣告管理',
+        href: '/advertisement',
+        prefix: 'advertisement.svg'
       }
     ]
   },
   {
-    prefix: <FontAwesomeIcon icon={faUserCog} />,
-    id: 6,
-    name: '促銷管理',
-    href: '/promote'
+    id: 9,
+    name: '門市管理',
+    href: '/store',
+    prefix: 'store.svg'
+  },
+  {
+    id: 10,
+    name: '前台首頁管理',
+    href: '/forestage',
+    prefix: 'forestage.svg'
   }
 ]
 

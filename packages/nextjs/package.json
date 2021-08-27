@@ -1,7 +1,7 @@
 {
-  "name": "@ec-backend/nextjs",
+  "name": "@ec-backstage/nextjs",
   "version": "1.0.0",
-  "description": "ec-backend-nextjs",
+  "description": "ec-backstage-nextjs",
   "author": "Dean Chen",
   "scripts": {
     "dev": "next",
@@ -23,7 +23,7 @@
     "node": ">=15.x"
   },
   "dependencies": {
-    "@ec-backend/core": "1.0.0",
+    "@ec-backstage/core": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
