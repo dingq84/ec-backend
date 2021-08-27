@@ -78,7 +78,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           tw="py-1.5 px-2.5 rounded flex items-center space-x-1 bg-blue-2"
           css={[
             error && tw`border-red-1 border border-solid`,
-            disabled && tw`bg-gray-2 text-black`,
+            disabled && tw`bg-gray-1 text-black`,
             border === false && `border-none`
           ]}
         >
@@ -110,7 +110,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           {adornment.end}
         </div>
 
-        {hint ? <small tw="text-gray-1 font-normal">{hint}</small> : ''}
+        {hint ? <small tw="text-gray-2 font-normal">{hint}</small> : ''}
       </div>
     </div>
   )

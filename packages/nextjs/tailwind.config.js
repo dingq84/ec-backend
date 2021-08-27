@@ -16,8 +16,8 @@ module.exports = {
       },
       colors: {
         primary: '#393091',
-        'gray-1': '#828282',
-        'gray-2': '#E0E0E0',
+        'gray-1': '#E0E0E0',
+        'gray-2': '#828282',
         'gray-3': '#8A8EA1',
         'purple-1': '#8153E9',
         'purple-2': '#393091',
@@ -49,7 +49,8 @@ module.exports = {
     }
   },
   variants: {
+    scrollbar: ['rounded'],
     extend: {}
   },
-  plugins: []
+  plugins: [require('tailwind-scrollbar')]
 }

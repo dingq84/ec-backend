@@ -33,7 +33,7 @@ const Tag = forwardRef<HTMLButtonElement, TagProps>(function Tag(props, ref) {
       tw="rounded-3xl py-0.5"
       css={[
         disabled &&
-          tw`border-transparent bg-gray-2 text-black pointer-events-none cursor-not-allowed`
+          tw`border-transparent bg-gray-1 text-black pointer-events-none cursor-not-allowed`
       ]}
       label={
         <>

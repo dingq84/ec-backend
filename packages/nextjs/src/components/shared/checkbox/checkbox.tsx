@@ -69,7 +69,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
         ></span>
         <FontAwesomeIcon
           tw="text-xs text-primary opacity-0 transition-opacity duration-300 absolute top-0.5 left-0.5"
-          css={[value && tw`opacity-100`, disabled && tw`text-gray-2`]}
+          css={[value && tw`opacity-100`, disabled && tw`text-gray-1`]}
           icon={faCheck}
         />
         <input

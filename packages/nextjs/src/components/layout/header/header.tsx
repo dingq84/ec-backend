@@ -124,9 +124,9 @@ const Header = () => {
             <small tw="mx-1.5 text-gray-3">{accountName}</small>
           </div>
 
-          <div tw="mx-auto mt-1 mb-2.5 w-11/12 bg-gray-2 height[1px]"></div>
+          <div tw="mx-auto mt-1 mb-2.5 w-11/12 bg-gray-1 height[1px]"></div>
 
-          <ul tw="w-full all:(py-1.5 text-xs font-normal flex justify-center hover:(bg-gray-2))">
+          <ul tw="w-full all:(py-1.5 text-xs font-normal flex justify-center hover:(bg-gray-1))">
             <li onClick={openUpdatePasswordDialog}>
               <Button className="btn-text" label="重設密碼" tw="text-black" />
             </li>

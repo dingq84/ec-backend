@@ -85,7 +85,7 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
             <div {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <div
-                  tw="bg-white border-b border-solid border-gray-2  px-3 py-4 text-gray-3"
+                  tw="bg-white border-b border-solid border-gray-1  px-3 py-4 text-gray-3"
                   {...column.getHeaderProps()}
                 >
                   {column.render('Header')}
@@ -100,7 +100,7 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
             return (
               <div
                 {...row.getRowProps()}
-                tw="text-blue-2 border-b border-solid border-gray-2 hover:(bg-purple-1 shadow-lg cursor-pointer)"
+                tw="text-blue-2 border-b border-solid border-gray-1 hover:(bg-purple-1 shadow-lg cursor-pointer)"
               >
                 {row.cells.map((cell, i) => {
                   return (

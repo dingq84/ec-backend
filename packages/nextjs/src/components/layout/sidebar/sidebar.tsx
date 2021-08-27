@@ -34,7 +34,7 @@ const Sidebar = () => {
       <button
         className="flex-center btn-outline"
         onClick={handleClick}
-        tw="absolute transition-all duration-300 left-50 top-16 rounded-full text-gray-3 bg-white p-0 w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 shadow-md border border-solid border-gray-2 hover:(text-blue-1 border-purple-1)"
+        tw="absolute transition-all duration-300 left-50 top-16 rounded-full text-gray-3 bg-white p-0 w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 shadow-md border border-solid border-gray-1 hover:(text-blue-1 border-purple-1)"
         css={[sidebarIsExtend === false && tw`left-20 -translate-x-full`]}
         role="presentation"
       >
