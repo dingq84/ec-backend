@@ -8,9 +8,6 @@ import tw, { css } from 'twin.macro'
 import Outer from '@/components/layout/sidebar/outer'
 import Collapse from '@/components/shared/collapse'
 
-// constants
-import SIDEBAR_MENU from '@/constants/components/sidebar'
-
 // states
 import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
 import { toggleSidebar } from '@/states/global/settings'
@@ -24,6 +21,7 @@ const backgroundGradient = css`
 const Sidebar = () => {
   const dispatch = useAppDispatch()
   const sidebarIsExtend = useAppSelector(state => state.settings.sidebarIsExtend)
+  const sidebarMenu = useAppSelector(state => state.me.menu)
 
   const handleClick = (): void => {
     dispatch(toggleSidebar())
@@ -56,7 +54,7 @@ const Sidebar = () => {
 
       <div className="scroll-y">
         <ul tw="flex-grow" css={[sidebarIsExtend && tw`mr-3`]}>
-          {SIDEBAR_MENU.map(menu => (
+          {sidebarMenu.map(menu => (
             <Outer menu={menu} key={menu.id} />
           ))}
         </ul>

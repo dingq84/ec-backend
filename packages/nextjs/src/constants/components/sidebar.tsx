@@ -47,15 +47,7 @@ const SIDEBAR_MENU: SidebarMenuType[] = [
     id: 8,
     name: '廣告管理',
     href: '/advertisement',
-    prefix: 'advertisement.svg',
-    children: [
-      {
-        id: 12,
-        name: '廣告管理',
-        href: '/advertisement',
-        prefix: 'advertisement.svg'
-      }
-    ]
+    prefix: 'advertisement.svg'
   },
   {
     id: 9,

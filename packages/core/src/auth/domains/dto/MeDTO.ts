@@ -1,8 +1,3 @@
-/**
- * @author Ding.Chen 2021-08-06
- * 這邊主要是將外部資料進行轉換，再注入進系統內
- */
-
 // 啟用狀態
 enum Status {
   inactive = 0,
@@ -13,10 +8,6 @@ enum Status {
 interface IMenuItem {
   id: number
   parent_id: number
-  sort: number
-  name: string
-  icon: string
-  uri?: null | string
   children?: IMenuItem[]
 }
 
