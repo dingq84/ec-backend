@@ -47,7 +47,7 @@ class Http implements IHttp {
         return left({ statusMessage: '請先登入', statusCode: StatusCode.tokenCancel })
       }
 
-      config.headers.Authorization = `Bearer ${this._token}`
+      config.headers.Authorization = this._token
     }
 
     return right(axios.create(config))
