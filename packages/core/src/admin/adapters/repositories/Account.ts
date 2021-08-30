@@ -15,7 +15,7 @@ class AccountRepository implements IAccountRepository {
   async updatePassword(parameter: IAccountDTO): Promise<Either<IErrorDTO, void>> {
     const result = await this.http.request<void>({
       url: ApiUrl.updatePassword,
-      method: 'POST',
+      method: 'PATCH',
       data: parameter,
       withAuth: true
     })

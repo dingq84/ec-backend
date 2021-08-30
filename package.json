@@ -16,7 +16,8 @@
       "**/babel-jest",
       "**/react",
       "**/react-dom",
-      "**/twin.macro"
+      "**/twin.macro",
+      "**/nextjs"
     ]
   },
   "scripts": {

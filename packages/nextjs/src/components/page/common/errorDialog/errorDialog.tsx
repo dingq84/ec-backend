@@ -28,8 +28,8 @@ const ErrorDialog = () => {
       }}
       content={
         <div tw="py-5 w-full">
-          <h1 tw="font-medium text-black text-2xl mb-8 text-center">系統提醒</h1>
-          <p tw="text-lg font-normal text-black text-center mb-10 whitespace-pre">{message}</p>
+          <h1 tw="font-medium text-black text-2xl mb-12 text-center">系統提醒</h1>
+          <p tw="text-lg font-normal text-black text-center mb-12 whitespace-pre">{message}</p>
         </div>
       }
       close={close}

@@ -60,19 +60,34 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
       }
     }, [data, dispatch])
 
+    useEnhancedEffect(() => {
+      if (data && isLeft(data)) {
+        const { errorMessage } = data.left
+        dispatch(
+          setError({
+            message: errorMessage,
+            callback: () => {
+              router.push('/auth/login')
+            }
+          })
+        )
+      } else if (isError) {
+        dispatch(
+          setError({
+            message: '請先進行登入',
+            callback: () => {
+              router.push('/auth/login')
+            }
+          })
+        )
+      }
+    }, [isError, data, dispatch])
+
     if (isLoading || refreshTokenIsLoading) {
       return <Loading isLoading />
     }
 
     if (isError || (data && isLeft(data))) {
-      dispatch(
-        setError({
-          message: '請先進行登入',
-          callback: () => {
-            router.push('/auth/login')
-          }
-        })
-      )
       return null
     }
 

@@ -15,7 +15,7 @@ class MeRepository implements IMeRepository {
   async getMe(): Promise<Either<IErrorDTO, IMeDTO>> {
     const result = await this.http.request<IMeParameters>({
       url: ApiUrl.me,
-      method: 'POST',
+      method: 'GET',
       withAuth: true
     })
 

@@ -28,7 +28,7 @@ import { clearMe } from '@/states/global/me'
 import { setError } from '@/states/global/error'
 
 const Header = () => {
-  const anchorEl = useRef<HTMLSpanElement>(null!)
+  const anchorEl = useRef<HTMLDivElement>(null!)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
   const [modifyPasswordDialogOpen, setModifyPasswordDialogOpen] = useState(false)
@@ -40,7 +40,7 @@ const Header = () => {
 
   const userName = user?.name ? `嗨${user.name}，您好!` : ''
   const accountName = user?.account || ''
-  const roleName = user?.roles && user?.roles.length ? user?.roles[0].name : ''
+  // const roleName = user?.roles && user?.roles.length ? user?.roles[0].name : ''
 
   const togglePopover = (open: boolean): void => {
     setPopoverOpen(open)
@@ -50,8 +50,8 @@ const Header = () => {
     const result = await mutation.mutateAsync()
 
     if (isRight(result)) {
-      dispatch(clearMe())
       router.push('/auth/login')
+      dispatch(clearMe())
       return
     }
 
@@ -92,35 +92,39 @@ const Header = () => {
       <header tw="relative bg-blue-1 flex flex-col md:flex-row">
         <nav tw="flex justify-between text-black flex-grow pr-3">
           <div>router</div>
-          <div tw="text-gray-3" data-testid="functions" className="flex-center">
-            <small tw="text-gray-3">{userName}</small>
-            <small tw="text-black ml-5 mr-2.5" ref={anchorEl}>
-              {roleName}
-            </small>
-            <Button
-              className="btn-text"
+          {userName ? (
+            <div
+              tw="text-gray-3 hover:(cursor-pointer)"
+              data-testid="functions"
+              className="flex-center"
+              ref={anchorEl}
               onClick={() => togglePopover(true)}
-              label={
-                <FontAwesomeIcon
-                  icon={faChevronDown}
-                  tw="text-sm transition-transform duration-300 text-black"
-                  css={[popoverOpen && tw`transform rotate-180`]}
-                />
-              }
-            />
-          </div>
+            >
+              <small tw="text-gray-3 mr-2.5">{userName}</small>
+              {/* <small tw="text-black ml-5 mr-2.5">{roleName}</small> */}
+              <Button
+                className="btn-text"
+                label={
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    tw="text-sm transition-transform duration-300 text-black"
+                    css={[popoverOpen && tw`transform rotate-180`]}
+                  />
+                }
+              />
+            </div>
+          ) : null}
         </nav>
         <Popover
-          verticalSpace={25}
-          horizontalSpace={-35}
+          verticalSpace={10}
           open={popoverOpen}
           autoWidth={false}
           anchorEl={anchorEl.current}
           onClose={() => togglePopover(false)}
-          paperProps={{ css: [tw`w-32 px-0 py-0 shadow-xl flex-col`] }}
+          paperProps={{ css: [tw`w-32 p-0 shadow-xl flex-col`] }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
-          <div tw="h-12" className="flex-center">
+          <div tw="h-12 mx-2.5" className="flex-center">
             <small tw="mx-1.5 text-gray-3">{accountName}</small>
           </div>
 

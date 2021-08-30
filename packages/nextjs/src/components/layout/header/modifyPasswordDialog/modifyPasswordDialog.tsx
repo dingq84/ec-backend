@@ -13,10 +13,10 @@ import Toast, { ToastProps } from '@/components/shared/toast'
 
 // core
 import core from '@ec-backstage/core/src'
-import { StatusCode } from '@/common/constants/statusCode'
+import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 
 // states
-import { useAppDispatch } from '@/states/global/hooks'
+import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
 import { setError } from '@/states/global/error'
 
 // password initialState and reducer
@@ -99,8 +99,11 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
   const [passwordState, passwordDispatch] = useReducer(passwordReducer, passwordInitialState)
   const [errorStates, errorDispatch] = useReducer(errorReducer, toastInitialStates)
   const reduxDispatch = useAppDispatch()
-  const mutation = useMutation((data: Record<keyof PasswordInitialState, string>) =>
-    core.admin.account.updatePassword(data)
+  const accountId = useAppSelector(state => state.me.user.id)
+
+  const mutation = useMutation(
+    (data: Record<keyof PasswordInitialState, string> & { accountId: number }) =>
+      core.admin.account.updatePassword(data)
   )
   const passwordKeys = Object.keys(passwordState) as Array<keyof typeof passwordState>
   const anyPasswordIsEmpty = passwordKeys.some(key => passwordState[key].value === '')
@@ -137,7 +140,7 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
       }),
       {} as Record<keyof PasswordInitialState, string>
     )
-    const result = await mutation.mutateAsync(data)
+    const result = await mutation.mutateAsync({ ...data, accountId })
 
     if (isRight(result)) {
       success()

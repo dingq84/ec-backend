@@ -11,26 +11,26 @@ interface IMenuItem {
   children?: IMenuItem[]
 }
 
-interface CreateAndUpdate {
-  created_user?: number | null
-  created_at?: string | null
-  updated_user?: string | null
-  updated_at?: string | null
-}
+// interface CreateAndUpdate {
+//   created_user?: number | null
+//   created_at?: string | null
+//   updated_user?: string | null
+//   updated_at?: string | null
+// }
 
-interface IRoleItem extends CreateAndUpdate {
-  id: number
-  name: string
-  status: Status
-}
+// interface IRoleItem extends CreateAndUpdate {
+//   id: number
+//   name: string
+//   status: Status
+// }
 
-interface IUser extends CreateAndUpdate {
+interface IUser {
   id: number
   account: string
   name: string
   phone: string
   status: Status
-  roles: IRoleItem[]
+  // roles: IRoleItem[]
 }
 
 export interface IMeParameters {
