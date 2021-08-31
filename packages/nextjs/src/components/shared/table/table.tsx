@@ -1,13 +1,4 @@
-/**
- * @author Dean Chen 2021-05-20
- * Table 為包裝 react-table 的用法，釋出一個彈性的 table component，
- * 將 react-table 較不熟悉的語法包裝在這，對外僅由 columns 控制功能與否
- *
- * @modified
- * [Dean Chen 2021-06-10]: 新增 Pagination
- */
-
-import { useMemo, forwardRef, HTMLAttributes } from 'react'
+import { useMemo, useState, useRef, forwardRef, HTMLAttributes } from 'react'
 import { useTable, useFlexLayout, useResizeColumns, usePagination } from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
@@ -15,15 +6,23 @@ import tw from 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
+import DeleteButton from '@/components/shared/table/deleteButton'
+import EditButton from '@/components/shared/table/editButton'
 import Paper from '@/components/shared/paper'
 
+// hooks
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+import useForkRef from '@/hooks/useForkRef'
+
 // types
-import type { CustomColumn } from '@/types/components/table'
+import { CustomColumn, FunctionTypes } from '@/types/components/table'
 
 interface TableProps extends HTMLAttributes<HTMLDivElement> {
   columns: CustomColumn[]
   data: {}[]
   headerFixed?: boolean
+  disabledPagination?: boolean
+  handleFunctions?: Record<FunctionTypes, (row: unknown) => void>
   pagination: {
     currentPage?: number // 目前第幾頁 (要)
     totalRows: number // 總共幾筆
@@ -32,18 +31,58 @@ interface TableProps extends HTMLAttributes<HTMLDivElement> {
   }
 }
 
-const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) {
-  const { columns, data, headerFixed = true, pagination, ...restProps } = props
-  const { totalRows, currentPage = 0, pageSize = 10 } = pagination
+const getColumnsSlot = (slotName: FunctionTypes) => {
+  switch (slotName) {
+    case FunctionTypes.edit:
+      return EditButton
+    case FunctionTypes.delete:
+      return DeleteButton
+    default:
+      return DeleteButton
+  }
+}
 
+const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) {
+  const {
+    columns,
+    data,
+    headerFixed = true,
+    handleFunctions,
+    pagination,
+    disabledPagination = false,
+    ...restProps
+  } = props
+  const { totalRows, currentPage = 0, pageSize = 10 } = pagination
+  const [totalWidth, setTotalWidth] = useState(1000)
+  const nodeRef = useRef<HTMLDivElement>(null!)
+  const handleRef = useForkRef(ref, nodeRef)
+  const memoHandleFunctions = useMemo(() => handleFunctions, [handleFunctions])
   // 官方建議將 column 和 data 做 useMemo
-  const memoColumns = useMemo(() => columns, [columns])
+  const memoColumns = useMemo(
+    () =>
+      columns.map(column => {
+        if (column.headerSlot) {
+          const Component = getColumnsSlot(column.headerSlot)
+          column.Header = (row: unknown) => (
+            <Component onClick={() => memoHandleFunctions![column.headerSlot!](row)} />
+          )
+        } else if (column.cellSlot) {
+          const Component = getColumnsSlot(column.cellSlot)
+          column.Cell = (row: unknown) => (
+            <Component onClick={() => memoHandleFunctions![column.cellSlot!](row)} />
+          )
+        }
+
+        return column
+      }),
+    [columns, memoHandleFunctions]
+  )
   const memoData = useMemo(() => data, [data])
   const defaultColumn = useMemo(
     () => ({
       minWidth: 30,
       width: 150,
-      maxWidth: 400
+      maxWidth: 600
     }),
     []
   )
@@ -71,21 +110,40 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
   )
   const { pageIndex } = state
 
+  useEnhancedEffect(() => {
+    // 取 columns 的 width 總和和實際 element 的 width 兩者間較大的值，並設定回 table header 和 body
+    const columnTotalWidth = memoColumns.reduce(
+      (accumulate, { width = 0, minWidth = 0, maxWidth = 0 }) =>
+        accumulate + Math.max(Number(width), minWidth, maxWidth),
+      60
+    )
+    const { clientWidth } = nodeRef.current
+    const actualWidth = clientWidth - 48 // padding x
+    setTotalWidth(Math.max(columnTotalWidth, actualWidth))
+  }, [memoColumns])
+
   return (
     /* eslint-disable react/jsx-key */
-    <>
-      <Paper
-        ref={ref}
-        tw="inline-block w-full h-full p-0 overflow-auto relative"
+    <Paper
+      ref={handleRef}
+      tw="w-full p-0 relative flex-col overflow-hidden bg-transparent"
+      shadow={false}
+      {...restProps}
+    >
+      <div
+        className="scroll"
+        tw="h-full w-full border border-solid border-gray-1 rounded-lg"
         {...getTableProps()}
-        {...restProps}
       >
-        <div css={[headerFixed && tw`sticky top-0`]}>
+        <div css={[headerFixed && tw`sticky top-0`]} style={{ minWidth: totalWidth }}>
           {headerGroups.map(headerGroup => (
-            <div {...headerGroup.getHeaderGroupProps()}>
+            <div
+              {...headerGroup.getHeaderGroupProps()}
+              tw="px-6 py-4 border-b border-solid border-gray-1 bg-blue-1 flex"
+            >
               {headerGroup.headers.map(column => (
                 <div
-                  tw="bg-white border-b border-solid border-gray-1  px-3 py-4 text-gray-3"
+                  tw="text-gray-3 text-xs font-medium flex justify-start items-center"
                   {...column.getHeaderProps()}
                 >
                   {column.render('Header')}
@@ -94,19 +152,20 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
             </div>
           ))}
         </div>
-        <div {...getTableBodyProps()}>
+
+        <div {...getTableBodyProps()} style={{ minWidth: totalWidth, height: 'calc(100% - 49px)' }}>
           {rows.map(row => {
             prepareRow(row)
             return (
               <div
                 {...row.getRowProps()}
-                tw="text-blue-2 border-b border-solid border-gray-1 hover:(bg-purple-1 shadow-lg cursor-pointer)"
+                tw="px-6 py-6 text-black border-b border-solid border-gray-1 cursor-pointer hover:(bg-blue-2)"
               >
                 {row.cells.map((cell, i) => {
                   return (
                     <div
+                      tw="text-xs text-black font-normal"
                       css={[
-                        tw`px-3 py-4`,
                         columns[i].align === 'center' && tw`text-center`,
                         columns[i].align === 'right' && tw`text-right`
                       ]}
@@ -120,21 +179,66 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
             )
           })}
         </div>
-      </Paper>
-      <div tw="mt-4 flex items-center justify-center space-x-4">
-        <Button
-          className="btn-text"
-          label={<FontAwesomeIcon icon={faChevronLeft} />}
-          disabled={!canPreviousPage}
-        />
-        <Button className="btn" label={pageIndex + 1} />
-        <Button
-          className="btn-text"
-          label={<FontAwesomeIcon icon={faChevronRight} />}
-          disabled={!canNextPage}
-        />
       </div>
-    </>
+
+      <div tw="mt-2.5 w-full">
+        <span tw="float-right text-xs text-black font-normal">
+          {`1頁有${pageSize}筆資料，共${Math.ceil(totalRows / pageSize)}頁`}
+        </span>
+
+        {disabledPagination ? null : (
+          <div className="flex-center" tw="gap-x-2">
+            {/* TODO: page calculation */}
+            <Button
+              className="btn-text"
+              tw="text-blue-gray-3"
+              label={<FontAwesomeIcon icon={faChevronLeft} />}
+              disabled={!canPreviousPage}
+            />
+            <Button
+              className="btn-text"
+              label={
+                <span
+                  tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3"
+                  css={[tw`bg-blue-2 text-primary`]}
+                >
+                  {pageIndex + 1}
+                </span>
+              }
+            />
+            <Button
+              className="btn-text"
+              label={
+                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
+                  {pageIndex + 2}
+                </span>
+              }
+            />
+            <Button
+              className="btn-text"
+              label={
+                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
+                  {pageIndex + 3}
+                </span>
+              }
+            />
+            <Button
+              className="btn-text"
+              label={
+                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
+                  {pageIndex + 4}
+                </span>
+              }
+            />
+            <Button
+              className="btn-text"
+              label={<FontAwesomeIcon icon={faChevronRight} />}
+              disabled={!canNextPage}
+            />
+          </div>
+        )}
+      </div>
+    </Paper>
   )
 })
 

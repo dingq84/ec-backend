@@ -57,6 +57,12 @@
   .flex-center {
     @apply flex justify-center items-center;
   }
+  .scroll {
+    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-auto;
+  }
+  .scroll-x {
+    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-x-auto;
+  }
   .scroll-y {
     @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-y-auto;
   }
