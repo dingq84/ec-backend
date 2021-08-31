@@ -1,5 +1,8 @@
 import 'twin.macro'
 
+// components
+import Fade from '@/components/shared/fade'
+
 // context
 import useTabContext from '@/components/shared/tab/useTabContext'
 
@@ -12,10 +15,12 @@ const TabPanel = (props: TabPanelProps) => {
   const { index, children } = props
   const { activeIndex } = useTabContext()
 
-  return activeIndex === index ? (
-    <div tw="pt-5" className="scroll-y">
-      {children}
-    </div>
+  return index === activeIndex ? (
+    <Fade inProps={activeIndex === index}>
+      <div tw="pt-5" className="scroll-y">
+        {children}
+      </div>
+    </Fade>
   ) : null
 }
 

@@ -24,16 +24,15 @@ const Tab = (props: TabProps) => {
   }
 
   return (
-    <div
+    <Button
+      label={children}
       onClick={handleClick}
       className="btn-text"
       tw="px-8 py-5 text-sm text-gray-3 font-medium"
       css={[
         activeIndex === index && tw`text-primary border-b-2 border-solid border-primary -mb-0.5`
       ]}
-    >
-      <Button label={children} />
-    </div>
+    />
   )
 }
 

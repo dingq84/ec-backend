@@ -4,12 +4,13 @@ import { useState, cloneElement, Children } from 'react'
 import { TabContext } from '@/components/shared/tab/useTabContext'
 
 interface TabsProps {
+  activeIndex?: number
   children: any
 }
 
 const Tabs = (props: TabsProps) => {
-  const { children } = props
-  const [activeIndex, setActiveIndex] = useState(0)
+  const { children, activeIndex: propsActiveIndex = 0 } = props
+  const [activeIndex, setActiveIndex] = useState(propsActiveIndex)
 
   const updateActiveIndex = (activeIndex: number): void => {
     setActiveIndex(activeIndex)
