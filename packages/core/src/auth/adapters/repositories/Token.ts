@@ -62,8 +62,8 @@ class TokenRepository implements ITokenRepository {
     const result = await this.http.request<ITokenParameters>({
       method: 'POST',
       url: ApiUrl.refreshToken,
-      data: {
-        refreshToken
+      headers: {
+        Authorization: refreshToken
       }
     })
 
