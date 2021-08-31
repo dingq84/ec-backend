@@ -8,18 +8,26 @@
  */
 
 import { forwardRef, HTMLAttributes } from 'react'
-import 'twin.macro'
+import { css } from 'twin.macro'
 
 export interface PaperProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
+  shadow?: boolean
 }
 
+const shadowCss = css`
+  & {
+    box-shadow: 0px 4px 4px rgba(103, 103, 103, 0.25);
+  }
+`
+
 const Paper = forwardRef<HTMLDivElement, PaperProps>(function Paper(props: PaperProps, ref) {
-  const { children, ...restProps } = props
+  const { shadow = true, children, ...restProps } = props
   return (
     <div
       ref={ref}
-      tw="bg-white w-full p-4 rounded-md shadow-lg flex justify-center items-center sm:(w-auto) md:(inline-flex py-8 px-12)"
+      tw="bg-white w-full p-4 rounded-lg flex justify-center items-center sm:(w-auto) md:(inline-flex py-8 px-12)"
+      css={[shadow && shadowCss]}
       {...restProps}
     >
       {children}
