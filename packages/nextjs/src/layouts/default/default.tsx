@@ -21,9 +21,11 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = (props: DefaultLayoutProps) 
       </Head>
 
       <Sidebar />
-      <div className="scroll-y" tw="flex flex-col min-h-0 py-5 px-6 bg-blue-1 flex-grow">
+      <div tw="flex flex-col min-h-0 py-5 px-6 bg-blue-1 flex-grow">
         <Header />
-        <PageTransition tw="flex-grow min-w-0 mt-5">{children}</PageTransition>
+        <PageTransition tw="flex-grow mt-5 overflow-hidden">
+          <main tw="flex flex-col h-full">{children}</main>
+        </PageTransition>
       </div>
     </div>
   )

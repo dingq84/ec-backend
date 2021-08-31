@@ -109,6 +109,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
               css={[disabled && tw`cursor-not-allowed`]}
               onClick={handleClear}
               data-testid="clear"
+              tabIndex={-1}
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>

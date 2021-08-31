@@ -73,7 +73,7 @@ const Role = () => {
   }
 
   return (
-    <main>
+    <>
       <div tw="flex items-center justify-between">
         <h1 tw="text-blue-gray-3 font-medium text-2xl">角色權限管理</h1>
         <Button className="btn" label="創建角色" />
@@ -81,15 +81,9 @@ const Role = () => {
 
       <Tabs>
         <TabList>
-          <Tab>
-            <span>全部角色</span>
-          </Tab>
-          <Tab>
-            <span>已啟用角色</span>
-          </Tab>
-          <Tab>
-            <span>已停用角色</span>
-          </Tab>
+          <Tab>全部角色</Tab>
+          <Tab>已啟用角色</Tab>
+          <Tab>已停用角色</Tab>
         </TabList>
 
         <TabPanel>
@@ -98,6 +92,48 @@ const Role = () => {
           <Table
             columns={roleColumns}
             data={[
+              {
+                name: 'test',
+                createDate: '2021-10-10',
+                status: 'active',
+                edit: 'edit',
+                delete: 'delete'
+              },
+              {
+                name: 'test',
+                createDate: '2021-10-10',
+                status: 'active',
+                edit: 'edit',
+                delete: 'delete'
+              },
+              {
+                name: 'test',
+                createDate: '2021-10-10',
+                status: 'active',
+                edit: 'edit',
+                delete: 'delete'
+              },
+              {
+                name: 'test',
+                createDate: '2021-10-10',
+                status: 'active',
+                edit: 'edit',
+                delete: 'delete'
+              },
+              {
+                name: 'test',
+                createDate: '2021-10-10',
+                status: 'active',
+                edit: 'edit',
+                delete: 'delete'
+              },
+              {
+                name: 'test',
+                createDate: '2021-10-10',
+                status: 'active',
+                edit: 'edit',
+                delete: 'delete'
+              },
               {
                 name: 'test',
                 createDate: '2021-10-10',
@@ -149,11 +185,11 @@ const Role = () => {
           <span>3</span>
         </TabPanel>
       </Tabs>
-    </main>
+    </>
   )
 }
 
 Role.layout = DefaultLayout
-// Role.auth = true
+Role.auth = true
 
 export default Role
