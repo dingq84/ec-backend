@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, Ref } from 'react'
+import { ChangeEvent, forwardRef, HTMLAttributes, Ref } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -9,7 +9,9 @@ import Fade from '@/components/shared/fade'
 // types
 import type { InputBasicType } from '@/types/components/input'
 
-export interface TextFieldProps extends InputBasicType<string> {
+export interface TextFieldProps
+  extends InputBasicType<string>,
+    Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   type?: 'text' | 'password'
   adornment?: {
     start?: JSX.Element
@@ -22,10 +24,10 @@ export interface TextFieldProps extends InputBasicType<string> {
   onClear?: () => void
 }
 
-const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> = (
+const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
   props: TextFieldProps,
   ref
-) => {
+) {
   const {
     id,
     label,
@@ -41,9 +43,11 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
     clear = true,
     value = '',
     labelPosition = 'top',
-    className = '',
     border = true,
     inputRef,
+    type = 'text',
+    name = 'input',
+    placeholder = '',
     ...restProps
   } = props
 
@@ -64,7 +68,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
   }
 
   return (
-    <div className={className} ref={ref}>
+    <div ref={ref} {...restProps}>
       <div
         tw="w-full text-blue-2 flex flex-col"
         css={[labelPosition === 'left' && tw`flex-row space-y-0 space-x-1.5 items-center`]}
@@ -75,7 +79,7 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
           </label>
         ) : null}
         <div
-          tw="py-1.5 px-2.5 rounded flex items-center space-x-1 bg-blue-2"
+          tw="py-1.5 px-2.5 rounded-lg flex items-center space-x-1 bg-blue-2"
           css={[
             error && tw`border-red-1 border border-solid`,
             disabled && tw`bg-gray-1 text-black`,
@@ -93,7 +97,9 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
               ref={inputRef}
               disabled={disabled}
               css={[disabled && tw`cursor-not-allowed`]}
-              {...restProps}
+              type={type}
+              name={name}
+              placeholder={placeholder}
             />
           </div>
 
@@ -114,6 +120,6 @@ const TextField: React.ForwardRefRenderFunction<HTMLDivElement, TextFieldProps> 
       </div>
     </div>
   )
-}
+})
 
-export default forwardRef(TextField)
+export default TextField

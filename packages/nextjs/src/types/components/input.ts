@@ -1,11 +1,4 @@
-/**
- * @author Ding.Chen 2021-07-11
- * 建立所有 input components 通用的型別，像是 Checkbox、Radio、Select 和 TextField 等等
- */
-
-import { HTMLAttributes } from 'react'
-
-interface InputBasicType<T> extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface InputBasicType<T> {
   id?: string
   label?: string
   name?: string

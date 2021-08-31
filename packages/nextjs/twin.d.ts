@@ -1,11 +1,11 @@
 import { ComponentType } from 'react'
 import { TwFn, TemplateFn } from 'twin.macro'
-import styledImport, { css as cssImport } from 'styled-components'
+import styledImport, { CSSProp, css as cssImport } from 'styled-components'
 
 declare module 'twin.macro' {
   type TwComponentWrapper = <T extends ComponentType<any>>(component: T) => TemplateFn<T>
   const tw: TwFn & TwComponentMap & TwComponentWrapper
-  const css: typeof cssImport
+  const css: ReturnType<cssImport>
   const styled: typeof styledImport
 
   export = tw
@@ -13,13 +13,20 @@ declare module 'twin.macro' {
 }
 
 declare module 'react' {
-  // The css prop
-  interface HTMLAttributes<T> extends DOMAttributes<T> {
+  interface DOMAttributes<T> {
     css?: CSSProp
   }
   // The inline svg css prop
   interface SVGProps<T> extends SVGProps<SVGSVGElement> {
     css?: CSSProp
+  }
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicAttributes {
+      css?: CSSProp
+    }
   }
 }
 
