@@ -19,6 +19,15 @@ export interface ResponseResult<T> {
   data: T
 }
 
+export interface IPagination {
+  total: number // 總比數
+  perPage: number // 每頁比數
+  currentPage: number // 目前頁面
+  lastPage: number // 最後一頁
+  from: number // 資料起始點
+  to: number // 資料終點
+}
+
 export interface IHttp {
   token: string
   request<T>(requestConfig: RequestConfig): Promise<Either<IErrorParameters, ResponseResult<T>>>

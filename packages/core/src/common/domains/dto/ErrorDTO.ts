@@ -1,8 +1,3 @@
-/**
- * @author Ding.Chen 2021-08-16
- * 建立一個轉換 presenter 和 api 的錯誤成 view 的錯誤訊息
- */
-
 import { StatusCode } from '@/common/constants/statusCode'
 
 export interface IErrorParameters {
@@ -50,6 +45,8 @@ class ErrorDTO implements IErrorDTO {
         return '無法完成此項目操作因為您沒有所需的權限'
       case StatusCode.system:
         return '系統繁忙中 請稍後再試'
+      case StatusCode.parameter:
+        return '參數錯誤，請重新填寫'
       default:
         return '系統繁忙中 請稍後再試'
     }
