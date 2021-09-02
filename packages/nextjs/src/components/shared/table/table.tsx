@@ -1,28 +1,27 @@
-import { useMemo, useState, useRef, forwardRef, HTMLAttributes } from 'react'
-import { useTable, useFlexLayout, useResizeColumns, usePagination } from 'react-table'
+import { useMemo, useState, useRef, HTMLAttributes, useCallback } from 'react'
+import { useTable, useFlexLayout, useResizeColumns, usePagination, Row } from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
-import DeleteButton from '@/components/shared/table/deleteButton'
-import EditButton from '@/components/shared/table/editButton'
 import Paper from '@/components/shared/paper'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-import useForkRef from '@/hooks/useForkRef'
 
 // types
-import { CustomColumn, FunctionTypes } from '@/types/components/table'
+import { CustomColumn } from '@/types/components/table'
 
-interface TableProps extends HTMLAttributes<HTMLDivElement> {
+interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
   columns: CustomColumn[]
-  data: {}[]
+  data: Array<T>
   headerFixed?: boolean
   disabledPagination?: boolean
-  handleFunctions?: Record<FunctionTypes, (row: unknown) => void>
+  slots?: {
+    [key: string]: (data: Row<T>) => JSX.Element
+  }
   pagination: {
     currentPage?: number // 目前第幾頁 (要)
     totalRows: number // 總共幾筆
@@ -31,51 +30,42 @@ interface TableProps extends HTMLAttributes<HTMLDivElement> {
   }
 }
 
-const getColumnsSlot = (slotName: FunctionTypes) => {
-  switch (slotName) {
-    case FunctionTypes.edit:
-      return EditButton
-    case FunctionTypes.delete:
-      return DeleteButton
-    default:
-      return DeleteButton
-  }
-}
-
-const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) {
+const Table = <T extends object>(props: TableProps<T>) => {
   const {
     columns,
     data,
     headerFixed = true,
-    handleFunctions,
     pagination,
     disabledPagination = false,
+    slots,
     ...restProps
   } = props
   const { totalRows, currentPage = 0, pageSize = 10 } = pagination
   const [totalWidth, setTotalWidth] = useState(1000)
-  const nodeRef = useRef<HTMLDivElement>(null!)
-  const handleRef = useForkRef(ref, nodeRef)
-  const memoHandleFunctions = useMemo(() => handleFunctions, [handleFunctions])
+  const ref = useRef<HTMLDivElement>(null!)
+  const getColumnsSlot = useCallback(
+    (slotName: string) => {
+      if (slots === undefined) {
+        return () => <span>{`請提供 ${slotName} 的 FC`}</span>
+      }
+
+      return slots[slotName]
+    },
+    [slots]
+  )
   // 官方建議將 column 和 data 做 useMemo
   const memoColumns = useMemo(
     () =>
       columns.map(column => {
         if (column.headerSlot) {
-          const Component = getColumnsSlot(column.headerSlot)
-          column.Header = (row: unknown) => (
-            <Component onClick={() => memoHandleFunctions![column.headerSlot!](row)} />
-          )
+          column.Header = ({ row }: { row: Row<T> }) => getColumnsSlot(column.headerSlot!)(row)
         } else if (column.cellSlot) {
-          const Component = getColumnsSlot(column.cellSlot)
-          column.Cell = (row: unknown) => (
-            <Component onClick={() => memoHandleFunctions![column.cellSlot!](row)} />
-          )
+          column.Cell = ({ row }: { row: Row<T> }) => getColumnsSlot(column.cellSlot!)(row)
         }
 
         return column
       }),
-    [columns, memoHandleFunctions]
+    [columns, getColumnsSlot]
   )
   const memoData = useMemo(() => data, [data])
   const defaultColumn = useMemo(
@@ -117,7 +107,7 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
         accumulate + Math.max(Number(width), minWidth, maxWidth),
       60
     )
-    const { clientWidth } = nodeRef.current
+    const { clientWidth } = ref.current
     const actualWidth = clientWidth - 48 // padding x
     setTotalWidth(Math.max(columnTotalWidth, actualWidth))
   }, [memoColumns])
@@ -125,7 +115,7 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
   return (
     /* eslint-disable react/jsx-key */
     <Paper
-      ref={handleRef}
+      ref={ref}
       tw="w-full p-0 relative flex-col overflow-hidden bg-transparent"
       shadow={false}
       {...restProps}
@@ -202,6 +192,14 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
                   tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3"
                   css={[tw`bg-blue-2 text-primary`]}
                 >
+                  {pageIndex}
+                </span>
+              }
+            />
+            <Button
+              className="btn-text"
+              label={
+                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
                   {pageIndex + 1}
                 </span>
               }
@@ -224,14 +222,6 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
             />
             <Button
               className="btn-text"
-              label={
-                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
-                  {pageIndex + 4}
-                </span>
-              }
-            />
-            <Button
-              className="btn-text"
               label={<FontAwesomeIcon icon={faChevronRight} />}
               disabled={!canNextPage}
             />
@@ -240,6 +230,6 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function Table(props, ref) 
       </div>
     </Paper>
   )
-})
+}
 
 export default Table

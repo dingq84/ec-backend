@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import Image from 'next/image'
 import 'twin.macro'
 
 // components
@@ -15,7 +14,7 @@ const EditButton = (props: EditButtonProps) => {
     <Button
       tw="text-gray-3 ml-2"
       className="btn-text"
-      label={<FontAwesomeIcon icon={faPen} />}
+      label={<Image src="/icons/pen.svg" alt="pen" width={20} height={20} />}
       onClick={onClick}
     />
   )

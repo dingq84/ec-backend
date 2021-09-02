@@ -1,18 +1,12 @@
-import { Column } from 'react-table'
+import { CellProps, Column, Renderer } from 'react-table'
 
-enum FunctionTypes {
-  edit = 'edit',
-  delete = 'delete'
-}
-
-type CustomColumn = Column & {
+type CustomColumn<D extends object = {}, V = any> = Column & {
   align?: 'left' | 'center' | 'right'
   // header 和 cell 代表 table header 和 cell 是否需要外來 component
-  headerSlot?: FunctionTypes
-  cellSlot?: FunctionTypes
+  headerSlot?: string
+  cellSlot?: string
   // react table 的 column type 遺失 cell property，這邊新增一個幫助 ts 檢查
-  Cell?: (row: unknown) => JSX.Element
+  Cell?: Renderer<CellProps<D, V>>
 }
 
 export type { CustomColumn }
-export { FunctionTypes }
