@@ -14,7 +14,7 @@ class RolePresenter implements IRolePresenter {
   async getRoleList(parameters: {
     status?: StatusRoleDTO
     name?: string
-    orderField: 'createdAt' | 'updatedAt'
+    orderField: 'createAt' | 'updateAt'
     orderBy: Order
   }): Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>> {
     const { status, name } = parameters
@@ -30,7 +30,7 @@ class RolePresenter implements IRolePresenter {
       parameters as {
         status?: StatusRoleEntity
         name?: string
-        orderField: 'createdAt' | 'updatedAt'
+        orderField: 'createAt' | 'updateAt'
         orderBy: Order
       }
     )

@@ -9,7 +9,7 @@ export interface IRolePresenter {
   getRoleList: (parameters: {
     status?: Status
     name?: string
-    orderField: 'createdAt' | 'updatedAt'
+    orderField: 'createAt' | 'updateAt'
     orderBy: Order
   }) => Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>>
 }

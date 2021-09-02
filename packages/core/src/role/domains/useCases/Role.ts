@@ -16,7 +16,7 @@ class RoleUseCase implements IRoleUseCase {
   async getRoleList(parameters: {
     status: Status
     name: string
-    orderField: 'createdAt' | 'updatedAt'
+    orderField: 'createAt' | 'updateAt'
     orderBy: Order
   }): Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>> {
     const result = await this.roleRepository.getRoleList(parameters)

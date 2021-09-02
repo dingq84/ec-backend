@@ -1,9 +1,9 @@
-import AccountRepository from '@/admin/adapters/repositories/Account'
-import MeRepository from '@/auth/adapters/repositories/Me'
-import TokenRepository from '@/auth/adapters/repositories/Token'
 import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
 import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
-import RoleRepository from '@/role/adapters/repositories/IRole'
+import AccountRepository from '@/admin/adapters/repositories/Account'
+import MeRepository from '@/auth/adapters/repositories/Me'
+import RoleRepository from '@/role/adapters/repositories/Role'
+import TokenRepository from '@/auth/adapters/repositories/Token'
 
 function createRepositories(infrastructures: IInfrastructures): IRepositories {
   return {
