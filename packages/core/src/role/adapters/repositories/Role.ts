@@ -26,6 +26,7 @@ class RoleRepository implements IRoleRepository {
     name?: string
     orderField: 'createAt' | 'updateAt'
     orderBy: Order
+    page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleEntity[]; pagination: IPaginationDTO }>> {
     const result = await this.http.request<IRoleListReturnType>({
       url: ApiUrl.roleList,

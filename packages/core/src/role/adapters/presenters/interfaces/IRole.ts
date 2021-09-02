@@ -11,5 +11,6 @@ export interface IRolePresenter {
     name?: string
     orderField: 'createAt' | 'updateAt'
     orderBy: Order
+    page: number
   }) => Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>>
 }

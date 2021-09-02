@@ -16,6 +16,7 @@ class RolePresenter implements IRolePresenter {
     name?: string
     orderField: 'createAt' | 'updateAt'
     orderBy: Order
+    page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>> {
     const { status, name } = parameters
     if (status !== StatusRoleDTO.active && status !== StatusRoleDTO.inactive) {
@@ -32,6 +33,7 @@ class RolePresenter implements IRolePresenter {
         name?: string
         orderField: 'createAt' | 'updateAt'
         orderBy: Order
+        page: number
       }
     )
   }

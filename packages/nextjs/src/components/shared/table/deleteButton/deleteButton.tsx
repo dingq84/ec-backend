@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import 'twin.macro'
 
 // components
@@ -13,9 +13,9 @@ const DeleteButton = (props: DeleteButtonProps) => {
   const { onClick } = props
   return (
     <Button
-      tw="text-gray-3 ml-2"
+      tw="text-gray-3 ml-1 w-5 h-5"
       className="btn-text"
-      label={<FontAwesomeIcon icon={faTrash} />}
+      label={<FontAwesomeIcon tw="text-base" icon={faTimes} />}
       onClick={onClick}
     />
   )

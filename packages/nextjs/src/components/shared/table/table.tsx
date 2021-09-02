@@ -25,7 +25,7 @@ interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
   pagination: {
     currentPage?: number // 目前第幾頁 (要)
     totalRows: number // 總共幾筆
-    fetchData: Function // 換頁 call api
+    nextPage: (page: number) => void // 換頁 call api
     pageSize?: number
   }
 }
@@ -40,7 +40,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
     slots,
     ...restProps
   } = props
-  const { totalRows, currentPage = 0, pageSize = 10 } = pagination
+  const { totalRows, currentPage = 0, pageSize = 10, nextPage } = pagination
   const [totalWidth, setTotalWidth] = useState(1000)
   const ref = useRef<HTMLDivElement>(null!)
   const getColumnsSlot = useCallback(
@@ -90,9 +90,9 @@ const Table = <T extends object>(props: TableProps<T>) => {
       columns: memoColumns,
       data: memoData,
       defaultColumn,
-      initialState: { pageIndex: currentPage, pageSize },
+      initialState: { pageIndex: currentPage - 1, pageSize },
       manualPagination: true,
-      pageCount: totalRows
+      pageCount: Math.ceil(totalRows / pageSize)
     },
     useFlexLayout,
     useResizeColumns,
@@ -184,6 +184,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
               tw="text-blue-gray-3"
               label={<FontAwesomeIcon icon={faChevronLeft} />}
               disabled={!canPreviousPage}
+              onClick={() => nextPage(-1)}
             />
             <Button
               className="btn-text"
@@ -192,11 +193,11 @@ const Table = <T extends object>(props: TableProps<T>) => {
                   tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3"
                   css={[tw`bg-blue-2 text-primary`]}
                 >
-                  {pageIndex}
+                  {pageIndex + 1}
                 </span>
               }
             />
-            <Button
+            {/* <Button
               className="btn-text"
               label={
                 <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
@@ -219,11 +220,12 @@ const Table = <T extends object>(props: TableProps<T>) => {
                   {pageIndex + 3}
                 </span>
               }
-            />
+            /> */}
             <Button
               className="btn-text"
               label={<FontAwesomeIcon icon={faChevronRight} />}
               disabled={!canNextPage}
+              onClick={() => nextPage(1)}
             />
           </div>
         )}

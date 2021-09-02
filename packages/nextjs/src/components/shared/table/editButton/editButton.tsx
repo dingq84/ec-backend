@@ -12,7 +12,7 @@ const EditButton = (props: EditButtonProps) => {
   const { onClick } = props
   return (
     <Button
-      tw="text-gray-3 ml-2"
+      tw="text-gray-3 ml-1"
       className="btn-text"
       label={<Image src="/icons/pen.svg" alt="pen" width={20} height={20} />}
       onClick={onClick}

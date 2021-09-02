@@ -12,5 +12,6 @@ export interface IRoleRepository {
     name?: string
     orderField: 'createAt' | 'updateAt'
     orderBy: Order
+    page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleEntity[]; pagination: IPaginationDTO }>>
 }
