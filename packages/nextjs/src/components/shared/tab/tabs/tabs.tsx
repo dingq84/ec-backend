@@ -19,7 +19,7 @@ const Tabs = (props: TabsProps) => {
   return (
     <TabContext.Provider value={{ activeIndex, updateActiveIndex }}>
       {Children.map(children, (child, arrayIndex) => {
-        if (child.type.name !== 'TabPanel') {
+        if (arrayIndex === 0) {
           return child
         }
         return cloneElement(child, {
