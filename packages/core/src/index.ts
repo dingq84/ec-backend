@@ -16,7 +16,8 @@ const core: IPresenters = {
   },
   admin: {
     account: cPresenters.admin.account
-  }
+  },
+  role: cPresenters.role
 }
 
 export default core

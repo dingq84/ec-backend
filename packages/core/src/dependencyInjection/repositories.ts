@@ -3,6 +3,7 @@ import MeRepository from '@/auth/adapters/repositories/Me'
 import TokenRepository from '@/auth/adapters/repositories/Token'
 import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
 import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
+import RoleRepository from '@/role/adapters/repositories/IRole'
 
 function createRepositories(infrastructures: IInfrastructures): IRepositories {
   return {
@@ -12,7 +13,8 @@ function createRepositories(infrastructures: IInfrastructures): IRepositories {
     },
     admin: {
       account: new AccountRepository(infrastructures.http)
-    }
+    },
+    role: new RoleRepository(infrastructures.http)
   }
 }
 
