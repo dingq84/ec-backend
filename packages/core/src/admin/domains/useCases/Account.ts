@@ -8,7 +8,7 @@ import { IAccountRepository } from '@/admin/domains/useCases/repositories-interf
 class AccountUseCase implements IAccountUseCase {
   constructor(private readonly accountRepository: IAccountRepository) {}
 
-  async updatePassword(parameter: IAccountDTO): Promise<Either<IErrorDTO, void>> {
+  updatePassword(parameter: IAccountDTO): Promise<Either<IErrorDTO, void>> {
     return this.accountRepository.updatePassword(parameter)
   }
 }

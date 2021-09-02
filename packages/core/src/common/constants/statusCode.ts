@@ -18,6 +18,12 @@ export enum StatusCode {
   wrongPassword = '1302',
   newPasswordIsSameAsOldPassword = '1303',
 
+  // 角色
+  wrongStatus = 'client-006',
+  roleIsNotExist = '1402',
+  roleCanNotUpdate = '1404',
+
+  // 全局
   // 帳號已被停權
   accountFrozen = '1003',
   // 成功

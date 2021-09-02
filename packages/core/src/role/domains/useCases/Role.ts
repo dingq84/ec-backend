@@ -29,6 +29,10 @@ class RoleUseCase implements IRoleUseCase {
       }))
     )(result)
   }
+
+  updateRoleStatus(parameters: { id: number; status: Status }): Promise<Either<IErrorDTO, void>> {
+    return this.roleRepository.updateRoleStatus(parameters)
+  }
 }
 
 export default RoleUseCase
