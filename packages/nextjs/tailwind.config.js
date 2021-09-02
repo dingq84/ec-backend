@@ -28,6 +28,8 @@ module.exports = {
         'blue-gray-1': '#D5D6DF',
         'blue-gray-2': '#687193',
         'blue-gray-3': '#3D4254',
+        'blue-gray-4': '#A7A9B8',
+        'blue-gray-5': '#858793',
         'blue-1': '#F7F7FA',
         'blue-2': '#E9EBF6',
         'blue-3': '#DDE2F6',

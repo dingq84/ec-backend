@@ -16,7 +16,10 @@ enum ApiKey {
   logout = 'logout',
   me = 'me',
   isLogged = 'isLogged',
-  refreshToken = 'refreshToken'
+  refreshToken = 'refreshToken',
+
+  // role
+  roleList = 'roleList'
 }
 
 export { ApiKey }

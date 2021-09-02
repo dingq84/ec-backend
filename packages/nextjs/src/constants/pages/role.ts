@@ -1,6 +1,4 @@
-import { FunctionTypes } from '@/types/components/table'
-
-const roleColumns = [
+const columns = [
   {
     Header: '角色名稱',
     accessor: 'name',
@@ -8,26 +6,27 @@ const roleColumns = [
   },
   {
     Header: '創建日期',
-    accessor: 'createDate',
+    accessor: 'createdAt',
     width: 201
   },
   {
     Header: '角色狀態',
     accessor: 'status',
-    width: 550
+    width: 550,
+    cellSlot: 'status'
   },
   {
     Header: '編輯',
     accessor: 'edit',
     width: 64,
-    cellSlot: FunctionTypes.edit
+    cellSlot: 'edit'
   },
   {
     Header: '刪除',
     accessor: 'delete',
     width: 24,
-    cellSlot: FunctionTypes.delete
+    cellSlot: 'delete'
   }
 ]
 
-export { roleColumns }
+export { columns }
