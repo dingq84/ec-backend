@@ -43,7 +43,7 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
       }
     )
     // 3. 執行 me api
-    const { data, isLoading, isError } = useQuery(ApiKey.isLogged, () => core.auth.me.getMe(), {
+    const { data, isLoading } = useQuery(ApiKey.isLogged, () => core.auth.me.getMe(), {
       enabled: !refreshTokenIsLoading,
       staleTime: 60000 // 緩存一分鐘
     })
@@ -66,23 +66,14 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
             }
           })
         )
-      } else if (isError) {
-        dispatch(
-          setError({
-            message: '請先進行登入',
-            callback: () => {
-              router.push('/auth/login')
-            }
-          })
-        )
       }
-    }, [isError, data, dispatch])
+    }, [data, dispatch])
 
     if (isLoading || refreshTokenIsLoading) {
       return <Loading isLoading />
     }
 
-    if (isError || (data && isLeft(data))) {
+    if (data && isLeft(data)) {
       return null
     }
 

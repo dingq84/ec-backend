@@ -34,13 +34,13 @@ const Header = () => {
   const [modifyPasswordDialogOpen, setModifyPasswordDialogOpen] = useState(false)
   const [successDialogOpen, setSuccessDialogOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const user = useAppSelector(state => state.me.user)
+  const { user, role } = useAppSelector(state => state.me)
+  const { name, account } = user
+  const userName = name ? `嗨${name}，您好!` : ''
+  const accountName = account || ''
+  const roleName = role.length ? role[0].name : ''
   const mutation = useMutation(() => core.auth.token.logout())
   const router = useRouter()
-
-  const userName = user?.name ? `嗨${user.name}，您好!` : ''
-  const accountName = user?.account || ''
-  // const roleName = user?.roles && user?.roles.length ? user?.roles[0].name : ''
 
   const togglePopover = (open: boolean): void => {
     setPopoverOpen(open)
@@ -100,8 +100,8 @@ const Header = () => {
               ref={anchorEl}
               onClick={() => togglePopover(true)}
             >
-              <small tw="text-gray-3 mr-2.5">{userName}</small>
-              {/* <small tw="text-black ml-5 mr-2.5">{roleName}</small> */}
+              <small tw="text-gray-3">{userName}</small>
+              <small tw="text-black ml-5 mr-2.5">{roleName}</small>
               <Button
                 className="btn-text"
                 label={
@@ -118,7 +118,6 @@ const Header = () => {
         <Popover
           verticalSpace={10}
           open={popoverOpen}
-          autoWidth={false}
           anchorEl={anchorEl.current}
           onClose={() => togglePopover(false)}
           paperProps={{ css: [tw`w-32 p-0 shadow-xl flex-col`] }}

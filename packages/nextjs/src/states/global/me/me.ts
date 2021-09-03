@@ -37,14 +37,14 @@ function filterAuthorizedSidebar(
   }, [])
 }
 
-interface initialState {
+interface initialState extends Pick<IMeDTO, 'user' | 'role'> {
   menu: SidebarMenuType[]
-  user: IMeDTO['user']
 }
 
 const initialState: initialState = {
   menu: [],
-  user: {} as initialState['user']
+  user: {} as initialState['user'],
+  role: {} as initialState['role']
 }
 
 const meSlice = createSlice({
@@ -54,10 +54,11 @@ const meSlice = createSlice({
     clearMe: state => {
       state.menu = []
       state.user = {} as initialState['user']
+      state.role = {} as initialState['role']
     },
     setMe: (state, action: PayloadAction<IMeDTO>) => {
-      const { user, menu } = action.payload
-
+      const { user, menu, role } = action.payload
+      state.role = role
       state.user = user
       state.menu = filterAuthorizedSidebar(SIDEBAR_MENU, menu)
     }
