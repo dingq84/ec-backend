@@ -34,29 +34,35 @@ const SIDEBAR_MENU: SidebarMenuType[] = [
   {
     id: 6,
     name: '會員管理',
+    href: '/member',
+    prefix: 'member.svg'
+  },
+  {
+    id: 7,
+    name: '帳號管理',
     href: '/account',
     prefix: 'account.svg'
   },
   {
-    id: 7,
+    id: 8,
     name: '角色權限管理',
     href: '/role',
     prefix: 'role.svg'
   },
   {
-    id: 8,
+    id: 13,
     name: '廣告管理',
     href: '/advertisement',
     prefix: 'advertisement.svg'
   },
   {
-    id: 9,
+    id: 14,
     name: '門市管理',
     href: '/store',
     prefix: 'store.svg'
   },
   {
-    id: 10,
+    id: 15,
     name: '前台首頁管理',
     href: '/forestage',
     prefix: 'forestage.svg'
