@@ -25,7 +25,7 @@ class RoleRepository implements IRoleRepository {
   async getRoleList(parameters: {
     status?: Status
     name?: string
-    orderField: 'createAt' | 'updateAt'
+
     orderBy: Order
     page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleEntity[]; pagination: IPaginationDTO }>> {
@@ -33,7 +33,8 @@ class RoleRepository implements IRoleRepository {
       url: ApiUrl.roleList,
       method: 'GET',
       withAuth: true,
-      params: parameters
+      // 畫面不會傳遞其他 orderField，因此不開放給外部
+      params: { ...parameters, orderField: 'createAt' }
     })
 
     return flow(
@@ -56,12 +57,29 @@ class RoleRepository implements IRoleRepository {
     status: Status
   }): Promise<Either<IErrorDTO, void>> {
     const result = await this.http.request<void>({
-      url: ApiUrl.roleList,
+      url: ApiUrl.roleStatus,
       method: 'PATCH',
       withAuth: true,
       data: parameters
     })
 
+    return flow(
+      (data: Either<IErrorParameters, ResponseResult<void>>) =>
+        either.mapLeft((error: IErrorParameters) => new RoleErrorDTO(error))<ResponseResult<void>>(
+          data
+        ),
+      either.map((response: ResponseResult<void>) => response.data)
+    )(result)
+  }
+
+  async deleteRole(id: number): Promise<Either<IErrorDTO, void>> {
+    const result = await this.http.request<void>({
+      url: ApiUrl.roleStatus,
+      method: 'PATCH',
+      withAuth: true,
+      // status 2 為刪除的狀態，不過 api 資料不會回傳 status 2 的資料，因此未納入 Status enum
+      data: { id, status: 2 }
+    })
     return flow(
       (data: Either<IErrorParameters, ResponseResult<void>>) =>
         either.mapLeft((error: IErrorParameters) => new RoleErrorDTO(error))<ResponseResult<void>>(

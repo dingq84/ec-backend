@@ -16,7 +16,6 @@ class RoleUseCase implements IRoleUseCase {
   async getRoleList(parameters: {
     status: Status
     name: string
-    orderField: 'createAt' | 'updateAt'
     orderBy: Order
     page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>> {
@@ -32,6 +31,10 @@ class RoleUseCase implements IRoleUseCase {
 
   updateRoleStatus(parameters: { id: number; status: Status }): Promise<Either<IErrorDTO, void>> {
     return this.roleRepository.updateRoleStatus(parameters)
+  }
+
+  deleteRole(id: number): Promise<Either<IErrorDTO, void>> {
+    return this.roleRepository.deleteRole(id)
   }
 }
 

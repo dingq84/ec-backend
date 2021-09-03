@@ -16,7 +16,6 @@ class RolePresenter implements IRolePresenter {
   async getRoleList(parameters: {
     status?: StatusRoleDTO
     name?: string
-    orderField: 'createAt' | 'updateAt'
     orderBy: Order
     page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleDTO[]; pagination: IPaginationDTO }>> {
@@ -33,7 +32,6 @@ class RolePresenter implements IRolePresenter {
       parameters as {
         status?: StatusRoleEntity
         name?: string
-        orderField: 'createAt' | 'updateAt'
         orderBy: Order
         page: number
       }
@@ -57,6 +55,10 @@ class RolePresenter implements IRolePresenter {
         status: StatusRoleEntity
       }
     )
+  }
+
+  async deleteRole(id: number): Promise<Either<IErrorDTO, void>> {
+    return await this.roleUseCase.deleteRole(id)
   }
 }
 

@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'hoist-non-react-statics/node_modules/@types/react'
+import { ChangeEvent } from 'react'
 import tw from 'twin.macro'
 
 export interface SwitchProps {
