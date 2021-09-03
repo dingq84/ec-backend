@@ -15,7 +15,7 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import { CustomColumn } from '@/types/components/table'
 
 interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
-  columns: CustomColumn[]
+  columns: CustomColumn<T>[]
   data: Array<T>
   headerFixed?: boolean
   disabledPagination?: boolean
@@ -87,7 +87,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
     state,
     canPreviousPage,
     canNextPage
-  } = useTable(
+  } = useTable<T>(
     {
       columns: memoColumns,
       data: memoData,
@@ -119,6 +119,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
       handleRowClick(data)
     }
   }
+
   return (
     /* eslint-disable react/jsx-key */
     <Paper
@@ -157,7 +158,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
               <div
                 {...row.getRowProps()}
                 tw="px-6 py-6 text-black border-b border-solid border-gray-1 cursor-pointer hover:(bg-blue-2)"
-                onClick={() => handleClick(row as Row<T>)}
+                onClick={() => handleClick(row)}
               >
                 {row.cells.map((cell, i) => {
                   return (

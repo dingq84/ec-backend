@@ -8,8 +8,8 @@ import { IErrorDTO } from '@/common/domains/dto/ErrorDTO'
 class MeUseCase implements IMeUseCase {
   constructor(private readonly meRepository: IMeRepository) {}
 
-  async getMe(): Promise<Either<IErrorDTO, IMeDTO>> {
-    return await this.meRepository.getMe()
+  getMe(): Promise<Either<IErrorDTO, IMeDTO>> {
+    return this.meRepository.getMe()
   }
 }
 

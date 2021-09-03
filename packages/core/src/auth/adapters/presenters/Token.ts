@@ -51,8 +51,8 @@ class TokenPresenter implements ITokenPresenter {
     return await this.useCases.login(parameters)
   }
 
-  async logout(): Promise<Either<IErrorDTO, void>> {
-    return await this.useCases.logout()
+  logout(): Promise<Either<IErrorDTO, void>> {
+    return this.useCases.logout()
   }
 
   async refreshToken(): Promise<Either<IErrorDTO, string>> {
@@ -70,8 +70,8 @@ class TokenPresenter implements ITokenPresenter {
     return await this.useCases.refreshToken()
   }
 
-  async getRefreshToken(): Promise<string | null> {
-    return await this.useCases.getRefreshToken()
+  getRefreshToken(): Promise<string | null> {
+    return this.useCases.getRefreshToken()
   }
 
   getAccessToken(): string {

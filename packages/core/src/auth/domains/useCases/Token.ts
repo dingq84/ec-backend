@@ -49,8 +49,8 @@ class TokenUseCase implements ITokenUseCase {
     return flow(either.map((response: ITokenDTO) => response.accessToken))(result)
   }
 
-  async getRefreshToken(): Promise<string | null> {
-    return await this.tokenRepository.getRefreshToken()
+  getRefreshToken(): Promise<string | null> {
+    return this.tokenRepository.getRefreshToken()
   }
 
   getAccessToken(): string {
