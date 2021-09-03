@@ -11,6 +11,7 @@ module.exports = {
         tighter: '1.167'
       },
       spacing: {
+        4.5: '18px',
         15: '60px',
         50: '200px'
       },
