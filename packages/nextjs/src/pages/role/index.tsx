@@ -1,111 +1,19 @@
 import { useState } from 'react'
-import { useQuery } from 'react-query'
 import tw, { css } from 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
-import DeleteButton from '@/components/shared/table/deleteButton'
-import EditButton from '@/components/shared/table/editButton'
-import Loading from '@/components/shared/loading'
 import Paper from '@/components/shared/paper'
-import Switch from '@/components/shared/switch'
-import Table from '@/components/shared/table'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
 import TextField from '@/components/shared/textField'
-
-// constants
-import { columns } from '@/constants/pages/role'
-import { ApiKey } from '@/constants/services/api'
+import RoleDrawer from '@/components/page/role/drawer'
+import RoleTable from '@/components/page/role/table'
 
 // core
-import core from '@ec-backstage/core/src'
-import { IRoleDTO, Status } from '@ec-backstage/core/src/role/domains/dto/RoleDTO'
-import { Order } from '@ec-backstage/core/src/common/constants/order'
-
-// hooks
-import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+import { Status } from '@ec-backstage/core/src/role/domains/dto/RoleDTO'
 
 // layouts
 import DefaultLayout from '@/layouts/default'
-import { isLeft } from 'fp-ts/lib/Either'
-
-// states
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
-import { Row } from 'react-table'
-
-const TableContainer = (props: { name: string; status: Status }) => {
-  const { name, status } = props
-  const [page, setPage] = useState(1)
-  const dispatch = useAppDispatch()
-  const { data, isLoading, isError } = useQuery(
-    [ApiKey.roleList, { orderField: 'createAt', orderBy: Order, name, status, page }],
-    () =>
-      core.role.getRoleList({ orderField: 'createAt', orderBy: Order.Desc, name, status, page }),
-    {
-      refetchOnWindowFocus: false
-    }
-  )
-
-  useEnhancedEffect(() => {
-    if (data && isLeft(data)) {
-      const { errorMessage } = data.left
-      dispatch(setError({ message: errorMessage }))
-    }
-
-    if (isError) {
-      dispatch(setError({ message: '系統繁忙中 請稍後再試' }))
-    }
-  }, [isError, data])
-
-  if (isLoading) {
-    return <Loading isLoading={isLoading} />
-  }
-
-  if ((data && isLeft(data)) || isError) {
-    return null
-  }
-
-  const { roles, pagination } = data!.right
-  const { total } = pagination
-
-  const handleEdit = (data: Row<IRoleDTO>): void => {
-    console.log('edit', data.original)
-  }
-
-  const handleDelete = (data: Row<IRoleDTO>): void => {
-    console.log('delete', data)
-  }
-
-  const handleStatusChange = (data: Row<IRoleDTO>): void => {
-    console.log('status', data)
-  }
-
-  return (
-    <Table<IRoleDTO>
-      columns={columns}
-      data={roles}
-      pagination={{
-        currentPage: page,
-        totalRows: total,
-        nextPage: pageCount => {
-          setPage(page => page + pageCount)
-        }
-      }}
-      slots={{
-        edit: data => <EditButton onClick={() => handleEdit(data)} />,
-        delete: data => <DeleteButton onClick={() => handleDelete(data)} />,
-        status: data => (
-          <Switch
-            value={Boolean(data.original.status)}
-            onChange={() => handleStatusChange(data)}
-            label={data.original.statusText}
-          />
-        )
-      }}
-    />
-  )
-}
 
 const inputCss = css`
   & {
@@ -120,6 +28,7 @@ const inputCss = css`
     }
   }
 `
+
 const SearchContainer = (props: { value: string; search: (name: string) => void }) => {
   const { value, search } = props
   const [name, setName] = useState(value)
@@ -150,16 +59,24 @@ const SearchContainer = (props: { value: string; search: (name: string) => void 
   )
 }
 
+export type Mode = 'create' | 'edit' | 'view'
+
 const Role = () => {
   const [keyword, setKeyword] = useState('')
   const [status, setStatus] = useState<Status>(-1)
-
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [drawerMode, setDrawerMode] = useState<Mode>('view')
   const handleSearch = (newKeyword: string): void => {
     setKeyword(newKeyword)
   }
 
   const handleTabClick = (newStatus: Status): void => {
     setStatus(newStatus)
+  }
+
+  const openDrawer = (mode: Mode): void => {
+    setDrawerOpen(true)
+    setDrawerMode(mode)
   }
 
   return (
@@ -178,19 +95,21 @@ const Role = () => {
 
         <TabPanel>
           <SearchContainer value={keyword} search={handleSearch} />
-          <TableContainer name={keyword} status={status} />
+          <RoleTable name={keyword} status={status} openDrawer={openDrawer} />
         </TabPanel>
 
         <TabPanel>
           <SearchContainer value={keyword} search={handleSearch} />
-          <TableContainer name={keyword} status={status} />
+          <RoleTable name={keyword} status={status} openDrawer={openDrawer} />
         </TabPanel>
 
         <TabPanel>
           <SearchContainer value={keyword} search={handleSearch} />
-          <TableContainer name={keyword} status={status} />
+          <RoleTable name={keyword} status={status} openDrawer={openDrawer} />
         </TabPanel>
       </Tabs>
+
+      <RoleDrawer mode={drawerMode} open={drawerOpen} />
     </>
   )
 }

@@ -25,7 +25,6 @@ class RoleRepository implements IRoleRepository {
   async getRoleList(parameters: {
     status?: Status
     name?: string
-
     orderBy: Order
     page: number
   }): Promise<Either<IErrorDTO, { roles: IRoleEntity[]; pagination: IPaginationDTO }>> {
