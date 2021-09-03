@@ -1,6 +1,6 @@
 import { CellProps, Column, Renderer } from 'react-table'
 
-type CustomColumn<D extends object = {}, V = any> = Column & {
+type CustomColumn<T extends object = {}, D extends object = {}, V = any> = Column<T> & {
   align?: 'left' | 'center' | 'right'
   // header 和 cell 代表 table header 和 cell 是否需要外來 component
   headerSlot?: string

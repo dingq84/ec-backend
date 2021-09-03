@@ -19,6 +19,7 @@ interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
   data: Array<T>
   headerFixed?: boolean
   disabledPagination?: boolean
+  handleRowClick?: (data: Row<T>) => void
   slots?: {
     [key: string]: (data: Row<T>) => JSX.Element
   }
@@ -38,6 +39,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
     pagination,
     disabledPagination = false,
     slots,
+    handleRowClick,
     ...restProps
   } = props
   const { totalRows, currentPage = 0, pageSize = 10, nextPage } = pagination
@@ -112,6 +114,11 @@ const Table = <T extends object>(props: TableProps<T>) => {
     setTotalWidth(Math.max(columnTotalWidth, actualWidth))
   }, [memoColumns])
 
+  const handleClick = (data: Row<T>): void => {
+    if (handleRowClick) {
+      handleRowClick(data)
+    }
+  }
   return (
     /* eslint-disable react/jsx-key */
     <Paper
@@ -150,6 +157,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
               <div
                 {...row.getRowProps()}
                 tw="px-6 py-6 text-black border-b border-solid border-gray-1 cursor-pointer hover:(bg-blue-2)"
+                onClick={() => handleClick(row as Row<T>)}
               >
                 {row.cells.map((cell, i) => {
                   return (

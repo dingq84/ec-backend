@@ -1,4 +1,10 @@
-const columns = [
+// core
+import { IRoleDTO } from '@ec-backstage/core/src/role/domains/dto/RoleDTO'
+
+// types
+import { CustomColumn } from '@/types/components/table'
+
+const columns: CustomColumn<IRoleDTO>[] = [
   {
     Header: '角色名稱',
     accessor: 'name',
@@ -17,13 +23,11 @@ const columns = [
   },
   {
     Header: '編輯',
-    accessor: 'edit',
     width: 64,
     cellSlot: 'edit'
   },
   {
     Header: '刪除',
-    accessor: 'delete',
     width: 24,
     cellSlot: 'delete'
   }
