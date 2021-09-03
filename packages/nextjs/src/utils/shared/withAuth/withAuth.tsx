@@ -1,14 +1,7 @@
-/**
- * @author Dean Chen 2021-04-17
- * withAuth 這支主要負責處理權限的判斷，透過 next-auth 的 utils，判斷 session，並回傳對應的 Component
- *
- * @modified
- * [Dean Chen 2021-06-05]: 因為專案為 SSG，因此移除 next-auth，改用 client side 判斷
- */
-
-import 'twin.macro'
 import { useRouter } from 'next/router'
 import { isLeft, isRight } from 'fp-ts/lib/Either'
+import { useQuery, useQueryClient } from 'react-query'
+import 'twin.macro'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
@@ -34,6 +27,7 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
   return function WrapperComponent(props: T) {
     const router = useRouter()
     const dispatch = useAppDispatch()
+    const queryClient = useQueryClient()
     // 1. 確認 accessToken 是否存在，存在的話跳至 3
     const accessToken = core.auth.token.getAccessToken()
     // 2. 如果不存在 accessToken，執行 refresh token api
@@ -41,17 +35,18 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
       ApiKey.refreshToken,
       () => core.auth.token.refreshToken(),
       {
-        enabled: !accessToken
+        enabled: !accessToken,
+        onSuccess() {
+          // 如果有執行 refreshToken，就重新執行 getMe
+          queryClient.invalidateQueries(ApiKey.isLogged)
+        }
       }
     )
     // 3. 執行 me api
-    const { data, isLoading, isError } = useNoCacheQuery(
-      ApiKey.isLogged,
-      () => core.auth.me.getMe(),
-      {
-        enabled: !refreshTokenIsLoading
-      }
-    )
+    const { data, isLoading, isError } = useQuery(ApiKey.isLogged, () => core.auth.me.getMe(), {
+      enabled: !refreshTokenIsLoading,
+      staleTime: 60000 // 緩存一分鐘
+    })
 
     useEnhancedEffect(() => {
       // 在每次檢查是否登入時，都會更新 me 的 state
