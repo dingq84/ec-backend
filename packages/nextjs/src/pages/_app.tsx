@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import Head from 'next/head'
 import { AppProps } from 'next/app'
 import { Provider as ReduxProvider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -35,6 +36,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReduxProvider store={store}>
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <Layout>
           <ProtectedComponent {...pageProps} />
         </Layout>
