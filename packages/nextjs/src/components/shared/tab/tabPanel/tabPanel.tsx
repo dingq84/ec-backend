@@ -18,7 +18,7 @@ const TabPanel = (props: TabPanelProps) => {
 
   return index === activeIndex ? (
     <Fade inProps={activeIndex === index}>
-      <div tw="pt-5 flex-grow" className="scroll-y" {...restProps}>
+      <div tw="pt-5 flex-grow pr-4" className="scroll-y" {...restProps}>
         {children}
       </div>
     </Fade>
