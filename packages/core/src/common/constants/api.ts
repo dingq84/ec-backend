@@ -8,6 +8,9 @@ export enum ApiUrl {
   // admin
   updatePassword = 'admin/update_password',
 
+  // permission
+  permissionList = 'permission/list',
+
   // role
   roleList = 'role/list',
   roleStatus = 'role/status'

@@ -17,6 +17,7 @@ const core: IPresenters = {
   admin: {
     account: cPresenters.admin.account
   },
+  permission: cPresenters.permission,
   role: cPresenters.role
 }
 

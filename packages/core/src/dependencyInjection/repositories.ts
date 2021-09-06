@@ -2,6 +2,7 @@ import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructu
 import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
 import AccountRepository from '@/admin/adapters/repositories/Account'
 import MeRepository from '@/auth/adapters/repositories/Me'
+import PermissionRepository from '@/permission/adapters/repositories/Permission'
 import RoleRepository from '@/role/adapters/repositories/Role'
 import TokenRepository from '@/auth/adapters/repositories/Token'
 
@@ -14,6 +15,7 @@ function createRepositories(infrastructures: IInfrastructures): IRepositories {
     admin: {
       account: new AccountRepository(infrastructures.http)
     },
+    permission: new PermissionRepository(infrastructures.http),
     role: new RoleRepository(infrastructures.http)
   }
 }
