@@ -13,7 +13,8 @@ const columns: CustomColumn<IRoleDTO>[] = [
   {
     Header: '創建日期',
     accessor: 'createdAt',
-    width: 201
+    width: 201,
+    disableSortBy: false
   },
   {
     Header: '角色狀態',

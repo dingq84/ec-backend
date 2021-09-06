@@ -1,7 +1,21 @@
 import { useMemo, useState, useRef, HTMLAttributes, useCallback } from 'react'
-import { useTable, useFlexLayout, useResizeColumns, usePagination, Row } from 'react-table'
+import {
+  useTable,
+  useFlexLayout,
+  useResizeColumns,
+  usePagination,
+  useSortBy,
+  Row,
+  TableOptions,
+  SortingRule
+} from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronLeft,
+  faChevronRight,
+  faSortUp,
+  faSortDown
+} from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
 // components
@@ -20,6 +34,8 @@ interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
   headerFixed?: boolean
   disabledPagination?: boolean
   handleRowClick?: (data: Row<T>) => void
+  handleSort?: (data: SortingRule<T>[]) => void
+  tableOptions?: Partial<TableOptions<T>>
   slots?: {
     [key: string]: (data: Row<T>) => JSX.Element
   }
@@ -38,11 +54,13 @@ const Table = <T extends object>(props: TableProps<T>) => {
     headerFixed = true,
     pagination,
     disabledPagination = false,
+    tableOptions = {},
     slots,
     handleRowClick,
+    handleSort,
     ...restProps
   } = props
-  const { totalRows, currentPage = 0, pageSize = 10, nextPage } = pagination
+  const { totalRows, pageSize = 10, nextPage } = pagination
   const [totalWidth, setTotalWidth] = useState(1000)
   const ref = useRef<HTMLDivElement>(null!)
   const getColumnsSlot = useCallback(
@@ -74,7 +92,8 @@ const Table = <T extends object>(props: TableProps<T>) => {
     () => ({
       minWidth: 30,
       width: 150,
-      maxWidth: 600
+      maxWidth: 600,
+      disableSortBy: true
     }),
     []
   )
@@ -92,15 +111,18 @@ const Table = <T extends object>(props: TableProps<T>) => {
       columns: memoColumns,
       data: memoData,
       defaultColumn,
-      initialState: { pageIndex: currentPage - 1, pageSize },
       manualPagination: true,
-      pageCount: Math.ceil(totalRows / pageSize)
+      pageCount: Math.ceil(totalRows / pageSize),
+      manualSortBy: true,
+      disableSortRemove: true,
+      ...tableOptions
     },
     useFlexLayout,
     useResizeColumns,
+    useSortBy,
     usePagination
   )
-  const { pageIndex } = state
+  const { pageIndex, sortBy } = state
 
   useEnhancedEffect(() => {
     // 取 columns 的 width 總和和實際 element 的 width 兩者間較大的值，並設定回 table header 和 body
@@ -113,6 +135,12 @@ const Table = <T extends object>(props: TableProps<T>) => {
     const actualWidth = clientWidth - 48 // padding x
     setTotalWidth(Math.max(columnTotalWidth, actualWidth))
   }, [memoColumns])
+
+  useEnhancedEffect(() => {
+    if (handleSort) {
+      handleSort(sortBy)
+    }
+  }, [sortBy])
 
   const handleClick = (data: Row<T>): void => {
     if (handleRowClick) {
@@ -142,9 +170,12 @@ const Table = <T extends object>(props: TableProps<T>) => {
               {headerGroup.headers.map(column => (
                 <div
                   tw="text-gray-3 text-xs font-medium flex justify-start items-center"
-                  {...column.getHeaderProps()}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
+                  {column.isSorted ? (
+                    <FontAwesomeIcon tw="ml-2" icon={column.isSortedDesc ? faSortDown : faSortUp} />
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -181,20 +212,19 @@ const Table = <T extends object>(props: TableProps<T>) => {
       </div>
 
       <div tw="mt-2.5 w-full">
-        <span tw="float-right text-xs text-black font-normal">
-          {`1頁有${pageSize}筆資料，共${Math.ceil(totalRows / pageSize)}頁`}
-        </span>
+        <span tw="float-right text-xs text-black font-normal">{`總資料筆數：${totalRows}`}</span>
 
         {disabledPagination ? null : (
           <div className="flex-center" tw="gap-x-2">
             {/* TODO: page calculation */}
-            <Button
-              className="btn-text"
-              tw="text-blue-gray-3"
-              label={<FontAwesomeIcon icon={faChevronLeft} />}
-              disabled={!canPreviousPage}
-              onClick={() => nextPage(-1)}
-            />
+            {canPreviousPage ? (
+              <Button
+                className="btn-text"
+                tw="text-blue-gray-3"
+                label={<FontAwesomeIcon icon={faChevronLeft} />}
+                onClick={() => nextPage(-1)}
+              />
+            ) : null}
             <Button
               className="btn-text"
               label={
@@ -206,36 +236,13 @@ const Table = <T extends object>(props: TableProps<T>) => {
                 </span>
               }
             />
-            {/* <Button
-              className="btn-text"
-              label={
-                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
-                  {pageIndex + 1}
-                </span>
-              }
-            />
-            <Button
-              className="btn-text"
-              label={
-                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
-                  {pageIndex + 2}
-                </span>
-              }
-            />
-            <Button
-              className="btn-text"
-              label={
-                <span tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3">
-                  {pageIndex + 3}
-                </span>
-              }
-            /> */}
-            <Button
-              className="btn-text"
-              label={<FontAwesomeIcon icon={faChevronRight} />}
-              disabled={!canNextPage}
-              onClick={() => nextPage(1)}
-            />
+            {canNextPage ? (
+              <Button
+                className="btn-text"
+                label={<FontAwesomeIcon icon={faChevronRight} />}
+                onClick={() => nextPage(1)}
+              />
+            ) : null}
           </div>
         )}
       </div>

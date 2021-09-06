@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { isLeft, isRight } from 'fp-ts/lib/Either'
 import { useState } from 'react'
-import { Row } from 'react-table'
+import { Row, SortingRule } from 'react-table'
 import 'twin.macro'
 
 // components
@@ -39,15 +39,20 @@ interface RoleTableProps {
 const RoleTable = (props: RoleTableProps) => {
   const { name, status, openDrawer } = props
   const [page, setPage] = useState(1)
+  const [desc, setDesc] = useState(true)
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   // get role list
-  const parameter = { orderBy: Order.Desc, name, status, page }
-  const getRoleList = () => core.role.getRoleList(parameter)
-  const { data, isLoading } = useQuery([ApiKey.roleList, parameter], getRoleList, {
-    refetchOnWindowFocus: false,
-    staleTime: 60000 // 相同 query 值 cache 60秒
-  })
+  const parameter = { orderBy: desc ? Order.Desc : Order.Asc, name, status, page }
+  const { data, isLoading } = useQuery(
+    [ApiKey.roleList, parameter],
+    () => core.role.getRoleList(parameter),
+    {
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+      staleTime: 60000 // 相同 query 值 cache 60秒
+    }
+  )
   // update role status
   const updateStatusMutation = useMutation((data: { id: number; status: Status }) =>
     core.role.updateRoleStatus(data)
@@ -56,8 +61,9 @@ const RoleTable = (props: RoleTableProps) => {
   const deleteMutation = useMutation((id: number) => core.role.deleteRole(id))
 
   useEnhancedEffect(() => {
-    // 角色狀態變更，表示切換頁籤，所以重設 page
+    // 角色狀態變更，表示切換頁籤，所以重設 page 和 desc
     setPage(1)
+    setDesc(true)
   }, [status])
 
   useEnhancedEffect(() => {
@@ -66,6 +72,11 @@ const RoleTable = (props: RoleTableProps) => {
       dispatch(setError({ message: errorMessage }))
     }
   }, [data])
+
+  const handleSort = (rule: SortingRule<IRoleDTO>[]): void => {
+    const { desc: newDesc } = rule[0]
+    setDesc(newDesc || false)
+  }
 
   const handleEdit = (data: Row<IRoleDTO>): void => {
     console.log('edit', data.original)
@@ -109,12 +120,14 @@ const RoleTable = (props: RoleTableProps) => {
 
   const { roles, pagination } = data!.right
   const { total } = pagination
+  const pageSize = 10
 
   return (
     <Table<IRoleDTO>
       columns={columns}
       data={roles}
       pagination={{
+        pageSize,
         currentPage: page,
         totalRows: total,
         nextPage: pageCount => {
@@ -131,6 +144,19 @@ const RoleTable = (props: RoleTableProps) => {
             label={data.original.statusText}
           />
         )
+      }}
+      handleSort={handleSort}
+      tableOptions={{
+        initialState: {
+          pageIndex: page - 1,
+          pageSize: pageSize,
+          sortBy: [
+            {
+              id: 'createdAt',
+              desc
+            }
+          ]
+        }
       }}
     />
   )
