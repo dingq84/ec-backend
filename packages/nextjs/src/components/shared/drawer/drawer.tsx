@@ -1,22 +1,24 @@
 import { useState, useRef } from 'react'
-import tw from 'twin.macro'
+import tw, { TwStyle } from 'twin.macro'
 
 // components
 import Collapse from '@/components/shared/collapse'
-import Modal from '@/components/shared/modal'
+import Modal, { ModalProps } from '@/components/shared/modal'
 import Paper from '@/components/shared/paper'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-export interface DrawerProps {
-  open: boolean
+export interface DrawerProps extends ModalProps {
   position?: 'left' | 'top' | 'right' | 'bottom'
   children: React.ReactNode
+  paperProps?: {
+    css: TwStyle[]
+  }
 }
 
 const Drawer = (props: DrawerProps) => {
-  const { open, children, position = 'left' } = props
+  const { open, children, position = 'left', paperProps = { css: [] }, ...restProps } = props
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isCollapseOpen, setIsCollapseOpen] = useState(false)
   const paperRef = useRef(null!)
@@ -38,11 +40,11 @@ const Drawer = (props: DrawerProps) => {
   }, [open])
 
   return (
-    <Modal open={isModalOpen}>
+    <Modal open={isModalOpen} {...restProps}>
       <Collapse
         inProps={isCollapseOpen}
         orientation={orientation}
-        tw="absolute transition-all overflow-y-auto overflow-x-hidden outline-none"
+        tw="absolute transition-all overflow-y-auto outline-none"
         css={[
           position === 'left' && tw`left-0`,
           position === 'right' && tw`right-0`,
@@ -53,7 +55,11 @@ const Drawer = (props: DrawerProps) => {
         <Paper
           ref={paperRef.current}
           tw="rounded-none"
-          css={[isHorizontal === true && tw`h-screen`, isHorizontal === false && tw`w-screen`]}
+          css={[
+            isHorizontal === true && tw`h-screen`,
+            isHorizontal === false && tw`w-screen`,
+            ...paperProps.css
+          ]}
         >
           {children}
         </Paper>

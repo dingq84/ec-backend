@@ -26,7 +26,7 @@ const Paper = forwardRef<HTMLDivElement, PaperProps>(function Paper(props: Paper
   return (
     <div
       ref={ref}
-      tw="bg-white w-full p-4 rounded-lg flex justify-center items-center sm:(w-auto) md:(inline-flex py-8 px-12)"
+      tw="bg-white w-full rounded-lg sm:(w-auto)"
       css={[shadow && shadowCss]}
       {...restProps}
     >

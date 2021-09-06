@@ -120,7 +120,7 @@ const Header = () => {
           open={popoverOpen}
           anchorEl={anchorEl.current}
           onClose={() => togglePopover(false)}
-          paperProps={{ css: [tw`w-32 p-0 shadow-xl flex-col`] }}
+          paperProps={{ css: [tw`w-32 shadow-xl`] }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
           <div tw="h-12 mx-2.5" className="flex-center">

@@ -177,7 +177,7 @@ const Outer = (props: OuterProps) => {
           hiddenBackdrop
           horizontalSpace={40}
           paperProps={{
-            css: [tw`p-0 rounded-l-none bg-transparent`]
+            css: [tw`flex justify-center items-center rounded-l-none bg-transparent`]
           }}
         >
           <div

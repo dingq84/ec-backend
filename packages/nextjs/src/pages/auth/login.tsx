@@ -133,7 +133,7 @@ function Login() {
         position="leftBottom"
       />
 
-      <Paper tw="bg-white height[calc(100% - 64px)] px-12 width[450px] flex-col">
+      <Paper tw="bg-white height[calc(100% - 64px)] px-12 width[450px] flex flex-col justify-center">
         <h1 tw="w-full text-black text-4xl font-semibold leading-normal mb-4">後台管理系統</h1>
         <p tw="text-lg text-gray-3 font-normal w-full">請登入您的使用者帳號及密碼</p>
         <form tw="w-full mt-12 flex flex-col" onSubmit={onSubmit}>

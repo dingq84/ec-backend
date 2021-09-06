@@ -23,7 +23,7 @@ const Dialog = (props: DialogProps) => {
   return (
     <Modal open={open} {...modalProps}>
       <Paper
-        tw="p-0 rounded-lg flex-col justify-start overflow-hidden min-width[412px] min-height[291px] max-height[90%]"
+        tw="rounded-lg flex flex-col justify-start overflow-hidden min-width[412px] min-height[291px] max-height[90%]"
         {...restProps}
       >
         {Header || (
