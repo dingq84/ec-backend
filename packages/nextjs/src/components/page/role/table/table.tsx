@@ -17,9 +17,14 @@ import { ApiKey } from '@/constants/services/api'
 
 // core
 import core from '@ec-backstage/core/src'
-import { IGetRoleOutput } from '@ec-backstage/core/src/role/application/interface/iGetRoleListUseCase'
-import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
+import {
+  IGetRoleListInputPort,
+  IGetRoleOutput
+} from '@ec-backstage/core/src/role/application/interface/iGetRoleListUseCase'
+import { IUpdateRoleStatusInputPort } from '@ec-backstage/core/src/role/application/interface/iUpdateRoleStatusUseCase'
+import { IDeleteRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iDeleteRoleUseCase'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
+import { Status } from '@/role/domain/interface/iRoleEntity'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
@@ -34,7 +39,7 @@ import { setError } from '@/states/global/error'
 interface RoleTableProps {
   openDrawer: (mode: Mode) => void
   name: string
-  status: Status
+  status: IGetRoleListInputPort['status']
 }
 
 const RoleTable = (props: RoleTableProps) => {
@@ -55,11 +60,11 @@ const RoleTable = (props: RoleTableProps) => {
     }
   )
   // update role status
-  const updateStatusMutation = useMutation((data: { id: number; status: Status }) =>
+  const updateStatusMutation = useMutation((data: IUpdateRoleStatusInputPort) =>
     core.role.updateRoleStatus(data)
   )
   // delete role
-  const deleteMutation = useMutation((id: number) => core.role.deleteRole({ id }))
+  const deleteMutation = useMutation(({ id }: IDeleteRoleInputPort) => core.role.deleteRole({ id }))
 
   useEnhancedEffect(() => {
     // 角色狀態變更，表示切換頁籤，所以重設 page 和 desc
@@ -86,7 +91,7 @@ const RoleTable = (props: RoleTableProps) => {
 
   const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
     const id = data.original.id
-    const result = await deleteMutation.mutateAsync(id)
+    const result = await deleteMutation.mutateAsync({ id })
 
     if (isRight(result)) {
       queryClient.invalidateQueries([ApiKey.roleList])
