@@ -11,7 +11,10 @@ import {
   IUpdateRoleStatusInputPort,
   IUpdateRoleStatusUseCase
 } from '@/role/application/interface/iUpdateRoleStatusUseCase'
-import { IDeleteRoleInputPort, IDeleteRoleUseCase } from '../application/interface/iDeleteRoleUseCase'
+import {
+  IDeleteRoleInputPort,
+  IDeleteRoleUseCase
+} from '@/role/application/interface/iDeleteRoleUseCase'
 
 class RoleController implements IRoleController {
   constructor(
@@ -26,7 +29,9 @@ class RoleController implements IRoleController {
     return this.getRoleListUseCase.getRoleList(parameters)
   }
 
-  updateRoleStatus(parameters: IUpdateRoleStatusInputPort): Promise<Either<IErrorOutputPort, void>> {
+  updateRoleStatus(
+    parameters: IUpdateRoleStatusInputPort
+  ): Promise<Either<IErrorOutputPort, void>> {
     return this.updateRoleStatusUseCase.updateRoleStatus(parameters)
   }
 
