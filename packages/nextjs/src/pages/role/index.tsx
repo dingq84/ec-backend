@@ -10,7 +10,7 @@ import RoleDrawer from '@/components/page/role/drawer'
 import RoleTable from '@/components/page/role/table'
 
 // core
-import { Status } from '@ec-backstage/core/src/role/domains/dto/RoleDTO'
+import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
 
 // layouts
 import DefaultLayout from '@/layouts/default'

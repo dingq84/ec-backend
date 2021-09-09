@@ -43,7 +43,6 @@ const Toast = (props: ToastProps) => {
 
   useEnhancedEffect(() => {
     if (autoClose && show) {
-      console.log('tt')
       timer.current = window.setTimeout(() => {
         closeToast()
       }, closeTimeout)

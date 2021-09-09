@@ -4,14 +4,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import SIDEBAR_MENU from '@/constants/components/sidebar'
 
 // cores
-import { IMeDTO } from '@ec-backstage/core/src/auth/domains/dto/MeDTO'
+import { IGetMeOutPort } from '@ec-backstage/core/src/auth/application/interface/iGetMeUseCase'
 
 // types
 import { SidebarMenuType } from '@/types/components/sidebar'
 
 function filterAuthorizedSidebar(
   list: SidebarMenuType[],
-  authorizedList: IMeDTO['menu']
+  authorizedList: IGetMeOutPort['menu']
 ): SidebarMenuType[] {
   return list.reduce((accumulate: SidebarMenuType[], current) => {
     const authorizedTarget = authorizedList.find(item => item.id === current.id)
@@ -37,7 +37,7 @@ function filterAuthorizedSidebar(
   }, [])
 }
 
-interface initialState extends Pick<IMeDTO, 'user' | 'role'> {
+interface initialState extends Pick<IGetMeOutPort, 'user' | 'role'> {
   menu: SidebarMenuType[]
 }
 
@@ -56,7 +56,7 @@ const meSlice = createSlice({
       state.user = {} as initialState['user']
       state.role = {} as initialState['role']
     },
-    setMe: (state, action: PayloadAction<IMeDTO>) => {
+    setMe: (state, action: PayloadAction<IGetMeOutPort>) => {
       const { user, menu, role } = action.payload
       state.role = role
       state.user = user

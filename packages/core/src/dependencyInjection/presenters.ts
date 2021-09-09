@@ -1,22 +1,28 @@
-import { IPresenters } from '@/dependencyInjection/interfaces/IPresenters'
-import { IUseCases } from '@/dependencyInjection/interfaces/IUseCases'
-import AccountPresenter from '@/admin/adapters/presenters/Account'
-import MePresenter from '@/auth/adapters/presenters/Me'
-import PermissionPresenter from '@/permission/adapters/presenters/Permission'
-import RolePresenter from '@/role/adapters/presenters/Role'
-import TokenPresenter from '@/auth/adapters/presenters/Token'
+import AccountErrorPresenter from '@/admin/adapter/AccountErrorPresenter'
+import AuthErrorPresenter from '@/auth/adapter/AuthErrorPresenter'
+import AuthPresenter from '@/auth/adapter/AuthPresenter'
+import ErrorPresenter from '@/common/adapter/ErrorPresenter'
+import PaginationPresenter from '@/common/adapter/PaginationPresenter'
+import { IPresenters } from '@/dependencyInjection/interface/iPresenters'
+import PermissionPresenter from '@/permission/adapter/PermissionPresenter'
+import RoleErrorPresenter from '@/role/adapter/RoleErrorPresenter'
+import RolePresenter from '@/role/adapter/RolePresenter'
 
-function createPresenters(useCases: IUseCases): IPresenters {
+function createPresenters(): IPresenters {
+  const errorPresenter = new ErrorPresenter()
+  const paginationPresenter = new PaginationPresenter()
+
   return {
-    auth: {
-      token: new TokenPresenter(useCases.auth.token),
-      me: new MePresenter(useCases.auth.me)
+    auth: new AuthPresenter(errorPresenter),
+    role: new RolePresenter(errorPresenter, paginationPresenter),
+    permission: new PermissionPresenter(errorPresenter),
+    error: {
+      admin: new AccountErrorPresenter(),
+      auth: new AuthErrorPresenter(),
+      default: errorPresenter,
+      role: new RoleErrorPresenter()
     },
-    admin: {
-      account: new AccountPresenter(useCases.admin.account)
-    },
-    permission: new PermissionPresenter(useCases.permission),
-    role: new RolePresenter(useCases.role)
+    pagination: paginationPresenter
   }
 }
 

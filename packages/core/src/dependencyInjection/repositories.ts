@@ -1,22 +1,16 @@
-import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
-import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
-import AccountRepository from '@/admin/adapters/repositories/Account'
-import MeRepository from '@/auth/adapters/repositories/Me'
-import PermissionRepository from '@/permission/adapters/repositories/Permission'
-import RoleRepository from '@/role/adapters/repositories/Role'
-import TokenRepository from '@/auth/adapters/repositories/Token'
+import AccountRepository from '@/admin/data/AccountRepository'
+import AuthRepository from '@/auth/data/AuthRepository'
+import { IInfrastructures } from '@/dependencyInjection/interface/iInfrastructures'
+import { IRepositories } from '@/dependencyInjection/interface/iRepositories'
+import PermissionRepository from '@/permission/data/PermissionRepository'
+import RoleRepository from '@/role/data/RoleRepository'
 
 function createRepositories(infrastructures: IInfrastructures): IRepositories {
   return {
-    auth: {
-      token: new TokenRepository(infrastructures.storage, infrastructures.http),
-      me: new MeRepository(infrastructures.http)
-    },
-    admin: {
-      account: new AccountRepository(infrastructures.http)
-    },
-    permission: new PermissionRepository(infrastructures.http),
-    role: new RoleRepository(infrastructures.http)
+    admin: new AccountRepository(infrastructures.http),
+    auth: new AuthRepository(infrastructures.http, infrastructures.storage),
+    role: new RoleRepository(infrastructures.http),
+    permission: new PermissionRepository(infrastructures.http)
   }
 }
 

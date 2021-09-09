@@ -17,7 +17,8 @@ import { ApiKey } from '@/constants/services/api'
 
 // core
 import core from '@ec-backstage/core/src'
-import { IRoleDTO, Status } from '@ec-backstage/core/src/role/domains/dto/RoleDTO'
+import { IGetRoleOutput } from '@ec-backstage/core/src/role/application/interface/iGetRoleListUseCase'
+import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
 
 // hooks
@@ -58,7 +59,7 @@ const RoleTable = (props: RoleTableProps) => {
     core.role.updateRoleStatus(data)
   )
   // delete role
-  const deleteMutation = useMutation((id: number) => core.role.deleteRole(id))
+  const deleteMutation = useMutation((id: number) => core.role.deleteRole({ id }))
 
   useEnhancedEffect(() => {
     // 角色狀態變更，表示切換頁籤，所以重設 page 和 desc
@@ -73,17 +74,17 @@ const RoleTable = (props: RoleTableProps) => {
     }
   }, [data])
 
-  const handleSort = (rule: SortingRule<IRoleDTO>[]): void => {
+  const handleSort = (rule: SortingRule<IGetRoleOutput>[]): void => {
     const { desc: newDesc } = rule[0]
     setDesc(newDesc || false)
   }
 
-  const handleEdit = (data: Row<IRoleDTO>): void => {
+  const handleEdit = (data: Row<IGetRoleOutput>): void => {
     console.log('edit', data.original)
     openDrawer('edit')
   }
 
-  const handleDelete = async (data: Row<IRoleDTO>): Promise<void> => {
+  const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
     const id = data.original.id
     const result = await deleteMutation.mutateAsync(id)
 
@@ -96,7 +97,7 @@ const RoleTable = (props: RoleTableProps) => {
     dispatch(setError({ message: errorMessage }))
   }
 
-  const handleStatusChange = async (value: boolean, data: Row<IRoleDTO>): Promise<void> => {
+  const handleStatusChange = async (value: boolean, data: Row<IGetRoleOutput>): Promise<void> => {
     const status = value ? Status.active : Status.inactive
     const id = data.original.id
     const result = await updateStatusMutation.mutateAsync({ id, status })
@@ -123,7 +124,7 @@ const RoleTable = (props: RoleTableProps) => {
   const pageSize = 10
 
   return (
-    <Table<IRoleDTO>
+    <Table<IGetRoleOutput>
       columns={columns}
       data={roles}
       pagination={{

@@ -103,7 +103,7 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
 
   const mutation = useMutation(
     (data: Record<keyof PasswordInitialState, string> & { accountId: number }) =>
-      core.admin.account.updatePassword(data)
+      core.admin.updatePassword(data)
   )
   const passwordKeys = Object.keys(passwordState) as Array<keyof typeof passwordState>
   const anyPasswordIsEmpty = passwordKeys.some(key => passwordState[key].value === '')

@@ -1,10 +1,10 @@
 // core
-import { IRoleDTO } from '@ec-backstage/core/src/role/domains/dto/RoleDTO'
+import { IGetRoleOutput } from '@ec-backstage/core/src/role/application/interface/iGetRoleListUseCase'
 
 // types
 import { CustomColumn } from '@/types/components/table'
 
-const columns: CustomColumn<IRoleDTO>[] = [
+const columns: CustomColumn<IGetRoleOutput>[] = [
   {
     Header: '角色名稱',
     accessor: 'name',

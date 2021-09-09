@@ -7,23 +7,25 @@
 
 export enum StatusCode {
   network = 'client-0001',
-  // 登入
+  // auth
   emptyAccountOrPassword = 'client-0002',
   wrongAccountFormat = 'client-0003',
   wrongAccountOrPassword = '1001',
 
-  // 變更密碼
-  wrongPasswordFormat = 'client-004',
-  passwordIsNotSame = 'client-005',
+  // admin
+  wrongAccountId = 'client-004',
+  wrongPasswordFormat = 'client-005',
+  passwordIsNotSame = 'client-006',
   wrongPassword = '1302',
   newPasswordIsSameAsOldPassword = '1303',
 
-  // 角色
-  wrongStatus = 'client-006',
+  // role
+  wrongRoleId = 'client-0007',
+  wrongRoleStatus = 'client-008',
   roleIsNotExist = '1402',
   roleCanNotUpdate = '1404',
 
-  // 全局
+  // global
   // 帳號已被停權
   accountFrozen = '1003',
   // 成功

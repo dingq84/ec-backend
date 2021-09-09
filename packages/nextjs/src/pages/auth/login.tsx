@@ -66,7 +66,7 @@ function Login() {
   const reduxDispatch = useAppDispatch()
 
   const accountRef = useRef<HTMLInputElement>(null!)
-  const mutation = useMutation((data: LoginData) => core.auth.token.login(data))
+  const mutation = useMutation((data: LoginData) => core.auth.login(data))
 
   const handleInputTypeChange = (): void => {
     if (inputType === 'text') {

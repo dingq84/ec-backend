@@ -1,13 +1,13 @@
-import Http from '@/common/adapters/infrastructures/Http'
-import Storage from '@/common/adapters/infrastructures/Storage'
-import { IInfrastructures } from '@/dependencyInjection/interfaces/IInfrastructures'
+import HttpInfrastructure from '@/common/adapter/HttpInfrastructure'
+import StorageInfrastructure from '@/common/adapter/StorageInfrastructure'
+import { IInfrastructures } from '@/dependencyInjection/interface/iInfrastructures'
 
-function createInfrastructure(): IInfrastructures {
+function createInfrastructures(): IInfrastructures {
   return {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    storage: new Storage((globalThis as any)?.localStorage),
-    http: Http.getInstance()
+    storage: new StorageInfrastructure((globalThis as any)?.localStorage),
+    http: HttpInfrastructure.getInstance()
   }
 }
 
-export default createInfrastructure
+export default createInfrastructures

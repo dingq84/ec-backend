@@ -39,7 +39,7 @@ const Header = () => {
   const userName = name ? `嗨${name}，您好!` : ''
   const accountName = account || ''
   const roleName = role.length ? role[0].name : ''
-  const mutation = useMutation(() => core.auth.token.logout())
+  const mutation = useMutation(() => core.auth.logout())
   const router = useRouter()
 
   const togglePopover = (open: boolean): void => {

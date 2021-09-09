@@ -1,22 +1,47 @@
-import { IUseCases } from '@/dependencyInjection/interfaces/IUseCases'
-import { IRepositories } from '@/dependencyInjection/interfaces/IRepositories'
-import AccountUseCase from '@/admin/domains/useCases/Account'
-import MeUseCase from '@/auth/domains/useCases/Me'
-import PermissionUseCase from '@/permission/domains/useCases/Permission'
-import RoleUseCase from '@/role/domains/useCases/Role'
-import TokenUseCases from '@/auth/domains/useCases/Token'
+import { IPresenters } from '@/dependencyInjection/interface/iPresenters'
+import { IUseCases } from '@/dependencyInjection/interface/iUseCases'
+import { IRepositories } from '@/dependencyInjection/interface/iRepositories'
+import GerPermissionListUseCase from '@/permission/application/GetPermissionListUseCase'
+import GetRoleListUseCase from '@/role/application/GetRoleListUseCase'
+import UpdateRoleStatusUseCase from '@/role/application/UpdateRoleStatusUseCase'
+import DeleteRoleUseCase from '@/role/application/DeleteRoleUseCase'
+import LoginUseCase from '@/auth/application/LoginUseCase'
+import LogoutUseCase from '@/auth/application/LogoutUseCase'
+import RefreshTokenUseCase from '@/auth/application/RefreshTokenUseCase'
+import GetMeUseCase from '@/auth/application/GetMeUseCase'
+import GetAccessTokenUseCase from '@/auth/application/GetAccessTokenUseCase'
+import CheckIsLoggedUseCase from '@/auth/application/CheckIsLoggedUseCase'
+import UpdatePasswordUseCase from '@/admin/application/UpdatePasswordUseCase'
 
-function createUseCases(repositories: IRepositories): IUseCases {
+function createUseCases(repositories: IRepositories, presenters: IPresenters): IUseCases {
+  const refreshToken = new RefreshTokenUseCase(
+    repositories.auth,
+    presenters.auth,
+    presenters.error.auth
+  )
   return {
-    auth: {
-      token: new TokenUseCases(repositories.auth.token),
-      me: new MeUseCase(repositories.auth.me)
-    },
     admin: {
-      account: new AccountUseCase(repositories.admin.account)
+      updatePassword: new UpdatePasswordUseCase(repositories.admin, presenters.error.admin)
     },
-    permission: new PermissionUseCase(repositories.permission),
-    role: new RoleUseCase(repositories.role)
+    auth: {
+      login: new LoginUseCase(repositories.auth, presenters.auth, presenters.error.auth),
+      logout: new LogoutUseCase(repositories.auth, presenters.error.default),
+      refreshToken,
+      getMe: new GetMeUseCase(repositories.auth, presenters.auth),
+      getAccessToken: new GetAccessTokenUseCase(repositories.auth),
+      checkIsLogged: new CheckIsLoggedUseCase(repositories.auth, refreshToken)
+    },
+    role: {
+      getRoleList: new GetRoleListUseCase(repositories.role, presenters.role),
+      updateRoleStatus: new UpdateRoleStatusUseCase(repositories.role, presenters.error.role),
+      deleteRole: new DeleteRoleUseCase(repositories.role, presenters.error.default)
+    },
+    permission: {
+      getPermissionList: new GerPermissionListUseCase(
+        repositories.permission,
+        presenters.permission
+      )
+    }
   }
 }
 
