@@ -10,7 +10,7 @@ export enum StatusCode {
   // auth
   emptyAccountOrPassword = 'client-0002',
   wrongAccountFormat = 'client-0003',
-  wrongAccountOrPassword = '1001',
+  wrongAccountOrPassword = '1101',
 
   // admin
   wrongAccountId = 'client-004',

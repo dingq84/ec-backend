@@ -38,7 +38,14 @@ class RolePresenter implements IRolePresenter {
           either.map((response: { roles: IRoleEntity[]; pagination: IPaginationInputPort }) => ({
             ...response,
             roles: response.roles.map(role => ({
-              ...role,
+              id: role.id,
+              name: role.name,
+              status: role.status,
+              permissions: role.permissions,
+              createdUser: role.createdUser,
+              createdAt: role.createdAt,
+              updatedUser: role.updatedUser,
+              updatedAt: role.updatedAt,
               statusText: this.getStatusText(role.status)
             }))
           }))

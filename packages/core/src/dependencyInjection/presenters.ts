@@ -11,16 +11,18 @@ import RolePresenter from '@/role/adapter/RolePresenter'
 function createPresenters(): IPresenters {
   const errorPresenter = new ErrorPresenter()
   const paginationPresenter = new PaginationPresenter()
+  const authErrorPresenter = new AuthErrorPresenter()
+  const roleErrorPresenter = new RoleErrorPresenter()
 
   return {
-    auth: new AuthPresenter(errorPresenter),
-    role: new RolePresenter(errorPresenter, paginationPresenter),
+    auth: new AuthPresenter(authErrorPresenter),
+    role: new RolePresenter(roleErrorPresenter, paginationPresenter),
     permission: new PermissionPresenter(errorPresenter),
     error: {
       admin: new AccountErrorPresenter(),
-      auth: new AuthErrorPresenter(),
+      auth: authErrorPresenter,
       default: errorPresenter,
-      role: new RoleErrorPresenter()
+      role: roleErrorPresenter
     },
     pagination: paginationPresenter
   }

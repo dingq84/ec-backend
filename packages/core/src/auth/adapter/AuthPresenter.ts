@@ -32,7 +32,13 @@ class AuthPresenter implements IAuthPresenter {
 
   getMe(data: Either<IErrorInputPort, IMeEntity>): Either<IErrorOutputPort, IGetMeOutPort> {
     return this.errorPresenter.present<IGetMeOutPort>(
-      flow(either.map((meEntity: IMeEntity) => meEntity))(data)
+      flow(
+        either.map((meEntity: IMeEntity) => ({
+          menu: meEntity.menu,
+          role: meEntity.role,
+          user: meEntity.user
+        }))
+      )(data)
     )
   }
 }
