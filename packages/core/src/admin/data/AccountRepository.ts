@@ -1,7 +1,7 @@
 import { IHttpInfrastructure, ResponseResult } from '@/common/adapter/interface/iHttpInfrastructure'
 import {
   IAccountRepository,
-  UpdatePasswordParameter
+  IAccountRepositoryParameters
 } from '@/admin/application/repository-interface/iAccountRepository'
 import { Either } from 'fp-ts/lib/Either'
 import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
@@ -13,7 +13,7 @@ class AccountRepository implements IAccountRepository {
   constructor(private readonly http: IHttpInfrastructure) {}
 
   async updatePassword(
-    parameters: UpdatePasswordParameter
+    parameters: IAccountRepositoryParameters['updatePassword']
   ): Promise<Either<IErrorInputPort, void>> {
     const result = await this.http.request<void>({
       url: ApiUrl.updatePassword,

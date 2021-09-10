@@ -8,7 +8,7 @@ import ReactDatePicker, { registerLocale, ReactDatePickerProps } from 'react-dat
 import zhTw from 'date-fns/locale/zh-TW'
 
 // components
-import TextField from '@/components/shared/textField'
+// import TextField from '@/components/shared/textField'
 
 // styles
 import 'react-datepicker/dist/react-datepicker.css'
@@ -20,11 +20,11 @@ registerLocale('tw', zhTw)
 
 export interface DatePickerProps extends Omit<ReactDatePickerProps, 'onChange'> {
   onChange?: (date: Date) => void
-  inputProps?: TextFieldProps
+  inputProps?: Omit<TextFieldProps, 'onClear'>
 }
 
 const DatePicker = (props: DatePickerProps) => {
-  const { onChange, inputProps = {}, ...restProps } = props
+  const { onChange, inputProps, ...restProps } = props
   const [date, setDate] = useState<Date>()
 
   const handleChange = (date: Date) => {
@@ -42,7 +42,7 @@ const DatePicker = (props: DatePickerProps) => {
       dateFormat="yyyy/MM/dd"
       selected={date}
       onChange={handleChange}
-      customInput={<TextField {...inputProps} onClear={() => setDate(undefined)} />}
+      // customInput={<TextField {...inputProps} onClear={() => setDate(undefined)} />}
       {...restProps}
     />
   )

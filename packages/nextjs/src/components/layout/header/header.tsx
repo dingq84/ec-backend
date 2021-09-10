@@ -35,12 +35,12 @@ const Header = () => {
   const [successDialogOpen, setSuccessDialogOpen] = useState(false)
   const dispatch = useAppDispatch()
   const { user, role } = useAppSelector(state => state.me)
+  const mutation = useMutation(() => core.auth.logout())
+  const router = useRouter()
   const { name, account } = user
   const userName = name ? `嗨${name}，您好!` : ''
   const accountName = account || ''
   const roleName = role.length ? role[0].name : ''
-  const mutation = useMutation(() => core.auth.logout())
-  const router = useRouter()
 
   const togglePopover = (open: boolean): void => {
     setPopoverOpen(open)

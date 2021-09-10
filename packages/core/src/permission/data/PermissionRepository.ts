@@ -13,15 +13,16 @@ class PermissionRepository implements IPermissionRepository {
   constructor(private readonly http: IHttpInfrastructure) {}
 
   async getPermissionList(): Promise<Either<IErrorInputPort, IPermissionEntity[]>> {
-    const result = await this.http.request<IPermissionData[]>({
+    const result = await this.http.request<{ permission: IPermissionData[] }>({
       url: ApiUrl.permissionList,
       method: 'GET',
-      withAuth: true
+      withAuth: true,
+      data: {}
     })
 
     return flow(
-      either.map((response: ResponseResult<IPermissionData[]>) => {
-        return response.data.map(role => new PermissionEntity(role))
+      either.map((response: ResponseResult<{ permission: IPermissionData[] }>) => {
+        return response.data.permission.map(permission => new PermissionEntity(permission))
       })
     )(result)
   }

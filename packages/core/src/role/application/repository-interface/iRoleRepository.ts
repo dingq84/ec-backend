@@ -19,6 +19,11 @@ export interface IRoleRepositoryParameters {
   deleteRole: {
     id: number
   }
+  createRole: {
+    name: string
+    status: Status
+    permissions: number[]
+  }
 }
 export interface IRoleRepository {
   getRoleList(
@@ -29,5 +34,8 @@ export interface IRoleRepository {
   ): Promise<Either<IErrorInputPort, void>>
   deleteRole(
     parameters: IRoleRepositoryParameters['deleteRole']
+  ): Promise<Either<IErrorInputPort, void>>
+  createRole(
+    parameters: IRoleRepositoryParameters['createRole']
   ): Promise<Either<IErrorInputPort, void>>
 }

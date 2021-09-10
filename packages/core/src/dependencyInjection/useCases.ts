@@ -12,6 +12,7 @@ import GetMeUseCase from '@/auth/application/GetMeUseCase'
 import GetAccessTokenUseCase from '@/auth/application/GetAccessTokenUseCase'
 import CheckIsLoggedUseCase from '@/auth/application/CheckIsLoggedUseCase'
 import UpdatePasswordUseCase from '@/admin/application/UpdatePasswordUseCase'
+import CreateRoleUseCase from '@/role/application/CreateRoleUseCase'
 
 function createUseCases(repositories: IRepositories, presenters: IPresenters): IUseCases {
   const refreshToken = new RefreshTokenUseCase(
@@ -34,7 +35,8 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
     role: {
       getRoleList: new GetRoleListUseCase(repositories.role, presenters.role),
       updateRoleStatus: new UpdateRoleStatusUseCase(repositories.role, presenters.error.role),
-      deleteRole: new DeleteRoleUseCase(repositories.role, presenters.error.default)
+      deleteRole: new DeleteRoleUseCase(repositories.role, presenters.error.role),
+      createRole: new CreateRoleUseCase(repositories.role, presenters.error.role)
     },
     permission: {
       getPermissionList: new GerPermissionListUseCase(

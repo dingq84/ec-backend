@@ -1,18 +1,21 @@
-import { ChangeEvent } from 'hoist-non-react-statics/node_modules/@types/react'
+import { ChangeEvent, InputHTMLAttributes } from 'react'
 import tw from 'twin.macro'
 
-export interface RadioProps {
+export interface RadioProps<T extends InputHTMLAttributes<HTMLInputElement>['value'] = undefined> {
   checked: boolean
-  onChange: (checked: boolean) => void
+  onChange: (checked: string) => void
   label?: string
   disabled?: boolean
+  value?: T
 }
 
-const Radio = (props: RadioProps) => {
-  const { checked, onChange, label, disabled = false } = props
+const Radio = <T extends InputHTMLAttributes<HTMLInputElement>['value'] = undefined>(
+  props: RadioProps<T>
+) => {
+  const { checked, onChange, label, value, disabled = false } = props
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    onChange(event.target.checked)
+    onChange(event.target.value)
   }
 
   return (
@@ -37,6 +40,7 @@ const Radio = (props: RadioProps) => {
         checked={checked}
         onChange={handleChange}
         tw="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer"
+        value={value}
       />
     </div>
   )

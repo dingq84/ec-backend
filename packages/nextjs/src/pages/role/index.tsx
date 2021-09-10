@@ -6,9 +6,9 @@ import Button from '@/components/shared/button'
 import Paper from '@/components/shared/paper'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
 import TextField from '@/components/shared/textField'
+import Toast, { ToastProps } from '@/components/shared/toast'
 import RoleDrawer from '@/components/page/role/drawer'
 import RoleTable from '@/components/page/role/table'
-
 // core
 import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
 
@@ -66,6 +66,11 @@ const Role = () => {
   const [status, setStatus] = useState<Status>(-1)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [drawerMode, setDrawerMode] = useState<Mode>('view')
+  const [toastProps, setToastProps] = useState<Pick<ToastProps, 'level' | 'message' | 'show'>>({
+    level: 'warning',
+    message: '',
+    show: false
+  })
   const handleSearch = (newKeyword: string): void => {
     setKeyword(newKeyword)
   }
@@ -79,11 +84,19 @@ const Role = () => {
     setDrawerMode(mode)
   }
 
+  const closeDrawer = (): void => {
+    setDrawerOpen(false)
+  }
+
+  const handleToastProps = (newToastProps: typeof toastProps): void => {
+    setToastProps({ ...toastProps, ...newToastProps })
+  }
+
   return (
     <>
       <div tw="flex items-center justify-between">
         <h1 tw="text-blue-gray-3 font-medium text-2xl">角色權限管理</h1>
-        <Button className="btn" label="創建角色" />
+        <Button className="btn" label="創建角色" onClick={() => openDrawer('create')} />
       </div>
 
       <Tabs>
@@ -109,7 +122,14 @@ const Role = () => {
         </TabPanel>
       </Tabs>
 
-      <RoleDrawer mode={drawerMode} open={drawerOpen} />
+      <RoleDrawer
+        mode={drawerMode}
+        open={drawerOpen}
+        close={closeDrawer}
+        handleToast={handleToastProps}
+      />
+
+      <Toast {...toastProps} close={() => setToastProps({ ...toastProps, show: false })} />
     </>
   )
 }

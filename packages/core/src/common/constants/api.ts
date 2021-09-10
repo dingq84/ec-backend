@@ -13,5 +13,6 @@ export enum ApiUrl {
 
   // role
   roleList = 'role/list',
-  roleStatus = 'role/status'
+  roleStatus = 'role/status',
+  createRole = 'role/create'
 }

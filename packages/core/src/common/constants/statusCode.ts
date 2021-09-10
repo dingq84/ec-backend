@@ -22,6 +22,9 @@ export enum StatusCode {
   // role
   wrongRoleId = 'client-0007',
   wrongRoleStatus = 'client-008',
+  wrongRoleNameFormat = 'client-009',
+  permissionIsEmpty = 'client-010',
+  roleNameIsExist = '1401',
   roleIsNotExist = '1402',
   roleCanNotUpdate = '1404',
 

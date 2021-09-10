@@ -6,6 +6,13 @@ import { IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
 export interface IGetPermissionListOutputPort {
   id: number
   name: string
+  value: boolean
+  children: {
+    id: number
+    name: string
+    parentId: number
+    value: boolean
+  }[]
 }
 
 export interface IGetPermissionListUseCase {

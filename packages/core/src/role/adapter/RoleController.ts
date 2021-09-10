@@ -15,12 +15,17 @@ import {
   IDeleteRoleInputPort,
   IDeleteRoleUseCase
 } from '@/role/application/interface/iDeleteRoleUseCase'
+import {
+  ICreateRoleInputPort,
+  ICreateRoleUseCase
+} from '../application/interface/iCreateRoleUseCase'
 
 class RoleController implements IRoleController {
   constructor(
     private readonly getRoleListUseCase: IGetRoleListUseCase,
     private readonly updateRoleStatusUseCase: IUpdateRoleStatusUseCase,
-    private readonly deleteRoleUseCase: IDeleteRoleUseCase
+    private readonly deleteRoleUseCase: IDeleteRoleUseCase,
+    private readonly createRoleUseCase: ICreateRoleUseCase
   ) {}
 
   getRoleList(
@@ -37,6 +42,10 @@ class RoleController implements IRoleController {
 
   deleteRole(parameters: IDeleteRoleInputPort): Promise<Either<IErrorOutputPort, void>> {
     return this.deleteRoleUseCase.deleteRole(parameters)
+  }
+
+  createRole(parameters: ICreateRoleInputPort): Promise<Either<IErrorOutputPort, void>> {
+    return this.createRoleUseCase.createRole(parameters)
   }
 }
 

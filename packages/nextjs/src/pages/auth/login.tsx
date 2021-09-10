@@ -15,6 +15,7 @@ import Toast from '@/components/shared/toast'
 // core
 import core from '@ec-backstage/core/src'
 import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
+import { ILoginInputPort } from '@ec-backstage/core/src/auth/application/interface/iLoginUseCase'
 
 // layouts
 import LoginLayout from '@/layouts/login'
@@ -23,19 +24,14 @@ import LoginLayout from '@/layouts/login'
 import { useAppDispatch } from '@/states/global/hooks'
 import { setError } from '@/states/global/error'
 
-interface LoginData {
-  account: string
-  password: string
-}
-
 interface ErrorState {
   type: 'local' | 'global'
   message: string
-  target: Array<keyof LoginData>
+  target: Array<keyof ILoginInputPort>
 }
 
 type Action =
-  | { type: 'localError'; payload: { message: string; target: Array<keyof LoginData> } }
+  | { type: 'localError'; payload: { message: string; target: Array<keyof ILoginInputPort> } }
   | { type: 'globalError' }
   | { type: 'reset' }
 
@@ -61,12 +57,12 @@ const reducer = (state: ErrorState, action: Action): ErrorState => {
 function Login() {
   const router = useRouter()
   const [inputType, setInputType] = useState<'text' | 'password'>('password')
-  const [data, setData] = useState<LoginData>({ account: '', password: '' })
+  const [data, setData] = useState<ILoginInputPort>({ account: '', password: '' })
   const [errors, dispatch] = useReducer(reducer, initialValue)
   const reduxDispatch = useAppDispatch()
 
   const accountRef = useRef<HTMLInputElement>(null!)
-  const mutation = useMutation((data: LoginData) => core.auth.login(data))
+  const mutation = useMutation((data: ILoginInputPort) => core.auth.login(data))
 
   const handleInputTypeChange = (): void => {
     if (inputType === 'text') {
@@ -80,7 +76,7 @@ function Login() {
     dispatch({ type: 'reset' })
   }
 
-  const handleChange = (value: string, type: keyof LoginData): void => {
+  const handleChange = (value: string, type: keyof ILoginInputPort): void => {
     setData(data => ({ ...data, [type]: value }))
     resetError()
   }
@@ -110,7 +106,7 @@ function Login() {
         StatusCode.wrongAccountOrPassword
       ].includes(statusCode)
     ) {
-      const target: Array<keyof LoginData> = ['account']
+      const target: Array<keyof ILoginInputPort> = ['account']
       if (statusCode !== StatusCode.wrongAccountFormat) {
         target.push('password')
       }

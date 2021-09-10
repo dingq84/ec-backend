@@ -8,10 +8,7 @@ import { IRoleEntity, Status } from '@/role/domain/interface/iRoleEntity'
 import { IErrorPresenter } from '@/common/adapter/interface/iErrorPresenter'
 import { IPaginationPresenter } from '@/common/adapter/interface/iPaginationPresenter'
 import { IErrorInputPort, IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
-import {
-  IPaginationInputPort,
-  IPaginationOutputPort
-} from '@/common/application/interface/iPaginationUseCase'
+import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
 
 class RolePresenter implements IRolePresenter {
   constructor(
@@ -30,7 +27,7 @@ class RolePresenter implements IRolePresenter {
   }
 
   getRoleList(
-    data: Either<IErrorInputPort, { roles: IRoleEntity[]; pagination: IPaginationOutputPort }>
+    data: Either<IErrorInputPort, { roles: IRoleEntity[]; pagination: IPaginationInputPort }>
   ): Either<IErrorOutputPort, IGetRoleListOutputPort> {
     return this.paginationPresenter.present(
       this.errorPresenter.present<IGetRoleListOutputPort>(

@@ -12,6 +12,12 @@ class RoleErrorPresenter extends ErrorPresenter {
         return '角色不存在'
       case StatusCode.roleCanNotUpdate:
         return '角色無法被編輯或刪除'
+      case StatusCode.wrongRoleNameFormat:
+        return '角色名稱不得超過10個字。'
+      case StatusCode.permissionIsEmpty:
+        return '角色名稱不得為空'
+      case StatusCode.roleNameIsExist:
+        return '角色名稱不得重複'
       default:
         return super.convertErrorToViewMessage(statusCode)
     }

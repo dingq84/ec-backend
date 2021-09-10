@@ -17,7 +17,17 @@ class PermissionPresenter implements IPermissionPresenter {
     return this.errorPresenter.present<IGetPermissionListOutputPort[]>(
       flow(
         either.map((response: IPermissionEntity[]) =>
-          response.map(permission => ({ id: permission.id, name: permission.name }))
+          response.map(permission => ({
+            id: permission.id,
+            name: permission.name,
+            children: permission.children.map(child => ({
+              id: child.id,
+              name: child.name,
+              parentId: child.parentId,
+              value: false
+            })),
+            value: false
+          }))
         )
       )(data)
     )

@@ -33,6 +33,8 @@ const Adornment = () => (
       start: <FontAwesomeIcon icon={faSearch} />,
       end: <FontAwesomeIcon icon={faEye} />
     }}
+    value=""
+    onChange={(_: string) => {}}
   />
 )
 

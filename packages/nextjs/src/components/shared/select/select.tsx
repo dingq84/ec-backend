@@ -7,18 +7,18 @@
  */
 
 import { forwardRef, useState, useRef } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
 
 // components
 import Popover from '@/components/shared/popover'
-import Tag from '@/components/shared/tag'
-import TextField, { TextFieldProps } from '@/components/shared/textField'
+// import Tag from '@/components/shared/tag'
+// import TextField, { TextFieldProps } from '@/components/shared/textField'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-import useForkRef from '@/hooks/useForkRef'
+// import useForkRef from '@/hooks/useForkRef'
 
 // types
 import type { Option } from '@/types/components/input'
@@ -28,20 +28,20 @@ export interface SelectProps {
   value?: null | Option
   onChange?: (value: Option | Option[]) => void
   multiple?: boolean
-  inputProps?: TextFieldProps
+  // inputProps?: TextFieldProps
 }
 
-const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, ref) {
-  const { options, onChange, value: initialValue = '', multiple = false, inputProps = {} } = props
+const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props) {
+  const { options, onChange, value: initialValue = '', multiple = false } = props
   const [isOpen, setIsOpen] = useState(false)
-  const [value, setValue] = useState('') // 顯示在 input 上
+  // const [value, setValue] = useState('') // 顯示在 input 上
   const [selected, setSelected] = useState<Option[]>([]) // 實際控制的選項
   const inputRef = useRef<HTMLDivElement>(null)
-  const handleRef = useForkRef(ref, inputRef)
+  // const handleRef = useForkRef(ref, inputRef)
 
   useEnhancedEffect(() => {
     if (typeof initialValue === 'object' && initialValue !== null) {
-      setValue(initialValue.value)
+      // setValue(initialValue.value)
       setSelected([initialValue])
     }
   }, [initialValue])
@@ -53,33 +53,33 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
     }
   }, [selected])
 
-  const openPopover = (): void => setIsOpen(true)
+  // const openPopover = (): void => setIsOpen(true)
 
   const closePopover = (): void => setIsOpen(false)
 
   const handleClick = (option: Option): void => {
-    const newValue = multiple ? '' : option.value
+    // const newValue = multiple ? '' : option.value
     const newSelected = multiple ? [...selected, option] : [option]
 
-    setValue(newValue)
+    // setValue(newValue)
     setSelected(newSelected)
 
     closePopover()
   }
 
-  const handleRemove = (target: Option) => {
-    const newSelected = selected.filter(item => item.key !== target.key)
-    setSelected(newSelected)
-  }
+  // const handleRemove = (target: Option) => {
+  //   const newSelected = selected.filter(item => item.key !== target.key)
+  //   setSelected(newSelected)
+  // }
 
-  const handleClear = () => {
-    setValue('')
-    setSelected([])
-  }
+  // const handleClear = () => {
+  //   setValue('')
+  //   setSelected([])
+  // }
 
   return (
     <div tw="w-full">
-      <TextField
+      {/* <TextField
         {...inputProps}
         ref={handleRef}
         readOnly
@@ -108,7 +108,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
           )
         }}
         value={value}
-      />
+      /> */}
       <Popover
         open={isOpen}
         onClose={closePopover}

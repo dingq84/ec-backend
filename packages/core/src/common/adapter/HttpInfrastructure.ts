@@ -42,7 +42,7 @@ class Http implements IHttpInfrastructure {
       config.headers = {}
     }
 
-    if (!config.headers || !config.headers['Content-Type']) {
+    if (!config.headers['Content-Type']) {
       config.headers['Content-Type'] = 'application/json;charset=UTF-8'
     }
 

@@ -18,6 +18,9 @@ enum ApiKey {
   isLogged = 'isLogged',
   refreshToken = 'refreshToken',
 
+  // permission
+  permissionList = 'permissionList',
+
   // role
   roleList = 'roleList'
 }

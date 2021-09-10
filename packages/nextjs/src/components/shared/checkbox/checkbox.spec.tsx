@@ -20,16 +20,6 @@ describe('test <Checkbox />', () => {
     expect(input).toHaveAttribute('disabled')
   })
 
-  it('should execute onChange function when click checkbox', () => {
-    const mockChange = jest.fn()
-    const { container } = render(<Checkbox value={false} onChange={mockChange} />)
-    userEvent.click(container.querySelector('input')!)
-    expect(mockChange).toHaveBeenCalledTimes(1)
-    expect(mockChange).toHaveBeenCalledWith(true)
-    userEvent.click(container.querySelector('input')!)
-    expect(mockChange).toHaveBeenCalledTimes(2)
-    expect(mockChange).toHaveBeenCalledWith(false)
-  })
   // 這邊有個問題，react-testing-library 在 checkbox is disabled，仍會觸發 onChange
   // 以下會 issue 連結，雖然是快兩年前，但問題似乎依舊存在，改用推薦的套件處理 @testing-library/user-event
   // https://github.com/testing-library/react-testing-library/issues/275

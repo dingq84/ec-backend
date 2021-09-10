@@ -9,7 +9,9 @@ describe('test <TextField />', () => {
     name: 'test',
     label: 'test label',
     id: 'test-label',
-    placeholder: 'please enter something'
+    placeholder: 'please enter something',
+    value: '',
+    onChange: (_: string) => {}
   }
   describe('test default render', () => {
     it('the id of the input should be "test" ', () => {

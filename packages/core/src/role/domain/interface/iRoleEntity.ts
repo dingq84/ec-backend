@@ -14,7 +14,7 @@ export interface IRoleData {
   readonly createdAt: string
   readonly updatedUser: string
   readonly updatedAt: string
-  readonly permissions: IPermissionData[]
+  readonly permissions: Pick<IPermissionData, 'id' | 'name'>[]
 }
 
 export interface IRoleEntity {
@@ -25,5 +25,5 @@ export interface IRoleEntity {
   readonly createdAt: string
   readonly updatedUser: string
   readonly updatedAt: string
-  readonly permissions: IPermissionEntity[]
+  readonly permissions: Pick<IPermissionEntity, 'id' | 'name'>[]
 }

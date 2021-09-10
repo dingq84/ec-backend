@@ -1,27 +1,16 @@
-/**
- * @author Dean Chen 2021-04-28
- * Checkbox 使用 svg 達到動畫的效果，但無法使用 font awesome 處理，因此額外使用 svg
- * 這邊使用寫 sass 原因為 tailwind 沒有太多 stroke 的設定，
- * 而且有一個 :checked 的變化，覺得透過 js 驅動有點笨拙，
- * 因此本 component 使用 sass 處理
- * 有 conditional 的部分才會透過 twin.macro - css 處理
- *
- * @modified
- * [Ding.Chen-2021-06-22]: 重構 checkbox，取消原本的 svg 動畫，改用較為簡單方式處理
- */
-
-import { ChangeEvent, useState, forwardRef } from 'react'
+import { ChangeEvent, forwardRef, HTMLAttributes } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faMinus } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
-
-// hooks
-import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // types
 import type { InputBasicType } from '@/types/components/input'
 
-export interface CheckboxProps extends InputBasicType<boolean> {}
+export interface CheckboxProps
+  extends InputBasicType<boolean>,
+    Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  partialChecked?: boolean // 如果有子層有勾選，出現勾選一半得樣式
+}
 
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
   props: CheckboxProps,
@@ -34,56 +23,52 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
     error = false,
     disabled = false,
     labelPosition = 'left',
-    value: initialValue = false,
+    value,
+    partialChecked = false,
     ...restProps
   } = props
-  const [value, setValue] = useState(initialValue)
-
-  useEnhancedEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setValue(event.target.checked)
-
-    if (onChange) {
-      onChange(event.target.checked)
-    }
+    onChange(event.target.checked)
   }
 
   return (
     <div
       className="flex-center"
-      tw="space-x-1.5 inline-flex"
+      tw="space-x-1.5 inline-flex items-center relative"
       css={[labelPosition === 'top' && tw`flex-col space-x-0 space-y-0.5 items-start`]}
+      {...restProps}
     >
+      <div tw="relative font-size[0px]">
+        <span
+          tw="inline-block w-3 h-3 leading-none bg-transparent border border-solid border-primary rounded-sm"
+          css={[
+            (partialChecked || value) && tw`bg-primary`,
+            error && tw`border-red-500`,
+            disabled && tw`border-blue-gray-4`
+          ]}
+        ></span>
+        <FontAwesomeIcon
+          tw="w-2! h-2! text-white opacity-0 transition-opacity duration-300 absolute top-0.5 left-0.5"
+          css={[(partialChecked || value) && tw`opacity-100`, disabled && tw`text-gray-1`]}
+          icon={partialChecked && !value ? faMinus : faCheck}
+        />
+      </div>
       {label && (
-        <label htmlFor={id} tw="text-sm text-black">
+        <label htmlFor={id} tw="ml-2 text-sm text-black font-normal">
           {label}
         </label>
       )}
-      <div tw="relative font-size[0px]">
-        <span
-          tw="inline-block w-4 h-4 leading-none bg-transparent border border-solid border-gray-3 rounded"
-          css={[error && tw`border-red-500`]}
-        ></span>
-        <FontAwesomeIcon
-          tw="text-xs text-primary opacity-0 transition-opacity duration-300 absolute top-0.5 left-0.5"
-          css={[value && tw`opacity-100`, disabled && tw`text-gray-1`]}
-          icon={faCheck}
-        />
-        <input
-          ref={ref}
-          id={id}
-          tw="absolute top-0 left-0 w-4 h-4 z-10 opacity-0 hover:(cursor-pointer)"
-          css={[disabled && tw`hover:(cursor-not-allowed)`]}
-          type="checkbox"
-          disabled={disabled}
-          checked={value}
-          onChange={handleChange}
-          {...restProps}
-        />
-      </div>
+      <input
+        ref={ref}
+        id={id}
+        tw="absolute top-0 left-0 w-full h-full z-10 opacity-0 hover:(cursor-pointer)"
+        css={[disabled && tw`hover:(cursor-not-allowed)`]}
+        type="checkbox"
+        disabled={disabled}
+        checked={value}
+        onChange={handleChange}
+      />
     </div>
   )
 })

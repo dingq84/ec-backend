@@ -22,7 +22,7 @@ export interface IGetRoleOutput {
   createdAt: string
   updatedUser: string
   updatedAt: string
-  permissions: IGetPermissionListOutputPort[]
+  permissions: Pick<IGetPermissionListOutputPort, 'id' | 'name'>[]
 }
 
 export interface IGetRoleListOutputPort {

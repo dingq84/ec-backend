@@ -2,16 +2,18 @@ import { either } from 'fp-ts'
 import { flow } from 'fp-ts/lib/function'
 import { Either } from 'fp-ts/lib/Either'
 
-import { IAuthRepository } from '@/auth/application/repository-interface/iAuthRepository'
-import { ILoginInputPort } from '@/auth/application/interface/iLoginUseCase'
+import {
+  IAuthRepository,
+  IAuthRepositoryParameters
+} from '@/auth/application/repository-interface/iAuthRepository'
 import TokenEntity from '@/auth/domain/TokenEntity'
 import { ITokenData, ITokenEntity } from '@/auth/domain/interface/iToken'
+import { IMeData, IMeEntity } from '@/auth/domain/interface/iMe'
+import MeEntity from '@/auth/domain/MeEntity'
 import { IHttpInfrastructure, ResponseResult } from '@/common/adapter/interface/iHttpInfrastructure'
 import { IStorageInfrastructure } from '@/common/adapter/interface/iStorageInfrastructure'
 import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
 import { ApiUrl } from '@/common/constants/api'
-import { IMeData, IMeEntity } from '../domain/interface/iMe'
-import MeEntity from '../domain/MeEntity'
 
 class AuthRepository implements IAuthRepository {
   constructor(
@@ -19,7 +21,9 @@ class AuthRepository implements IAuthRepository {
     private readonly storage: IStorageInfrastructure
   ) {}
 
-  async login(parameter: ILoginInputPort): Promise<Either<IErrorInputPort, ITokenEntity>> {
+  async login(
+    parameter: IAuthRepositoryParameters['login']
+  ): Promise<Either<IErrorInputPort, ITokenEntity>> {
     const result = await this.http.request<ITokenData>({
       url: ApiUrl.login,
       method: 'POST',
@@ -41,14 +45,16 @@ class AuthRepository implements IAuthRepository {
     return flow(either.map((response: ResponseResult<void>) => response.data))(result)
   }
 
-  async refreshToken(): Promise<Either<IErrorInputPort, ITokenEntity>> {
-    const refreshToken = await this.getRefreshToken()
+  async refreshToken(
+    parameters: IAuthRepositoryParameters['refreshToken']
+  ): Promise<Either<IErrorInputPort, ITokenEntity>> {
     const result = await this.http.request<ITokenData>({
       method: 'POST',
       url: ApiUrl.refreshToken,
       headers: {
-        Authorization: refreshToken
-      }
+        Authorization: parameters.refreshToken
+      },
+      data: {}
     })
 
     return flow(
@@ -60,7 +66,8 @@ class AuthRepository implements IAuthRepository {
     const result = await this.http.request<IMeData>({
       url: ApiUrl.me,
       method: 'GET',
-      withAuth: true
+      withAuth: true,
+      data: {}
     })
 
     return flow(either.map((response: ResponseResult<IMeData>) => new MeEntity(response.data)))(

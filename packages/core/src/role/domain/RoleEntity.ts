@@ -1,8 +1,9 @@
-import { IRoleEntity, IRoleData, Status } from '@/role/domain/interface/iRoleEntity'
-import { IPermissionEntity } from '@/permission/domain/interface/iPermissionEntity'
 import Validator from '@/common/domain/Validator'
 import { StatusCode } from '@/common/constants/statusCode'
 import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
+import { IPermissionEntity } from '@/permission/domain/interface/iPermissionEntity'
+import { IRoleEntity, IRoleData, Status } from '@/role/domain/interface/iRoleEntity'
+import { IRoleRepositoryParameters } from '@/role/application/repository-interface/iRoleRepository'
 
 class RoleEntity implements IRoleEntity {
   private readonly _id: number
@@ -12,7 +13,7 @@ class RoleEntity implements IRoleEntity {
   private readonly _createdAt: string
   private readonly _updatedUser: string
   private readonly _updatedAt: string
-  private readonly _permissions: IPermissionEntity[]
+  private readonly _permissions: Pick<IPermissionEntity, 'id' | 'name'>[]
 
   constructor(parameters: IRoleData) {
     this._id = parameters.id
@@ -53,7 +54,7 @@ class RoleEntity implements IRoleEntity {
     return this._updatedAt
   }
 
-  get permissions(): IPermissionEntity[] {
+  get permissions(): Pick<IPermissionEntity, 'id' | 'name'>[] {
     return this._permissions
   }
 
@@ -95,6 +96,46 @@ class RoleEntity implements IRoleEntity {
         statusMessage,
         data: {
           id: statusMessage
+        }
+      }
+    }
+    return true
+  }
+
+  static createRoleValidate(
+    parameters: IRoleRepositoryParameters['createRole']
+  ): IErrorInputPort | true {
+    const { name, permissions } = parameters
+
+    if (name.length === 0) {
+      const statusMessage = '角色名稱不得為空'
+      return {
+        statusCode: StatusCode.wrongRoleNameFormat,
+        statusMessage,
+        data: {
+          name: statusMessage
+        }
+      }
+    }
+
+    if (name.length > 10) {
+      const statusMessage = '角色名稱不得超過10個字'
+      return {
+        statusCode: StatusCode.wrongRoleNameFormat,
+        statusMessage,
+        data: {
+          name: statusMessage
+        }
+      }
+    }
+
+    if (permissions.length === 0) {
+      const statusMessage = '角色權限不得為空'
+      return {
+        statusCode: StatusCode.permissionIsEmpty,
+        statusMessage,
+        data: {
+          permissions: statusMessage
         }
       }
     }
