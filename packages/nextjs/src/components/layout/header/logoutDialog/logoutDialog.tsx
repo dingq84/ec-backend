@@ -3,6 +3,7 @@ import 'twin.macro'
 // components
 import Button from '@/components/shared/button'
 import Dialog from '@/components/shared/dialog'
+
 interface LogoutDialogProps {
   open: boolean
   close: () => void

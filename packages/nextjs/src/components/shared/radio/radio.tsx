@@ -39,8 +39,9 @@ const Radio = <T extends InputHTMLAttributes<HTMLInputElement>['value'] = undefi
         type="radio"
         checked={checked}
         onChange={handleChange}
-        tw="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer"
+        tw="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer disabled:pointer-events-none"
         value={value}
+        disabled={disabled}
       />
     </div>
   )

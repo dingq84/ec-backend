@@ -7,7 +7,8 @@ const Template: Story<SelectProps> = args => <Select {...args} />
 
 const Default = Template.bind({})
 Default.args = {
-  multiple: true,
+  value: '',
+  onChange: () => {},
   options: [
     { key: '1', value: 'apple' },
     { key: '2', value: 'banana' },

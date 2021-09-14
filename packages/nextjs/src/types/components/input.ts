@@ -3,13 +3,12 @@ interface InputBasicType<T> {
   label?: string
   name?: string
   value: T
-  onChange: (value: T) => void
+  onChange?: (value: T) => void
   error?: boolean // 是否有錯誤
   disabled?: boolean
   readOnly?: boolean
   labelPosition?: 'top' | 'left'
 }
-
 interface Option {
   key: string
   value: string

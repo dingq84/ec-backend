@@ -82,7 +82,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
           tw="py-1.5 px-2.5 rounded-lg flex items-center text-black space-x-1 bg-blue-2 h-9"
           css={[
             error && tw`border-red-1 border border-solid`,
-            disabled && tw`bg-gray-1 text-black`,
+            disabled && tw`bg-blue-1 text-blue-gray-3`,
             border === false && `border-none`
           ]}
         >
@@ -90,7 +90,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
           <div tw="flex items-center flex-grow flex-wrap space-x-1">
             {adornment.start}
             <input
-              tw="color[inherit] font-normal border-none rounded flex-grow h-6 text-base placeholder:(text-gray-3)"
+              tw="color[inherit] font-normal border-none rounded flex-grow h-6 font-size[inherit] placeholder:(text-gray-3)"
               id={id}
               value={value}
               onChange={handleChange}
@@ -103,7 +103,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
             />
           </div>
 
-          <Fade inProps={clear && value !== ''}>
+          <Fade inProps={clear && value !== '' && disabled === false}>
             <button
               tw="text-xs mr-1! leading-none h-3.5 color[inherit]"
               css={[disabled && tw`cursor-not-allowed`]}

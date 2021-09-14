@@ -29,7 +29,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
   } = props
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    onChange(event.target.checked)
+    if (onChange) {
+      onChange(event.target.checked)
+    }
   }
 
   return (
@@ -45,20 +47,25 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
           css={[
             (partialChecked || value) && tw`bg-primary`,
             error && tw`border-red-500`,
-            disabled && tw`border-blue-gray-4`
+            disabled && tw`border-blue-gray-4`,
+            (partialChecked || value) && disabled && tw`bg-blue-gray-4`
           ]}
         ></span>
         <FontAwesomeIcon
           tw="w-2! h-2! text-white opacity-0 transition-opacity duration-300 absolute top-0.5 left-0.5"
-          css={[(partialChecked || value) && tw`opacity-100`, disabled && tw`text-gray-1`]}
+          css={[(partialChecked || value) && tw`opacity-100`]}
           icon={partialChecked && !value ? faMinus : faCheck}
         />
       </div>
-      {label && (
-        <label htmlFor={id} tw="ml-2 text-sm text-black font-normal">
+      {label ? (
+        <label
+          htmlFor={id}
+          tw="ml-2 text-sm text-black font-normal"
+          css={[disabled && tw`text-blue-gray-3`]}
+        >
           {label}
         </label>
-      )}
+      ) : null}
       <input
         ref={ref}
         id={id}
