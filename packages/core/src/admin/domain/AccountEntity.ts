@@ -2,9 +2,9 @@ import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
 import { StatusCode } from '@/common/constants/statusCode'
 import { IUpdatePasswordInputPort } from '@/admin/application/interface/iUpdatePasswordUseCase'
 import Validator from '@/common/domain/Validator'
-import { IAccountData } from '@/admin/domain/interface/iAccountEntity'
+import { IAccountData, IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
 
-class AccountEntity {
+class AccountEntity implements IAccountEntity {
   private readonly _id: number
   private readonly _name: string
   private readonly _account: string

@@ -163,6 +163,9 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
 
       if (isRight(result)) {
         queryClient.invalidateQueries([ApiKey.roleList])
+
+        handleToast({ show: true, level: 'success', message: `「${state.name}」角色刪除成功` })
+        close()
         return
       }
 

@@ -62,11 +62,13 @@ const RoleTable = (props: RoleTableProps) => {
     }
   )
   // update role status
-  const updateStatusMutation = useMutation((data: IUpdateRoleStatusInputPort) =>
-    core.role.updateRoleStatus(data)
+  const { isLoading: updateRoleStatusLoading, mutateAsync: updateRoleStatusMutation } = useMutation(
+    (data: IUpdateRoleStatusInputPort) => core.role.updateRoleStatus(data)
   )
   // delete role
-  const deleteMutation = useMutation(({ id }: IDeleteRoleInputPort) => core.role.deleteRole({ id }))
+  const { isLoading: deleteRoleLoading, mutateAsync: deleteRoleMutation } = useMutation(
+    ({ id }: IDeleteRoleInputPort) => core.role.deleteRole({ id })
+  )
 
   useEnhancedEffect(() => {
     // 角色狀態變更，表示切換頁籤，所以重設 page 和 desc
@@ -93,7 +95,7 @@ const RoleTable = (props: RoleTableProps) => {
   const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
     const id = data.original.id
     const callback = async () => {
-      const result = await deleteMutation.mutateAsync({ id })
+      const result = await deleteRoleMutation({ id })
 
       if (isRight(result)) {
         queryClient.invalidateQueries([ApiKey.roleList])
@@ -111,7 +113,7 @@ const RoleTable = (props: RoleTableProps) => {
     const id = data.original.id
     const callback = async () => {
       const status = value ? Status.active : Status.inactive
-      const result = await updateStatusMutation.mutateAsync({ id, status })
+      const result = await updateRoleStatusMutation({ id, status })
 
       if (isRight(result)) {
         queryClient.invalidateQueries([ApiKey.roleList])
@@ -137,27 +139,20 @@ const RoleTable = (props: RoleTableProps) => {
     setModalProps({ ...modalProps, open: false })
   }
 
-  if (isLoading) {
-    return <Loading isLoading={isLoading} />
-  }
-
   if (data && isLeft(data)) {
     return null
   }
 
-  const { roles, pagination } = data!.right
-  const { total } = pagination
-  const pageSize = 10
-
   return (
     <>
+      <Loading isLoading={isLoading || updateRoleStatusLoading || deleteRoleLoading} />
       <Table<IGetRoleOutput>
         columns={columns}
-        data={roles}
+        data={data && isRight(data) ? data.right.roles : []}
         pagination={{
-          pageSize,
+          pageSize: 10,
           currentPage: page,
-          totalRows: total,
+          totalRows: data && isRight(data) ? data.right.pagination.total : 0,
           nextPage: pageCount => {
             setPage(page => page + pageCount)
           }
@@ -178,7 +173,7 @@ const RoleTable = (props: RoleTableProps) => {
         tableOptions={{
           initialState: {
             pageIndex: page - 1,
-            pageSize: pageSize,
+            pageSize: 10,
             sortBy: [
               {
                 id: 'createdAt',
@@ -188,7 +183,6 @@ const RoleTable = (props: RoleTableProps) => {
           }
         }}
       />
-
       <RoleAffectedAccountsDialog {...modalProps} close={closeModal} />
     </>
   )

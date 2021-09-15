@@ -70,7 +70,7 @@ const CreateDrawer = (props: CreateDrawerProps) => {
   const submit = async () => {
     const result = await mutation.mutateAsync(state)
     if (isRight(result)) {
-      handleToast({ show: true, level: 'success', message: `「${state.name}」角色編輯成功` })
+      handleToast({ show: true, level: 'success', message: `「${state.name}」角色新增成功` })
       close()
       return
     }

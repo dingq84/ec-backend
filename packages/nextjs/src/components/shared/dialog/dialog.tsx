@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react'
-import Image from 'next/image'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import 'twin.macro'
 
 // components
@@ -29,7 +30,11 @@ const Dialog = (props: DialogProps) => {
         {Header || (
           <div tw="bg-primary h-9 w-full">
             {title}
-            <Image src="/icons/times.svg" alt="close icon" width={16} height={16} tw="text-white" />
+            <FontAwesomeIcon
+              icon={faTimes}
+              tw="text-white text-sm mt-3 mr-5 float-right cursor-pointer"
+              onClick={close}
+            />
           </div>
         )}
         {content}

@@ -90,11 +90,15 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
           className="scroll-y"
           tw="w-full max-h-32 all:(inline-block text-blue-gray-3 w-full h-10 py-2 px-3 my-1 rounded hover:(bg-blue-2 cursor-pointer))"
         >
-          {options.map(option => (
-            <li key={`option-${option.key}`} onClick={() => handleClick(option)}>
-              {option.value}
-            </li>
-          ))}
+          {options.length ? (
+            options.map(option => (
+              <li key={`option-${option.key}`} onClick={() => handleClick(option)}>
+                {option.value}
+              </li>
+            ))
+          ) : (
+            <li>目前無資料</li>
+          )}
         </ul>
       </Popover>
     </div>

@@ -20,7 +20,7 @@ const Switch = (switchProps: SwitchProps) => {
   }
 
   return (
-    <div tw="flex items-center" onClick={handleClick}>
+    <div tw="inline-flex items-center" onClick={handleClick}>
       <div
         tw="h-3 w-6 rounded-md relative px-0.5"
         css={[
