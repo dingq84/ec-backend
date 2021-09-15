@@ -28,6 +28,11 @@ import {
   IUpdateRoleInputPort,
   IUpdateRoleUseCase
 } from '@/role/application/interface/iUpdateRoleUseCase'
+import {
+  IGetRoleAccountListInputPort,
+  IGetRoleAccountListOutputPort,
+  IGetRoleAccountListUseCase
+} from '@/role/application/interface/iGetRoleAccountListUseCase'
 
 class RoleController implements IRoleController {
   constructor(
@@ -36,7 +41,8 @@ class RoleController implements IRoleController {
     private readonly deleteRoleUseCase: IDeleteRoleUseCase,
     private readonly createRoleUseCase: ICreateRoleUseCase,
     private readonly getRoleDetailUseCase: IGetRoleDetailUseCase,
-    private readonly updateRoleUseCase: IUpdateRoleUseCase
+    private readonly updateRoleUseCase: IUpdateRoleUseCase,
+    private readonly getRoleAccountListUseCase: IGetRoleAccountListUseCase
   ) {}
 
   getRoleList(
@@ -67,6 +73,12 @@ class RoleController implements IRoleController {
 
   updateRole(parameters: IUpdateRoleInputPort): Promise<Either<IErrorOutputPort, void>> {
     return this.updateRoleUseCase.updateRole(parameters)
+  }
+
+  getRoleAccountList(
+    parameters: IGetRoleAccountListInputPort
+  ): Promise<Either<IErrorOutputPort, IGetRoleAccountListOutputPort>> {
+    return this.getRoleAccountListUseCase.getRoleAccountList(parameters)
   }
 }
 

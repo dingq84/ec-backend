@@ -13,6 +13,10 @@ import {
   IGetRoleDetailOutputPort
 } from '@/role/application/interface/iGetRoleDetailUseCase'
 import { IUpdateRoleInputPort } from '@/role/application/interface/iUpdateRoleUseCase'
+import {
+  IGetRoleAccountListInputPort,
+  IGetRoleAccountListOutputPort
+} from '@/role/application/interface/iGetRoleAccountListUseCase'
 
 export interface IRoleController {
   getRoleList(
@@ -25,4 +29,7 @@ export interface IRoleController {
     parameters: IGetRoleDetailInputPort
   ): Promise<Either<IErrorOutputPort, IGetRoleDetailOutputPort>>
   updateRole(parameters: IUpdateRoleInputPort): Promise<Either<IErrorOutputPort, void>>
+  getRoleAccountList(
+    parameters: IGetRoleAccountListInputPort
+  ): Promise<Either<IErrorOutputPort, IGetRoleAccountListOutputPort>>
 }

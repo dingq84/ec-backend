@@ -5,6 +5,8 @@ import { IPaginationInputPort } from '@/common/application/interface/iPagination
 import { IGetRoleListOutputPort } from '@/role/application/interface/iGetRoleListUseCase'
 import { IRoleEntity } from '@/role/domain/interface/iRoleEntity'
 import { IGetRoleDetailOutputPort } from '@/role/application/interface/iGetRoleDetailUseCase'
+import { IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
+import { IGetRoleAccountListOutputPort } from '@/role/application/interface/iGetRoleAccountListUseCase'
 
 export interface IRolePresenter {
   getRoleList(
@@ -13,4 +15,7 @@ export interface IRolePresenter {
   getRoleDetail(
     data: Either<IErrorInputPort, IRoleEntity>
   ): Either<IErrorOutputPort, IGetRoleDetailOutputPort>
+  getRoleAccountList(
+    data: Either<IErrorInputPort, { accounts: Array<Pick<IAccountEntity, 'id' | 'name'>> }>
+  ): Either<IErrorOutputPort, IGetRoleAccountListOutputPort>
 }

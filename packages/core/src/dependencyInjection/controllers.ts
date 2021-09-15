@@ -22,7 +22,8 @@ function createControllers(useCases: IUseCases): IControllers {
       useCases.role.deleteRole,
       useCases.role.createRole,
       useCases.role.getRoleDetail,
-      useCases.role.updateRole
+      useCases.role.updateRole,
+      useCases.role.getRoleAccountList
     ),
     permission: new PermissionController(useCases.permission.getPermissionList)
   }

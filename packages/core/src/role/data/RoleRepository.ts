@@ -12,6 +12,8 @@ import {
 } from '@/role/application/repository-interface/iRoleRepository'
 import { IRoleEntity, IRoleData } from '@/role/domain/interface/iRoleEntity'
 import RoleEntity from '@/role/domain/RoleEntity'
+import { IAccountData, IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
+import AccountEntity from '@/admin/domain/AccountEntity'
 
 class RoleRepository implements IRoleRepository {
   constructor(private readonly http: IHttpInfrastructure) {}
@@ -107,6 +109,26 @@ class RoleRepository implements IRoleRepository {
     })
 
     return flow(either.map((response: ResponseResult<void>) => response.data))(result)
+  }
+
+  async getRoleAccountList(
+    parameters: IRoleRepositoryParameters['getRoleAccountList']
+  ): Promise<Either<IErrorInputPort, { accounts: Array<Pick<IAccountEntity, 'id' | 'name'>> }>> {
+    const { id } = parameters
+    const result = await this.http.request<{ admin: Array<Pick<IAccountData, 'id' | 'name'>> }>({
+      url: `${ApiUrl.roleAccountList}/${id}`,
+      method: 'GET',
+      withAuth: true,
+      data: {}
+    })
+
+    return flow(
+      either.map(
+        (response: ResponseResult<{ admin: Array<Pick<IAccountData, 'id' | 'name'>> }>) => ({
+          accounts: response.data.admin.map(account => new AccountEntity(account))
+        })
+      )
+    )(result)
   }
 }
 

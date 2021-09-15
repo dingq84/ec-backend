@@ -4,6 +4,7 @@ import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
 import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
 import { IRoleEntity, Status } from '@/role/domain/interface/iRoleEntity'
 import { Order } from '@/common/constants/order'
+import { IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
 
 export interface IRoleRepositoryParameters {
   getRoleList: {
@@ -33,6 +34,9 @@ export interface IRoleRepositoryParameters {
     status: Status
     permissions: number[]
   }
+  getRoleAccountList: {
+    id: number
+  }
 }
 export interface IRoleRepository {
   getRoleList(
@@ -53,4 +57,7 @@ export interface IRoleRepository {
   updateRole(
     parameters: IRoleRepositoryParameters['updateRole']
   ): Promise<Either<IErrorInputPort, void>>
+  getRoleAccountList(
+    parameters: IRoleRepositoryParameters['getRoleAccountList']
+  ): Promise<Either<IErrorInputPort, { accounts: Array<Pick<IAccountEntity, 'id' | 'name'>> }>>
 }

@@ -16,5 +16,6 @@ export enum ApiUrl {
   roleStatus = 'role/status',
   createRole = 'role/create',
   roleDetail = 'role/detail',
-  updateRole = 'role/update'
+  updateRole = 'role/update',
+  roleAccountList = 'role/admin_list'
 }
