@@ -9,6 +9,7 @@ import { IErrorPresenter } from '@/common/adapter/interface/iErrorPresenter'
 import { IPaginationPresenter } from '@/common/adapter/interface/iPaginationPresenter'
 import { IErrorInputPort, IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
 import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
+import { IGetRoleDetailOutputPort } from '@/role/application/interface/iGetRoleDetailUseCase'
 
 class RolePresenter implements IRolePresenter {
   constructor(
@@ -48,6 +49,26 @@ class RolePresenter implements IRolePresenter {
           }))
         )(data)
       )
+    )
+  }
+
+  getRoleDetail(
+    data: Either<IErrorInputPort, IRoleEntity>
+  ): Either<IErrorOutputPort, IGetRoleDetailOutputPort> {
+    return this.errorPresenter.present<IGetRoleDetailOutputPort>(
+      flow(
+        either.map((role: IRoleEntity) => ({
+          id: role.id,
+          name: role.name,
+          status: role.status,
+          permissions: role.permissions,
+          createdUser: role.createdUser,
+          createdAt: role.createdAt,
+          updatedUser: role.updatedUser,
+          updatedAt: role.updatedAt,
+          statusText: this.getStatusText(role.status)
+        }))
+      )(data)
     )
   }
 }

@@ -9,6 +9,7 @@ import TextField from '@/components/shared/textField'
 import Toast, { ToastProps } from '@/components/shared/toast'
 import RoleDrawer from '@/components/page/role/drawer'
 import RoleTable from '@/components/page/role/table'
+
 // core
 import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
 
@@ -59,13 +60,17 @@ const SearchContainer = (props: { value: string; search: (name: string) => void 
   )
 }
 
-export type Mode = 'create' | 'edit' | 'view'
+export enum Mode {
+  'create' = 'create',
+  'edit' = 'edit',
+  'view' = 'view'
+}
 
 const Role = () => {
   const [keyword, setKeyword] = useState('')
   const [status, setStatus] = useState<Status>(-1)
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const [drawerMode, setDrawerMode] = useState<Mode>('view')
+  const [currentRoleId, setCurrentRoleId] = useState<number | undefined>(undefined)
+  const [drawProps, setDrawProps] = useState({ open: false, mode: Mode.view })
   const [toastProps, setToastProps] = useState<Pick<ToastProps, 'level' | 'message' | 'show'>>({
     level: 'warning',
     message: '',
@@ -79,13 +84,17 @@ const Role = () => {
     setStatus(newStatus)
   }
 
-  const openDrawer = (mode: Mode): void => {
-    setDrawerOpen(true)
-    setDrawerMode(mode)
+  const changeModeToEdit = (): void => {
+    setDrawProps({ ...drawProps, mode: Mode.edit })
+  }
+
+  const openDrawer = (mode: Mode, roleId: number | undefined = undefined): void => {
+    setDrawProps({ open: true, mode })
+    setCurrentRoleId(roleId)
   }
 
   const closeDrawer = (): void => {
-    setDrawerOpen(false)
+    setDrawProps({ ...drawProps, open: false })
   }
 
   const handleToastProps = (newToastProps: typeof toastProps): void => {
@@ -96,7 +105,7 @@ const Role = () => {
     <>
       <div tw="flex items-center justify-between">
         <h1 tw="text-blue-gray-3 font-medium text-2xl">角色權限管理</h1>
-        <Button className="btn" label="創建角色" onClick={() => openDrawer('create')} />
+        <Button className="btn" label="創建角色" onClick={() => openDrawer(Mode.create)} />
       </div>
 
       <Tabs>
@@ -123,10 +132,11 @@ const Role = () => {
       </Tabs>
 
       <RoleDrawer
-        mode={drawerMode}
-        open={drawerOpen}
+        {...drawProps}
         close={closeDrawer}
         handleToast={handleToastProps}
+        id={currentRoleId}
+        changeModeToEdit={changeModeToEdit}
       />
 
       <Toast {...toastProps} close={() => setToastProps({ ...toastProps, show: false })} />

@@ -8,8 +8,10 @@ import { IRefreshTokenUseCase } from '@/auth/application/interface/iRefreshToken
 import { IGetPermissionListUseCase } from '@/permission/application/interface/iGetPermissionListUseCase'
 import { ICreateRoleUseCase } from '@/role/application/interface/iCreateRoleUseCase'
 import { IDeleteRoleUseCase } from '@/role/application/interface/iDeleteRoleUseCase'
+import { IGetRoleDetailUseCase } from '@/role/application/interface/iGetRoleDetailUseCase'
 import { IGetRoleListUseCase } from '@/role/application/interface/iGetRoleListUseCase'
 import { IUpdateRoleStatusUseCase } from '@/role/application/interface/iUpdateRoleStatusUseCase'
+import { IUpdateRoleUseCase } from '@/role/application/interface/iUpdateRoleUseCase'
 
 export interface IUseCases {
   admin: {
@@ -28,6 +30,8 @@ export interface IUseCases {
     updateRoleStatus: IUpdateRoleStatusUseCase
     deleteRole: IDeleteRoleUseCase
     createRole: ICreateRoleUseCase
+    getRoleDetail: IGetRoleDetailUseCase
+    updateRole: IUpdateRoleUseCase
   }
   permission: {
     getPermissionList: IGetPermissionListUseCase

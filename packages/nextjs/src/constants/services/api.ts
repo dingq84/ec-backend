@@ -22,7 +22,8 @@ enum ApiKey {
   permissionList = 'permissionList',
 
   // role
-  roleList = 'roleList'
+  roleList = 'roleList',
+  roleDetail = 'roleDetail'
 }
 
 export { ApiKey }

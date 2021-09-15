@@ -152,7 +152,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
     /* eslint-disable react/jsx-key */
     <Paper
       ref={ref}
-      tw="w-full p-0 relative flex-col overflow-hidden bg-transparent"
+      tw="w-full p-0 relative overflow-hidden bg-transparent"
       shadow={false}
       {...restProps}
     >

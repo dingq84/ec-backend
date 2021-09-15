@@ -27,7 +27,16 @@ export interface ModalProps extends PortalProps {
 }
 
 const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(props, ref) {
-  const { open, children, onClose, onBackdropClick, backdropProps = {}, ...restProps } = props
+  const {
+    open,
+    children,
+    onClose,
+    onBackdropClick,
+    backdropProps = {},
+    disablePortal,
+    container,
+    ...restProps
+  } = props
   const { onEnter, onExited, ...restBackdropProps } = backdropProps
   const [exited, setExited] = useState(true)
   const modalRef = useRef<HTMLDivElement>(null!)
@@ -85,11 +94,12 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(props, ref) 
   }
 
   return (
-    <Portal ref={handlePortalRef} {...restProps}>
+    <Portal ref={handlePortalRef} disablePortal={disablePortal} container={container}>
       <div
         role="presentation"
         css={[tw`fixed top-0 left-0 z-10 flex`, open === false && exited && tw`invisible`]}
         ref={handleRef}
+        {...restProps}
       >
         <Backdrop
           inProps={open}

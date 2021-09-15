@@ -4,7 +4,7 @@ import { useReducer } from 'react'
 import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
 import { IGetPermissionListOutputPort } from '@ec-backstage/core/src/permission/application/interface/iGetPermissionListUseCase'
 
-interface InitialStateProps {
+export interface InitialStateProps {
   name: string
   status: Status
   permissions: IGetPermissionListOutputPort[]
@@ -16,7 +16,7 @@ const initialState: InitialStateProps = {
   permissions: []
 }
 
-type Action =
+export type Action =
   | { type: 'reset' }
   | { type: 'setPermissionData'; payload: { permissions: IGetPermissionListOutputPort[] } }
   | { type: 'updateName'; payload: { name: string } }

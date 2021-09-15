@@ -8,6 +8,11 @@ import {
 import { IUpdateRoleStatusInputPort } from '@/role/application/interface/iUpdateRoleStatusUseCase'
 import { IDeleteRoleInputPort } from '@/role/application/interface/iDeleteRoleUseCase'
 import { ICreateRoleInputPort } from '@/role/application/interface/iCreateRoleUseCase'
+import {
+  IGetRoleDetailInputPort,
+  IGetRoleDetailOutputPort
+} from '@/role/application/interface/iGetRoleDetailUseCase'
+import { IUpdateRoleInputPort } from '@/role/application/interface/iUpdateRoleUseCase'
 
 export interface IRoleController {
   getRoleList(
@@ -16,4 +21,8 @@ export interface IRoleController {
   updateRoleStatus(parameters: IUpdateRoleStatusInputPort): Promise<Either<IErrorOutputPort, void>>
   deleteRole(parameters: IDeleteRoleInputPort): Promise<Either<IErrorOutputPort, void>>
   createRole(parameters: ICreateRoleInputPort): Promise<Either<IErrorOutputPort, void>>
+  getRoleDetail(
+    parameters: IGetRoleDetailInputPort
+  ): Promise<Either<IErrorOutputPort, IGetRoleDetailOutputPort>>
+  updateRole(parameters: IUpdateRoleInputPort): Promise<Either<IErrorOutputPort, void>>
 }

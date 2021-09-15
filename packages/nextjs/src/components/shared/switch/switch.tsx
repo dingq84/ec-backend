@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, MouseEvent } from 'react'
 import tw from 'twin.macro'
 
 export interface SwitchProps {
@@ -15,8 +15,12 @@ const Switch = (switchProps: SwitchProps) => {
     onChange(event.target.checked)
   }
 
+  const handleClick = (event: MouseEvent<HTMLDivElement>): void => {
+    event.stopPropagation()
+  }
+
   return (
-    <div tw="flex items-center">
+    <div tw="flex items-center" onClick={handleClick}>
       <div
         tw="h-3 w-6 rounded-md relative px-0.5"
         css={[

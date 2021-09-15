@@ -24,6 +24,15 @@ export interface IRoleRepositoryParameters {
     status: Status
     permissions: number[]
   }
+  getRoleDetail: {
+    id: number
+  }
+  updateRole: {
+    id: number
+    name: string
+    status: Status
+    permissions: number[]
+  }
 }
 export interface IRoleRepository {
   getRoleList(
@@ -37,5 +46,11 @@ export interface IRoleRepository {
   ): Promise<Either<IErrorInputPort, void>>
   createRole(
     parameters: IRoleRepositoryParameters['createRole']
+  ): Promise<Either<IErrorInputPort, void>>
+  getRoleDetail(
+    parameters: IRoleRepositoryParameters['getRoleDetail']
+  ): Promise<Either<IErrorInputPort, IRoleEntity>>
+  updateRole(
+    parameters: IRoleRepositoryParameters['updateRole']
   ): Promise<Either<IErrorInputPort, void>>
 }

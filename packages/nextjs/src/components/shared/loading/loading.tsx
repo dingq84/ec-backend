@@ -12,7 +12,7 @@ interface LoadingProps {
 const Loading = (props: LoadingProps) => {
   const { isLoading } = props
   return (
-    <Modal open={isLoading}>
+    <Modal open={isLoading} tw="z-50">
       <FontAwesomeIcon icon={faSpinner} tw="animate-spin text-4xl text-primary" />
     </Modal>
   )

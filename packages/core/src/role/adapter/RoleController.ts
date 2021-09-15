@@ -18,14 +18,25 @@ import {
 import {
   ICreateRoleInputPort,
   ICreateRoleUseCase
-} from '../application/interface/iCreateRoleUseCase'
+} from '@/role/application/interface/iCreateRoleUseCase'
+import {
+  IGetRoleDetailInputPort,
+  IGetRoleDetailOutputPort,
+  IGetRoleDetailUseCase
+} from '@/role/application/interface/iGetRoleDetailUseCase'
+import {
+  IUpdateRoleInputPort,
+  IUpdateRoleUseCase
+} from '@/role/application/interface/iUpdateRoleUseCase'
 
 class RoleController implements IRoleController {
   constructor(
     private readonly getRoleListUseCase: IGetRoleListUseCase,
     private readonly updateRoleStatusUseCase: IUpdateRoleStatusUseCase,
     private readonly deleteRoleUseCase: IDeleteRoleUseCase,
-    private readonly createRoleUseCase: ICreateRoleUseCase
+    private readonly createRoleUseCase: ICreateRoleUseCase,
+    private readonly getRoleDetailUseCase: IGetRoleDetailUseCase,
+    private readonly updateRoleUseCase: IUpdateRoleUseCase
   ) {}
 
   getRoleList(
@@ -46,6 +57,16 @@ class RoleController implements IRoleController {
 
   createRole(parameters: ICreateRoleInputPort): Promise<Either<IErrorOutputPort, void>> {
     return this.createRoleUseCase.createRole(parameters)
+  }
+
+  getRoleDetail(
+    parameters: IGetRoleDetailInputPort
+  ): Promise<Either<IErrorOutputPort, IGetRoleDetailOutputPort>> {
+    return this.getRoleDetailUseCase.getRoleDetail(parameters)
+  }
+
+  updateRole(parameters: IUpdateRoleInputPort): Promise<Either<IErrorOutputPort, void>> {
+    return this.updateRoleUseCase.updateRole(parameters)
   }
 }
 

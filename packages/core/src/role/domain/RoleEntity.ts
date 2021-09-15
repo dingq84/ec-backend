@@ -141,6 +141,21 @@ class RoleEntity implements IRoleEntity {
     }
     return true
   }
+
+  static getRoleDetailValidate(parameters: Pick<IRoleEntity, 'id'>): IErrorInputPort | true {
+    const { id } = parameters
+    if (!Validator.isNumber(id)) {
+      const statusMessage = '角色 id 格式需為數字'
+      return {
+        statusCode: StatusCode.wrongRoleId,
+        statusMessage,
+        data: {
+          id: statusMessage
+        }
+      }
+    }
+    return true
+  }
 }
 
 export default RoleEntity

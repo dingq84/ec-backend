@@ -48,6 +48,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
     type = 'text',
     name = 'input',
     placeholder = '',
+    readOnly = false,
     ...restProps
   } = props
 
@@ -100,6 +101,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
               type={type}
               name={name}
               placeholder={placeholder}
+              readOnly={readOnly}
             />
           </div>
 

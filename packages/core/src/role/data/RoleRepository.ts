@@ -77,6 +77,37 @@ class RoleRepository implements IRoleRepository {
 
     return flow(either.map((response: ResponseResult<void>) => response.data))(result)
   }
+
+  async getRoleDetail(
+    parameters: IRoleRepositoryParameters['getRoleDetail']
+  ): Promise<Either<IErrorInputPort, IRoleEntity>> {
+    const { id } = parameters
+    const result = await this.http.request<{ role: IRoleData }>({
+      url: `${ApiUrl.roleDetail}/${id}`,
+      method: 'GET',
+      withAuth: true,
+      data: {}
+    })
+
+    return flow(
+      either.map(
+        (response: ResponseResult<{ role: IRoleData }>) => new RoleEntity(response.data.role)
+      )
+    )(result)
+  }
+
+  async updateRole(
+    parameters: IRoleRepositoryParameters['updateRole']
+  ): Promise<Either<IErrorInputPort, void>> {
+    const result = await this.http.request<void>({
+      url: ApiUrl.updateRole,
+      method: 'PATCH',
+      withAuth: true,
+      data: parameters
+    })
+
+    return flow(either.map((response: ResponseResult<void>) => response.data))(result)
+  }
 }
 
 export default RoleRepository

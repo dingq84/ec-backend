@@ -20,7 +20,9 @@ function createControllers(useCases: IUseCases): IControllers {
       useCases.role.getRoleList,
       useCases.role.updateRoleStatus,
       useCases.role.deleteRole,
-      useCases.role.createRole
+      useCases.role.createRole,
+      useCases.role.getRoleDetail,
+      useCases.role.updateRole
     ),
     permission: new PermissionController(useCases.permission.getPermissionList)
   }

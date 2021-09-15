@@ -10,6 +10,7 @@ import EditButton from '@/components/shared/table/editButton'
 import Loading from '@/components/shared/loading'
 import Switch from '@/components/shared/switch'
 import Table from '@/components/shared/table'
+import RoleAffectedAccountsDialog from '@/components/page/role/affectedAccountsDialog'
 
 // constants
 import { columns } from '@/constants/pages/role'
@@ -37,7 +38,7 @@ import { useAppDispatch } from '@/states/global/hooks'
 import { setError } from '@/states/global/error'
 
 interface RoleTableProps {
-  openDrawer: (mode: Mode) => void
+  openDrawer: (mode: Mode, id?: number) => void
   name: string
   status: IGetRoleListInputPort['status']
 }
@@ -46,6 +47,7 @@ const RoleTable = (props: RoleTableProps) => {
   const { name, status, openDrawer } = props
   const [page, setPage] = useState(1)
   const [desc, setDesc] = useState(true)
+  const [modalProps, setModalProps] = useState({ open: false, id: -1, callback: () => {} })
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   // get role list
@@ -85,35 +87,54 @@ const RoleTable = (props: RoleTableProps) => {
   }
 
   const handleEdit = (data: Row<IGetRoleOutput>): void => {
-    console.log('edit', data.original)
-    openDrawer('edit')
+    openDrawer(Mode.edit, data.original.id)
   }
 
   const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
     const id = data.original.id
-    const result = await deleteMutation.mutateAsync({ id })
+    const callback = async () => {
+      const result = await deleteMutation.mutateAsync({ id })
 
-    if (isRight(result)) {
-      queryClient.invalidateQueries([ApiKey.roleList])
-      return
+      if (isRight(result)) {
+        queryClient.invalidateQueries([ApiKey.roleList])
+        return
+      }
+
+      const { errorMessage } = result.left
+      dispatch(setError({ message: errorMessage }))
     }
 
-    const { errorMessage } = result.left
-    dispatch(setError({ message: errorMessage }))
+    setModalProps({ open: true, id, callback })
   }
 
   const handleStatusChange = async (value: boolean, data: Row<IGetRoleOutput>): Promise<void> => {
-    const status = value ? Status.active : Status.inactive
     const id = data.original.id
-    const result = await updateStatusMutation.mutateAsync({ id, status })
+    const callback = async () => {
+      const status = value ? Status.active : Status.inactive
+      const result = await updateStatusMutation.mutateAsync({ id, status })
 
-    if (isRight(result)) {
-      queryClient.invalidateQueries([ApiKey.roleList])
-      return
+      if (isRight(result)) {
+        queryClient.invalidateQueries([ApiKey.roleList])
+        return
+      }
+
+      const { errorMessage } = result.left
+      dispatch(setError({ message: errorMessage }))
     }
 
-    const { errorMessage } = result.left
-    dispatch(setError({ message: errorMessage }))
+    if (value) {
+      callback()
+    } else {
+      setModalProps({ open: true, id, callback })
+    }
+  }
+
+  const handleRowClick = (data: Row<IGetRoleOutput>): void => {
+    openDrawer(Mode.view, data.original.id)
+  }
+
+  const closeModal = (): void => {
+    setModalProps({ ...modalProps, open: false })
   }
 
   if (isLoading) {
@@ -129,42 +150,47 @@ const RoleTable = (props: RoleTableProps) => {
   const pageSize = 10
 
   return (
-    <Table<IGetRoleOutput>
-      columns={columns}
-      data={roles}
-      pagination={{
-        pageSize,
-        currentPage: page,
-        totalRows: total,
-        nextPage: pageCount => {
-          setPage(page => page + pageCount)
-        }
-      }}
-      slots={{
-        edit: data => <EditButton onClick={() => handleEdit(data)} />,
-        delete: data => <DeleteButton onClick={() => handleDelete(data)} />,
-        status: data => (
-          <Switch
-            value={Boolean(data.original.status)}
-            onChange={(value: boolean) => handleStatusChange(value, data)}
-            label={data.original.statusText}
-          />
-        )
-      }}
-      handleSort={handleSort}
-      tableOptions={{
-        initialState: {
-          pageIndex: page - 1,
-          pageSize: pageSize,
-          sortBy: [
-            {
-              id: 'createdAt',
-              desc
-            }
-          ]
-        }
-      }}
-    />
+    <>
+      <Table<IGetRoleOutput>
+        columns={columns}
+        data={roles}
+        pagination={{
+          pageSize,
+          currentPage: page,
+          totalRows: total,
+          nextPage: pageCount => {
+            setPage(page => page + pageCount)
+          }
+        }}
+        slots={{
+          edit: data => <EditButton onClick={() => handleEdit(data)} />,
+          delete: data => <DeleteButton onClick={() => handleDelete(data)} />,
+          status: data => (
+            <Switch
+              value={Boolean(data.original.status)}
+              onChange={(value: boolean) => handleStatusChange(value, data)}
+              label={data.original.statusText}
+            />
+          )
+        }}
+        handleSort={handleSort}
+        handleRowClick={handleRowClick}
+        tableOptions={{
+          initialState: {
+            pageIndex: page - 1,
+            pageSize: pageSize,
+            sortBy: [
+              {
+                id: 'createdAt',
+                desc
+              }
+            ]
+          }
+        }}
+      />
+
+      <RoleAffectedAccountsDialog {...modalProps} close={closeModal} />
+    </>
   )
 }
 
