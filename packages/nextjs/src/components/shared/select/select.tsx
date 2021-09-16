@@ -53,6 +53,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
   const handleRef = useForkRef(ref, inputRef)
 
   useEnhancedEffect(() => {
+    if (value === '') {
+      setDisplayValue('')
+      return
+    }
+
     const selectedOption = options.find(option => option.key === value)
 
     if (selectedOption) {
@@ -73,7 +78,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
     closePopover()
   }
 
-  const handleClear = () => {
+  const handleClear = (): void => {
     if (onChange) {
       onChange('')
     }

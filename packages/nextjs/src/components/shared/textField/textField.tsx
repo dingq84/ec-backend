@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, HTMLAttributes, Ref } from 'react'
+import { ChangeEvent, forwardRef, HTMLAttributes, Ref, MouseEvent } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import tw from 'twin.macro'
@@ -52,13 +52,15 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
     ...restProps
   } = props
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (onChange) {
       onChange(event.target.value)
     }
   }
 
-  const handleClear = () => {
+  const handleClear = (event: MouseEvent<HTMLButtonElement>): void => {
+    event.stopPropagation()
+
     if (disabled) {
       return
     }
@@ -108,7 +110,10 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
           <Fade inProps={clear && value !== '' && disabled === false}>
             <button
               tw="text-xs mr-1! leading-none h-3.5 color[inherit]"
-              css={[disabled && tw`cursor-not-allowed`]}
+              css={[
+                disabled && tw`cursor-not-allowed`,
+                Boolean(adornment.end) && tw`pr-2 border-r rounded-none border-white border-solid`
+              ]}
               onClick={handleClear}
               data-testid="clear"
               tabIndex={-1}
