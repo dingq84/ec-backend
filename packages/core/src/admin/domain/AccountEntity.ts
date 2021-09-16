@@ -3,11 +3,17 @@ import { StatusCode } from '@/common/constants/statusCode'
 import { IUpdatePasswordInputPort } from '@/admin/application/interface/iUpdatePasswordUseCase'
 import Validator from '@/common/domain/Validator'
 import { IAccountData, IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
+import { IRoleEntity } from '@/role/domain/interface/iRoleEntity'
+import { Status } from '@/common/constants/status'
 
 class AccountEntity implements IAccountEntity {
   private readonly _id: number
   private readonly _name: string
   private readonly _account: string
+  private readonly _status: Status
+  private readonly _createdAt: string
+  private readonly _updatedAt: string
+  private readonly _roles: Array<Pick<IRoleEntity, 'id' | 'name'>>
 
   constructor(
     parameters: Pick<IAccountData, 'id' | 'name'> & Partial<Exclude<IAccountData, 'id' | 'name'>>
@@ -15,6 +21,10 @@ class AccountEntity implements IAccountEntity {
     this._id = parameters.id
     this._name = parameters.name
     this._account = parameters.account || ''
+    this._status = parameters.status || Status.active
+    this._createdAt = parameters.createdAt || ''
+    this._updatedAt = parameters.updatedAt || ''
+    this._roles = parameters.roles || []
   }
 
   get id(): number {
@@ -27,6 +37,22 @@ class AccountEntity implements IAccountEntity {
 
   get account(): string {
     return this._account
+  }
+
+  get status(): Status {
+    return this._status
+  }
+
+  get createdAt(): string {
+    return this._createdAt
+  }
+
+  get updatedAt(): string {
+    return this._updatedAt
+  }
+
+  get roles(): Array<Pick<IRoleEntity, 'id' | 'name'>> {
+    return this._roles
   }
 
   static updatePasswordValidate(parameters: IUpdatePasswordInputPort): IErrorInputPort | true {

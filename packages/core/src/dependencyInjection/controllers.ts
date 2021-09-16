@@ -7,7 +7,7 @@ import AccountController from '@/admin/adapter/AccountController'
 
 function createControllers(useCases: IUseCases): IControllers {
   return {
-    admin: new AccountController(useCases.admin.updatePassword),
+    admin: new AccountController(useCases.admin.updatePassword, useCases.admin.getAccountList),
     auth: new AuthController(
       useCases.auth.login,
       useCases.auth.logout,

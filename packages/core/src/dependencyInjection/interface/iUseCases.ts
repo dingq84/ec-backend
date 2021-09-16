@@ -1,3 +1,4 @@
+import { IGetAccountListUseCase } from '@/admin/application/interface/iGetAccountListUseCase'
 import { IUpdatePasswordUseCase } from '@/admin/application/interface/iUpdatePasswordUseCase'
 import { ICheckIsLoggedUseCase } from '@/auth/application/interface/iCheckIsLoggedUseCase'
 import { IGetAccessTokenUseCase } from '@/auth/application/interface/iGetAccessTokenUseCase'
@@ -17,6 +18,7 @@ import { IUpdateRoleUseCase } from '@/role/application/interface/iUpdateRoleUseC
 export interface IUseCases {
   admin: {
     updatePassword: IUpdatePasswordUseCase
+    getAccountList: IGetAccountListUseCase
   }
   auth: {
     login: ILoginUseCase

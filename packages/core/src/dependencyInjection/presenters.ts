@@ -1,4 +1,5 @@
 import AccountErrorPresenter from '@/admin/adapter/AccountErrorPresenter'
+import AccountPresenter from '@/admin/adapter/AccountPresenter'
 import AuthErrorPresenter from '@/auth/adapter/AuthErrorPresenter'
 import AuthPresenter from '@/auth/adapter/AuthPresenter'
 import ErrorPresenter from '@/common/adapter/ErrorPresenter'
@@ -15,6 +16,7 @@ function createPresenters(): IPresenters {
   const roleErrorPresenter = new RoleErrorPresenter()
 
   return {
+    admin: new AccountPresenter(errorPresenter, paginationPresenter),
     auth: new AuthPresenter(authErrorPresenter),
     role: new RolePresenter(roleErrorPresenter, paginationPresenter),
     permission: new PermissionPresenter(errorPresenter),
