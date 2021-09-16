@@ -167,7 +167,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
     >
       <Paper
         ref={paperRef}
-        tw="absolute transition-all overflow-y-auto overflow-x-hidden outline-none min-width[16px] min-height[16px]"
+        tw="absolute transition-all overflow-y-auto outline-none min-width[16px] min-height[16px]"
         css={paperProps?.css}
         data-testid="paper"
       >

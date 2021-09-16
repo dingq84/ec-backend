@@ -43,7 +43,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
     clear = true,
     value = '',
     labelPosition = 'top',
-    border = true,
+    border = false,
     inputRef,
     type = 'text',
     name = 'input',
@@ -80,18 +80,18 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
           </label>
         ) : null}
         <div
-          tw="py-1.5 px-2.5 rounded-lg flex items-center text-black space-x-1 bg-blue-2 h-9"
+          tw="py-1.5 px-2.5 rounded-lg border border-solid border-blue-gray-3 flex items-center text-black space-x-1 bg-blue-2 h-9"
           css={[
-            error && tw`border-red-1 border border-solid`,
-            disabled && tw`bg-blue-1 text-blue-gray-3`,
-            border === false && `border-none`
+            error && tw`border-red-1`,
+            disabled && tw`bg-blue-1 text-blue-gray-3 border-none`,
+            border === false && tw`border-none`
           ]}
         >
           {/* 針對 start adornment 和 input 包起來，讓他可以有 wrap 的樣子，end adornment 和 clear button 維持垂直置中 */}
-          <div tw="flex items-center flex-grow flex-wrap space-x-1">
+          <div tw="flex items-center flex-grow space-x-1">
             {adornment.start}
             <input
-              tw="color[inherit] font-normal border-none rounded flex-grow h-6 font-size[inherit] placeholder:(text-gray-3)"
+              tw="color[inherit] font-normal border-none rounded flex-grow w-full h-6 font-size[inherit] placeholder:(text-gray-3)"
               id={id}
               value={value}
               onChange={handleChange}

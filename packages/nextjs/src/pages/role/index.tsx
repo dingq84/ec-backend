@@ -54,7 +54,13 @@ const SearchContainer = (props: { value: string; search: (name: string) => void 
           onClear={() => setName('')}
           tabIndex={1}
         />
-        <Button className="btn-outline" label="搜尋" onClick={handleClick} tabIndex={2} />
+        <Button
+          className="btn-outline"
+          label="搜尋"
+          tw="py-2 px-9 text-sm"
+          onClick={handleClick}
+          tabIndex={2}
+        />
       </div>
     </Paper>
   )

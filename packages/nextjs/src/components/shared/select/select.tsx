@@ -1,7 +1,7 @@
-import { forwardRef, useState, useRef } from 'react'
+import { forwardRef, useState, useRef, HTMLAttributes } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import tw from 'twin.macro'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import tw, { css, TwStyle } from 'twin.macro'
 
 // components
 import Popover from '@/components/shared/popover'
@@ -14,30 +14,51 @@ import useForkRef from '@/hooks/useForkRef'
 // types
 import type { Option } from '@/types/components/input'
 
-export interface SelectProps {
+const inputCss = css`
+  & {
+    & > div > div {
+      ${tw`bg-white`}
+    }
+
+    & input {
+      ${tw`text-black placeholder:text-black`}
+    }
+  }
+`
+
+export interface SelectProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   options: Option[]
-  value: ''
+  value: string
   onChange?: (value: string) => void
   inputProps?: Partial<TextFieldProps>
   disabled?: boolean
+  paperProps?: {
+    css: TwStyle[]
+  }
 }
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, ref) {
-  const { options, onChange, value, disabled = false, inputProps = {} } = props
+  const {
+    options,
+    onChange,
+    value,
+    disabled = false,
+    inputProps = {},
+    paperProps = { css: [] },
+    ...restProps
+  } = props
   const [isOpen, setIsOpen] = useState(false)
   const [displayValue, setDisplayValue] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
   const handleRef = useForkRef(ref, inputRef)
 
   useEnhancedEffect(() => {
-    if (value) {
-      const selectedOption = options.find(option => option.key === value)
+    const selectedOption = options.find(option => option.key === value)
 
-      if (selectedOption) {
-        setDisplayValue(selectedOption.value)
-      } else {
-        console.warn(`沒有符合 ${value} 的選項`)
-      }
+    if (selectedOption) {
+      setDisplayValue(selectedOption.value)
+    } else {
+      console.warn(`沒有符合 ${value} 的選項`)
     }
   }, [value])
 
@@ -59,8 +80,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
   }
 
   return (
-    <div tw="w-full">
+    <div tw="w-full" {...restProps}>
       <TextField
+        css={[inputCss]}
+        border
         {...inputProps}
         ref={handleRef}
         readOnly
@@ -70,8 +93,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
         adornment={{
           end: (
             <FontAwesomeIcon
-              icon={faCaretDown}
-              tw="transition-transform duration-300"
+              icon={faChevronDown}
+              tw="color[inherit] text-sm transition-transform duration-300"
               css={[isOpen && tw`transform rotate-180`]}
             />
           )
@@ -83,16 +106,25 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
         open={isOpen}
         onClose={closePopover}
         anchorEl={inputRef.current!}
-        paperProps={{ css: [tw`p-2.5 bg-blue-1 border border-solid border-blue-gray-1`] }}
+        paperProps={{
+          css: [
+            tw`text-black py-2.5 pl-2.5 pr-1 bg-blue-1 text-base border border-solid border-blue-gray-1`,
+            ...paperProps.css
+          ]
+        }}
         verticalSpace={8}
       >
         <ul
           className="scroll-y"
-          tw="w-full max-h-32 all:(inline-block text-blue-gray-3 w-full h-10 py-2 px-3 my-1 rounded hover:(bg-blue-2 cursor-pointer))"
+          tw="color[inherit] pr-5 w-full max-h-32 cursor-pointer all:(inline-block color[inherit] w-full py-2 px-3 my-1 rounded hover:(bg-blue-2))"
         >
           {options.length ? (
             options.map(option => (
-              <li key={`option-${option.key}`} onClick={() => handleClick(option)}>
+              <li
+                key={`option-${option.key}`}
+                onClick={() => handleClick(option)}
+                css={[value === option.key && tw`text-primary`]}
+              >
                 {option.value}
               </li>
             ))
