@@ -16,24 +16,32 @@ import CreateRoleUseCase from '@/role/application/CreateRoleUseCase'
 import GetRoleDetailUseCase from '@/role/application/GetRoleDetailUseCase'
 import UpdateRoleUseCase from '@/role/application/UpdateRoleUseCase'
 import GetRoleAccountListUseCase from '@/role/application/GetRoleAccountListUseCase'
+import GetAccountListUseCase from '@/admin/application/GetAccountListUseCase'
 
 function createUseCases(repositories: IRepositories, presenters: IPresenters): IUseCases {
-  const refreshToken = new RefreshTokenUseCase(
+  const refreshTokenUseCase = new RefreshTokenUseCase(
     repositories.auth,
     presenters.auth,
     presenters.error.auth
   )
+  const getAccessTokenUseCase = new GetAccessTokenUseCase(repositories.auth)
+
   return {
     admin: {
-      updatePassword: new UpdatePasswordUseCase(repositories.admin, presenters.error.admin)
+      updatePassword: new UpdatePasswordUseCase(repositories.admin, presenters.error.admin),
+      getAccountList: new GetAccountListUseCase(repositories.admin, presenters.admin)
     },
     auth: {
       login: new LoginUseCase(repositories.auth, presenters.auth, presenters.error.auth),
       logout: new LogoutUseCase(repositories.auth, presenters.error.default),
-      refreshToken,
+      refreshToken: refreshTokenUseCase,
       getMe: new GetMeUseCase(repositories.auth, presenters.auth),
-      getAccessToken: new GetAccessTokenUseCase(repositories.auth),
-      checkIsLogged: new CheckIsLoggedUseCase(repositories.auth, refreshToken)
+      getAccessToken: getAccessTokenUseCase,
+      checkIsLogged: new CheckIsLoggedUseCase(
+        repositories.auth,
+        getAccessTokenUseCase,
+        refreshTokenUseCase
+      )
     },
     role: {
       getRoleList: new GetRoleListUseCase(repositories.role, presenters.role),
