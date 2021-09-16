@@ -194,7 +194,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
                 {row.cells.map((cell, i) => {
                   return (
                     <div
-                      tw="text-xs text-black font-normal"
+                      tw="text-sm text-black font-normal"
                       css={[
                         columns[i].align === 'center' && tw`text-center`,
                         columns[i].align === 'right' && tw`text-right`
