@@ -22,13 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(props:
   const { label, className = '', type = 'button', ...restProps } = props
 
   return (
-    <button
-      ref={ref}
-      type={type}
-      className={`flex-center ${className}`}
-      tw="space-x-1.5"
-      {...restProps}
-    >
+    <button ref={ref} type={type} className={`flex-center ${className}`} {...restProps}>
       {label}
     </button>
   )

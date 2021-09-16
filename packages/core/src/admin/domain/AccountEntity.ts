@@ -32,6 +32,13 @@ class AccountEntity implements IAccountEntity {
   static updatePasswordValidate(parameters: IUpdatePasswordInputPort): IErrorInputPort | true {
     const { accountId, oldPassword, newPassword1, newPassword2 } = parameters
 
+    if (oldPassword === '' && newPassword1 === '' && newPassword2 === '') {
+      return {
+        statusCode: StatusCode.emptyPassword,
+        statusMessage: '必填欄位未填寫'
+      }
+    }
+
     if (!Validator.isNumber(accountId)) {
       return {
         statusCode: StatusCode.passwordIsNotSame,

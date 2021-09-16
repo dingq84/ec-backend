@@ -14,6 +14,7 @@ export enum StatusCode {
 
   // admin
   wrongAccountId = 'client-004',
+  emptyPassword = 'client-011',
   wrongPasswordFormat = 'client-005',
   passwordIsNotSame = 'client-006',
   wrongPassword = '1302',

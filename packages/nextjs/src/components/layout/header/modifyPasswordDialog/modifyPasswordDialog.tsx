@@ -106,7 +106,6 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
       core.admin.updatePassword(data)
   )
   const passwordKeys = Object.keys(passwordState) as Array<keyof typeof passwordState>
-  const anyPasswordIsEmpty = passwordKeys.some(key => passwordState[key].value === '')
 
   const closeToast = (): void => {
     errorDispatch({
@@ -150,6 +149,7 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
     const { errorMessage, statusCode } = result.left
     switch (statusCode) {
       case StatusCode.wrongPasswordFormat:
+      case StatusCode.emptyPassword:
         errorDispatch({
           type: 'show',
           payload: {
@@ -262,13 +262,7 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
         Footer={
           <div className="flex-center">
             <Button label="取消" className="btn-outline" onClick={close} />
-            <Button
-              label="重設密碼"
-              className="btn"
-              tw="ml-10"
-              onClick={handleSubmit}
-              disabled={anyPasswordIsEmpty}
-            />
+            <Button label="重設密碼" className="btn" tw="ml-10" onClick={handleSubmit} />
           </div>
         }
         close={close}

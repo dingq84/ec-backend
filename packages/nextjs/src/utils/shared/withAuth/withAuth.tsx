@@ -15,9 +15,6 @@ import core from '@ec-backstage/core/src'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-// services
-import useNoCacheQuery from '@/services/useNoCacheQuery'
-
 // states
 import { setMe } from '@/states/global/me'
 import { useAppDispatch } from '@/states/global/hooks'
@@ -28,8 +25,13 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    const { data: isLogged, isLoading: isLoggedLoading } = useNoCacheQuery(ApiKey.isLogged, () =>
-      core.auth.checkIsLogged()
+    const { data: isLogged, isLoading: isLoggedLoading } = useQuery(
+      ApiKey.isLogged,
+      () => core.auth.checkIsLogged(),
+      {
+        // refetchOnWindowFocus: false,
+        staleTime: 10000
+      }
     )
     const { data: meData, isLoading: isMeLoading } = useQuery(ApiKey.me, () => core.auth.getMe(), {
       enabled: isLogged === true,

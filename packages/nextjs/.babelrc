@@ -3,7 +3,6 @@
 		[
 		"next/babel",
 			{
-				// When true, class properties are compiled to use an assignment expression instead of Object.defineProperty.
 				"class-properties": {
 					"loose": true
 				}

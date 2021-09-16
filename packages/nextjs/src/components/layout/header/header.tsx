@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useMutation } from 'react-query'
 import { isRight } from 'fp-ts/lib/Either'
+import Image from 'next/image'
 import tw from 'twin.macro'
 
 // components
@@ -90,8 +91,8 @@ const Header = () => {
   return (
     <>
       <header tw="relative bg-blue-1 flex flex-col md:flex-row">
-        <nav tw="flex justify-between text-black flex-grow pr-3">
-          <div>router</div>
+        <nav tw="flex justify-end text-black flex-grow pr-3">
+          {/* <div>router</div> */}
           {userName ? (
             <div
               tw="text-gray-3 hover:(cursor-pointer)"
@@ -120,21 +121,72 @@ const Header = () => {
           open={popoverOpen}
           anchorEl={anchorEl.current}
           onClose={() => togglePopover(false)}
-          paperProps={{ css: [tw`w-32 shadow-xl`] }}
+          paperProps={{ css: [tw`shadow-xl py-2.5`] }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
-          <div tw="h-12 mx-2.5" className="flex-center">
-            <small tw="mx-1.5 text-gray-3">{accountName}</small>
+          <div tw="h-12 mx-2.5 flex items-center">
+            <div tw="w-8 h-8 rounded-full bg-blue-2"></div>
+            <div tw="ml-2 flex flex-col">
+              <span tw="text-gray-3 text-base">{name}</span>
+              <small tw="text-gray-2">{accountName}</small>
+            </div>
           </div>
 
           <div tw="mx-auto mt-1 mb-2.5 w-11/12 bg-gray-1 height[1px]"></div>
 
-          <ul tw="w-full all:(py-1.5 text-xs font-normal flex justify-center hover:(bg-gray-1))">
-            <li onClick={openUpdatePasswordDialog}>
-              <Button className="btn-text" label="重設密碼" tw="text-black" />
+          <ul tw="w-full all:(font-normal text-black flex items-center)">
+            <li>
+              <Button
+                label={
+                  <>
+                    <Image
+                      src="/icons/portfolio.svg"
+                      alt="logout icon"
+                      width={15}
+                      height={15}
+                      tw="color[inherit]"
+                    />
+                    <span tw="inline-block ml-5 color[inherit] text-sm">個人資料</span>
+                  </>
+                }
+                tw="w-full py-3.5 px-5 justify-start hover:(bg-blue-2 text-primary)"
+              />
             </li>
-            <li onClick={openLogoutDialog} tw="cursor-pointer">
-              <Button className="btn-text" label="登出" tw="text-black" />
+            <li>
+              <Button
+                onClick={openUpdatePasswordDialog}
+                label={
+                  <>
+                    <Image
+                      src="/icons/refresh.svg"
+                      alt="logout icon"
+                      width={15}
+                      height={15}
+                      tw="color[inherit]"
+                    />
+                    <span tw="inline-block ml-5 color[inherit] text-sm">重設密碼</span>
+                  </>
+                }
+                tw="w-full py-3.5 px-5 justify-start hover:(bg-blue-2 text-primary)"
+              />
+            </li>
+            <li tw="mx-auto mt-1 mb-1 w-11/12 bg-gray-1 height[1px]"></li>
+            <li onClick={openLogoutDialog}>
+              <Button
+                label={
+                  <>
+                    <Image
+                      src="/icons/logout.svg"
+                      alt="logout icon"
+                      width={15}
+                      height={15}
+                      tw="color[inherit]"
+                    />
+                    <span tw="inline-block ml-5 color[inherit] text-sm">登出</span>
+                  </>
+                }
+                tw="w-full py-3.5 px-5 justify-start hover:(bg-blue-2 text-primary)"
+              />
             </li>
           </ul>
         </Popover>
