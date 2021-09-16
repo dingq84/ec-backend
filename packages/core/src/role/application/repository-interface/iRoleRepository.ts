@@ -2,8 +2,9 @@ import { Either } from 'fp-ts/lib/Either'
 
 import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
 import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
-import { IRoleEntity, Status } from '@/role/domain/interface/iRoleEntity'
+import { IRoleEntity } from '@/role/domain/interface/iRoleEntity'
 import { Order } from '@/common/constants/order'
+import { Status } from '@/common/constants/status'
 import { IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
 
 export interface IRoleRepositoryParameters {
@@ -12,6 +13,7 @@ export interface IRoleRepositoryParameters {
     name?: string
     orderBy: Order
     page: number
+    orderField: 'created_at' | 'updated_at'
   }
   updateRoleStatus: {
     id: number

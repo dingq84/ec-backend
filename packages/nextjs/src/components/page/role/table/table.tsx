@@ -25,7 +25,7 @@ import {
 import { IUpdateRoleStatusInputPort } from '@ec-backstage/core/src/role/application/interface/iUpdateRoleStatusUseCase'
 import { IDeleteRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iDeleteRoleUseCase'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
-import { Status } from '@/role/domain/interface/iRoleEntity'
+import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'

@@ -4,7 +4,7 @@ import { Order } from '@/common/constants/order'
 import { IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
 import { IPaginationOutputPort } from '@/common/application/interface/iPaginationUseCase'
 import { IGetPermissionListOutputPort } from '@/permission/application/interface/iGetPermissionListUseCase'
-import { Status } from '@/role/domain/interface/iRoleEntity'
+import { Status } from '@/common/constants/status'
 
 export interface IGetRoleListInputPort {
   status?: Status

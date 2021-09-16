@@ -14,7 +14,7 @@ import TextField from '@/components/shared/textField/textField'
 import { InitialStateProps, Action } from '@/components/page/role/drawer/useDrawerReducer'
 
 // core
-import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
+import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'

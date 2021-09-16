@@ -25,8 +25,7 @@ class RoleRepository implements IRoleRepository {
       url: ApiUrl.roleList,
       method: 'GET',
       withAuth: true,
-      // 畫面不會傳遞其他 orderField，因此不開放給外部
-      params: { ...parameters, orderField: 'created_at' },
+      params: parameters,
       data: {}
     })
 

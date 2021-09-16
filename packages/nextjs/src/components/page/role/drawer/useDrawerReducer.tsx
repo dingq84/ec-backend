@@ -1,7 +1,7 @@
 import { useReducer } from 'react'
 
 // core
-import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
+import { Status } from '@ec-backstage/core/src/common/constants/status'
 import { IGetPermissionListOutputPort } from '@ec-backstage/core/src/permission/application/interface/iGetPermissionListUseCase'
 
 export interface InitialStateProps {

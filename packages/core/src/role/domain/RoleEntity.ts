@@ -2,7 +2,8 @@ import Validator from '@/common/domain/Validator'
 import { StatusCode } from '@/common/constants/statusCode'
 import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
 import { IPermissionEntity } from '@/permission/domain/interface/iPermissionEntity'
-import { IRoleEntity, IRoleData, Status } from '@/role/domain/interface/iRoleEntity'
+import { IRoleEntity, IRoleData } from '@/role/domain/interface/iRoleEntity'
+import { Status } from '@/common/constants/status'
 import { IRoleRepositoryParameters } from '@/role/application/repository-interface/iRoleRepository'
 
 class RoleEntity implements IRoleEntity {

@@ -18,7 +18,7 @@ import core from '@ec-backstage/core/src'
 import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 import { IUpdateRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iUpdateRoleUseCase'
 import { IDeleteRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iDeleteRoleUseCase'
-import { Status } from '@ec-backstage/core/src/role/domain/interface/iRoleEntity'
+import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'

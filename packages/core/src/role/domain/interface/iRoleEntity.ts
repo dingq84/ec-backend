@@ -1,10 +1,5 @@
+import { Status } from '@/common/constants/status'
 import { IPermissionData, IPermissionEntity } from '@/permission/domain/interface/iPermissionEntity'
-
-export enum Status {
-  inactive = 0,
-  active = 1,
-  delete = 2
-}
 
 export interface IRoleData {
   readonly id: number

@@ -4,7 +4,7 @@ import { flow } from 'fp-ts/lib/function'
 
 import { IRolePresenter } from '@/role/adapter/interface/iRolePresenter'
 import { IGetRoleListOutputPort } from '@/role/application/interface/iGetRoleListUseCase'
-import { IRoleEntity, Status } from '@/role/domain/interface/iRoleEntity'
+import { IRoleEntity } from '@/role/domain/interface/iRoleEntity'
 import { IErrorPresenter } from '@/common/adapter/interface/iErrorPresenter'
 import { IPaginationPresenter } from '@/common/adapter/interface/iPaginationPresenter'
 import { IErrorInputPort, IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
@@ -12,12 +12,13 @@ import { IPaginationInputPort } from '@/common/application/interface/iPagination
 import { IGetRoleDetailOutputPort } from '@/role/application/interface/iGetRoleDetailUseCase'
 import { IGetRoleAccountListOutputPort } from '../application/interface/iGetRoleAccountListUseCase'
 import { IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
-
+import { Status } from '@/common/constants/status'
 class RolePresenter implements IRolePresenter {
   constructor(
     private readonly errorPresenter: IErrorPresenter,
     private readonly paginationPresenter: IPaginationPresenter
   ) {}
+
   private getStatusText(status: Status): string {
     switch (status) {
       case 0:
