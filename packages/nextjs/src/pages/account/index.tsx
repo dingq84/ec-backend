@@ -9,6 +9,7 @@ import Paper from '@/components/shared/paper'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
 import Select from '@/components/shared/select'
 import TextField from '@/components/shared/textField'
+import AccountTable from '@/components/page/account/table'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
@@ -16,6 +17,7 @@ import { ApiKey } from '@/constants/services/api'
 // core
 import core from '@ec-backstage/core/src'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
+import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // layouts
 import DefaultLayout from '@/layouts/default'
@@ -49,26 +51,32 @@ const selectCss = css`
   }
 
   & input {
-    ${tw`text-gray-3 text-xs`}
+    ${tw`text-white text-xs placeholder:text-gray-3`}
   }
 
   & label {
     ${tw`text-xs mb-2`}
   }
+
+  &[data-selected='true'] {
+    & > div > div > div {
+      ${tw`border-transparent bg-primary text-white`}
+    }
+  }
 `
 
 interface SearchContainer {
-  name: string
+  keyword: string
   roleId: number | undefined
-  search: (name: string, role: string) => void
+  search: (keyword: string, role: string) => void
 }
 
 const SearchContainer = memo(
   (props: SearchContainer) => {
-    const { name: propName, roleId: propRoleId, search } = props
-    const [name, setName] = useState(propName)
+    const { keyword: propKeyword, roleId: propRoleId, search } = props
+    const [keyword, setKeyword] = useState(propKeyword)
     const [roleId, setRoleId] = useState(propRoleId === undefined ? '' : propRoleId.toString())
-    const [roleList, setRoleList] = useState<Option[]>([{ key: '', value: '全部' }])
+    const [roleList, setRoleList] = useState<Option[]>([])
     const { data } = useQuery(
       ApiKey.roleList,
       () => core.role.getRoleList({ orderBy: Order.Desc, page: 1 }),
@@ -79,35 +87,32 @@ const SearchContainer = memo(
     )
 
     useEnhancedEffect(() => {
-      setName(propName)
+      setKeyword(propKeyword)
       if (propRoleId === undefined) {
         setRoleId('')
       } else {
         setRoleId(propRoleId.toString())
       }
-    }, [propName, propRoleId])
+    }, [propKeyword, propRoleId])
 
     useEnhancedEffect(() => {
       if (data) {
         if (isRight(data)) {
-          setRoleList([
-            ...roleList,
-            ...data.right.roles.map(role => ({ key: role.id.toString(), value: role.name }))
-          ])
+          setRoleList(data.right.roles.map(role => ({ key: role.id.toString(), value: role.name })))
         }
       }
     }, [data])
 
-    const handleNameChange = (newName: string): void => {
-      setName(newName)
+    const handleNameChange = (newKeyword: string): void => {
+      setKeyword(newKeyword)
     }
 
-    const handleRoleChange = (value: string): void => {
-      setRoleId(value)
+    const handleRoleChange = (newRoleId: string): void => {
+      setRoleId(newRoleId)
     }
 
     const handleClick = (): void => {
-      search(name, roleId)
+      search(keyword, roleId)
     }
 
     return (
@@ -117,18 +122,19 @@ const SearchContainer = memo(
           <TextField
             placeholder="搜尋管理者名稱、帳號"
             css={[inputCss]}
-            value={name}
+            value={keyword}
             onChange={handleNameChange}
-            onClear={() => setName('')}
+            onClear={() => setKeyword('')}
             tabIndex={1}
           />
           <Select
             value={roleId}
             options={roleList}
-            inputProps={{ label: '角色名稱', clear: false }}
+            inputProps={{ label: '角色名稱', placeholder: '全部' }}
             css={[selectCss]}
             onChange={handleRoleChange}
             paperProps={{ css: [tw`text-gray-3 text-xs`] }}
+            data-selected={String(roleId !== '')}
           />
           <Button
             className="btn-outline"
@@ -142,21 +148,21 @@ const SearchContainer = memo(
     )
   },
   (prevProps, nextProps) => {
-    return prevProps.name === nextProps.name && prevProps.roleId === nextProps.roleId
+    return prevProps.keyword === nextProps.keyword && prevProps.roleId === nextProps.roleId
   }
 )
 
 const Account = () => {
-  const [name, setName] = useState('')
+  const [keyword, setKeyword] = useState('')
   const [roleId, setRoleId] = useState<undefined | number>(undefined)
-  const [, setStatus] = useState(-1)
+  const [status, setStatus] = useState<Status>(-1)
 
-  const handleSearch = (name: string, roleId: string): void => {
-    setName(name)
-    setRoleId(Number(roleId))
+  const handleSearch = (newKeyword: string, newRoleId: string): void => {
+    setKeyword(newKeyword)
+    setRoleId(newRoleId === '' ? undefined : Number(newRoleId))
   }
 
-  const handleTabClick = (newStatus: number): void => {
+  const handleTabClick = (newStatus: Status): void => {
     setStatus(newStatus)
   }
 
@@ -175,15 +181,18 @@ const Account = () => {
         </TabList>
 
         <TabPanel>
-          <SearchContainer name={name} roleId={roleId} search={handleSearch} />
+          <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
+          <AccountTable keyword={keyword} roleId={roleId} status={status} />
         </TabPanel>
 
         <TabPanel>
-          <SearchContainer name={name} roleId={roleId} search={handleSearch} />
+          <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
+          <AccountTable keyword={keyword} roleId={roleId} status={status} />
         </TabPanel>
 
         <TabPanel>
-          <SearchContainer name={name} roleId={roleId} search={handleSearch} />
+          <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
+          <AccountTable keyword={keyword} roleId={roleId} status={status} />
         </TabPanel>
       </Tabs>
     </>
