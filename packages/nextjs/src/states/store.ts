@@ -4,9 +4,10 @@ import { configureStore } from '@reduxjs/toolkit'
 import error from '@/states/error'
 import me from '@/states/me'
 import settings from '@/states/settings'
+import toast from '@/states/toast'
 
 export const store = configureStore({
-  reducer: { error, me, settings },
+  reducer: { error, me, settings, toast },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false

@@ -7,7 +7,6 @@ import 'twin.macro'
 import Button from '@/components/shared/button'
 import useDrawerTemplate from '@/components/page/role/drawer/useDrawerTemplate'
 import useDrawerReducer from '@/components/page/role/drawer/useDrawerReducer'
-import { ToastProps } from '@/components/shared/toast'
 import RoleAffectedAccountsDialog from '@/components/page/role/affectedAccountsDialog'
 
 // constants
@@ -29,18 +28,18 @@ import { Mode } from '@/pages/role'
 // state
 import { useAppDispatch } from '@/states/hooks'
 import { setError } from '@/states/error'
+import { pushToast } from '@/states/toast'
 
 interface EditViewDrawerProps {
   mode: Mode
   open: boolean
   close(): void
   changeModeToEdit(): void
-  handleToast(toastProps: Pick<ToastProps, 'show' | 'level' | 'message'>): void
   id: number
 }
 
 const EditViewDrawer = (props: EditViewDrawerProps) => {
-  const { mode, open, close, handleToast, id, changeModeToEdit } = props
+  const { mode, open, close, id, changeModeToEdit } = props
   const queryClient = useQueryClient()
   const reduxDispatch = useAppDispatch()
   const [state, dispatch] = useDrawerReducer()
@@ -88,7 +87,6 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
       }
 
       const { name, status, permissions } = roleData.right
-
       permissions.forEach(permission => {
         const { id } = permission
         const target = state.permissions.find(permission => permission.id === id)
@@ -119,8 +117,9 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     if (isRight(result)) {
       queryClient.invalidateQueries(ApiKey.roleList)
       queryClient.invalidateQueries([ApiKey.roleDetail, id])
-
-      handleToast({ show: true, level: 'success', message: `「${state.name}」角色編輯成功` })
+      reduxDispatch(
+        pushToast({ show: true, level: 'success', message: `「${state.name}」角色編輯成功` })
+      )
       close()
       return
     }
@@ -133,16 +132,14 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
         StatusCode.roleNameIsExist
       ].includes(statusCode)
     ) {
-      handleToast({ show: true, level: 'warning', message: errorMessage })
-
       if (statusCode === StatusCode.permissionIsEmpty) {
         handleErrorTarget(['permissions'])
       } else {
         handleErrorTarget(['name'])
       }
+      reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
       return
     }
-
     reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
   }
 
@@ -154,18 +151,19 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     }
   }
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setModalProps({ ...modalProps, open: false })
   }
 
-  const handleDelete = () => {
+  const handleDelete = (): void => {
     const callback = async () => {
       const result = await deleteMutation.mutateAsync({ id })
 
       if (isRight(result)) {
         queryClient.invalidateQueries([ApiKey.roleList])
-
-        handleToast({ show: true, level: 'success', message: `「${state.name}」角色刪除成功` })
+        reduxDispatch(
+          pushToast({ show: true, level: 'success', message: `「${state.name}」角色刪除成功` })
+        )
         close()
         return
       }

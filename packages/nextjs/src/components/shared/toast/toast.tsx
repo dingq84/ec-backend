@@ -1,33 +1,33 @@
 import Image from 'next/image'
-import { useState, useRef } from 'react'
+import { useState, useRef, HTMLAttributes } from 'react'
 import tw from 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
-import Modal from '@/components/shared/modal'
+
+// hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-export interface ToastProps {
+// states
+import { useAppDispatch } from '@/states/hooks'
+import { removeToast } from '@/states/toast'
+
+export interface Toast {
+  id: string
   show: boolean
   message: string
   close?: () => void
   manualClose?: boolean
   autoClose?: boolean
   closeTimeout?: number
-  position?:
-    | 'leftTop'
-    | 'left'
-    | 'leftBottom'
-    | 'bottom'
-    | 'rightBottom'
-    | 'right'
-    | 'rightTop'
-    | 'top'
   level?: 'info' | 'warning' | 'remind' | 'success'
 }
 
+export interface ToastProps extends Toast, Omit<HTMLAttributes<HTMLDivElement>, 'id'> {}
+
 const Toast = (props: ToastProps) => {
   const {
+    id,
     show,
     message,
     close,
@@ -35,14 +35,24 @@ const Toast = (props: ToastProps) => {
     autoClose = true,
     closeTimeout = 3000,
     level = 'info',
-    position = 'leftBottom'
+    ...restProps
   } = props
-  const [modalOpen, setModalOpen] = useState(false)
   const [toastOpen, setToastOpen] = useState(false)
+  const dispatch = useAppDispatch()
   const timer = useRef(0)
 
   useEnhancedEffect(() => {
-    if (autoClose && show) {
+    if (show) {
+      setTimeout(() => {
+        setToastOpen(true)
+      }, 300)
+    } else {
+      closeToast()
+    }
+  }, [show])
+
+  useEnhancedEffect(() => {
+    if (autoClose) {
       timer.current = window.setTimeout(() => {
         closeToast()
       }, closeTimeout)
@@ -51,26 +61,14 @@ const Toast = (props: ToastProps) => {
     return () => {
       clearTimeout(timer.current)
     }
-  }, [show, autoClose])
-
-  useEnhancedEffect(() => {
-    if (show) {
-      setModalOpen(show)
-      setTimeout(() => {
-        setToastOpen(show)
-      }, 300)
-    } else {
-      setToastOpen(show)
-      setTimeout(() => {
-        setModalOpen(show)
-      }, 300)
-    }
-  }, [show])
+  }, [autoClose])
 
   const closeToast = (): void => {
-    setModalOpen(false)
     setToastOpen(false)
     clearTimeout(timer.current)
+    setTimeout(() => {
+      dispatch(removeToast({ id }))
+    }, 300)
 
     if (close) {
       close()
@@ -78,46 +76,28 @@ const Toast = (props: ToastProps) => {
   }
 
   return (
-    <Modal
-      open={modalOpen}
-      backdropProps={{
-        invisible: true,
-        hidden: true
-      }}
+    <div
+      tw="rounded-lg border border-solid py-1.5 px-3 flex items-center justify-center transition-all duration-300 fixed -left-full mt-5"
+      css={[
+        level === 'info' && tw`border-blue-10 bg-blue-9`,
+        level === 'warning' && tw`border-red-3 bg-red-2`,
+        level === 'success' && tw`border-green-2 bg-green-1`,
+        level === 'remind' && tw`border-yellow-2 bg-yellow-1`,
+        toastOpen && tw`left-20 animate-shake`
+      ]}
+      {...restProps}
     >
-      <div
-        tw="rounded-lg border border-solid py-1.5 px-3 inline-flex items-center justify-center fixed transition-all duration-300"
-        css={[
-          level === 'info' && tw`border-blue-10 bg-blue-9`,
-          level === 'warning' && tw`border-red-3 bg-red-2`,
-          level === 'success' && tw`border-green-2 bg-green-1`,
-          level === 'remind' && tw`border-yellow-2 bg-yellow-1`,
-          position === 'left' && tw`bottom-1/2 transform -translate-y-1/2 -left-full`,
-          position === 'leftTop' && tw`top-10 -left-full`,
-          position === 'leftBottom' && tw`bottom-10 -left-full`,
-          position === 'bottom' && tw`-bottom-full left-1/2 transform -translate-x-1/2`,
-          position === 'rightBottom' && tw`bottom-10 -right-full`,
-          position === 'right' && tw`bottom-1/2 transform -translate-y-1/2 -right-full`,
-          position === 'rightTop' && tw`top-10 -right-full`,
-          position === 'top' && tw`-top-full left-1/2 transform -translate-x-1/2`,
-          toastOpen && position.includes('left') && tw`left-20`,
-          toastOpen && position.includes('right') && tw`right-20`,
-          toastOpen && position === 'bottom' && tw`bottom-10`,
-          toastOpen && position === 'top' && tw`top-10`
-        ]}
-      >
-        <Image src={`/icons/toast/${level}.svg`} alt="toast icon" width={24} height={24} />
-        <span tw="ml-2 font-normal text-sm text-black select-none">{message}</span>
-        {manualClose ? (
-          <Button
-            className="btn-text"
-            tw="ml-10"
-            onClick={closeToast}
-            label={<Image src="/icons/times.svg" alt="close icon" width={8} height={8} />}
-          />
-        ) : null}
-      </div>
-    </Modal>
+      <Image src={`/icons/toast/${level}.svg`} alt="toast icon" width={24} height={24} />
+      <span tw="ml-2 font-normal text-sm text-black select-none">{message}</span>
+      {manualClose ? (
+        <Button
+          className="btn-text"
+          tw="ml-10"
+          onClick={closeToast}
+          label={<Image src="/icons/times.svg" alt="close icon" width={8} height={8} />}
+        />
+      ) : null}
+    </div>
   )
 }
 

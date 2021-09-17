@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface initialStateProps {
+interface InitialState {
   sidebarIsExtend: boolean
 }
 
-const initialState: initialStateProps = {
+const initialState: InitialState = {
   sidebarIsExtend: true
 }
 

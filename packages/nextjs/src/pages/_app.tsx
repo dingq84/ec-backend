@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 
 // components
 import ErrorDialog from '@/components/page/common/errorDialog'
+import { ToastContainer } from '@/components/shared/toast'
 
 // states
 import { store } from '@/states/store'
@@ -43,6 +44,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           <ProtectedComponent {...pageProps} />
         </Layout>
         <ErrorDialog />
+        <ToastContainer />
       </ReduxProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

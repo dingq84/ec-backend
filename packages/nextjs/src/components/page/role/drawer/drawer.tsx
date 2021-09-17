@@ -1,5 +1,4 @@
 // components
-import { ToastProps } from '@/components/shared/toast'
 import CreateDrawer from '@/components/page/role/drawer/createDrawer'
 import EditViewDrawer from '@/components/page/role/drawer/editViewDrawer'
 
@@ -9,7 +8,6 @@ import { Mode } from '@/pages/role'
 type RoleDrawerProps = {
   open: boolean
   close(): void
-  handleToast(toastProps: Pick<ToastProps, 'show' | 'level' | 'message'>): void
   mode: Mode
   id?: number
   changeModeToEdit(): void

@@ -4,7 +4,6 @@ import { isRight } from 'fp-ts/Either'
 // components
 import useDrawerTemplate from '@/components/page/role/drawer/useDrawerTemplate'
 import useDrawerReducer from '@/components/page/role/drawer/useDrawerReducer'
-import { ToastProps } from '@/components/shared/toast'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
@@ -23,15 +22,15 @@ import { Mode } from '@/pages/role'
 // state
 import { useAppDispatch } from '@/states/hooks'
 import { setError } from '@/states/error'
+import { pushToast } from '@/states/toast'
 
 interface CreateDrawerProps {
   open: boolean
   close(): void
-  handleToast(toastProps: Pick<ToastProps, 'show' | 'level' | 'message'>): void
 }
 
 const CreateDrawer = (props: CreateDrawerProps) => {
-  const { open, close, handleToast } = props
+  const { open, close } = props
   const queryClient = useQueryClient()
   const reduxDispatch = useAppDispatch()
   const [state, dispatch] = useDrawerReducer()
@@ -70,13 +69,14 @@ const CreateDrawer = (props: CreateDrawerProps) => {
   const submit = async () => {
     const result = await mutation.mutateAsync(state)
     if (isRight(result)) {
-      handleToast({ show: true, level: 'success', message: `「${state.name}」角色新增成功` })
+      reduxDispatch(
+        pushToast({ show: true, level: 'success', message: `「${state.name}」角色新增成功` })
+      )
       close()
       return
     }
 
     const { statusCode, errorMessage } = result.left
-
     if (
       [
         StatusCode.wrongRoleNameFormat,
@@ -84,14 +84,12 @@ const CreateDrawer = (props: CreateDrawerProps) => {
         StatusCode.roleNameIsExist
       ].includes(statusCode)
     ) {
-      handleToast({ show: true, level: 'warning', message: errorMessage })
-
       if (statusCode === StatusCode.permissionIsEmpty) {
         handleErrorTarget(['permissions'])
       } else {
         handleErrorTarget(['name'])
       }
-
+      reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
       return
     }
 

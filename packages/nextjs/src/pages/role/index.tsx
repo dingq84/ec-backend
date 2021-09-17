@@ -6,7 +6,6 @@ import Button from '@/components/shared/button'
 import Paper from '@/components/shared/paper'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
 import TextField from '@/components/shared/textField'
-import Toast, { ToastProps } from '@/components/shared/toast'
 import RoleDrawer from '@/components/page/role/drawer'
 import RoleTable from '@/components/page/role/table'
 
@@ -77,11 +76,6 @@ const Role = () => {
   const [status, setStatus] = useState<Status>(-1)
   const [currentRoleId, setCurrentRoleId] = useState<number | undefined>(undefined)
   const [drawProps, setDrawProps] = useState({ open: false, mode: Mode.view })
-  const [toastProps, setToastProps] = useState<Pick<ToastProps, 'level' | 'message' | 'show'>>({
-    level: 'warning',
-    message: '',
-    show: false
-  })
   const handleSearch = (newKeyword: string): void => {
     setKeyword(newKeyword)
   }
@@ -101,10 +95,6 @@ const Role = () => {
 
   const closeDrawer = (): void => {
     setDrawProps({ ...drawProps, open: false })
-  }
-
-  const handleToastProps = (newToastProps: typeof toastProps): void => {
-    setToastProps({ ...toastProps, ...newToastProps })
   }
 
   return (
@@ -140,12 +130,9 @@ const Role = () => {
       <RoleDrawer
         {...drawProps}
         close={closeDrawer}
-        handleToast={handleToastProps}
         id={currentRoleId}
         changeModeToEdit={changeModeToEdit}
       />
-
-      <Toast {...toastProps} close={() => setToastProps({ ...toastProps, show: false })} />
     </>
   )
 }

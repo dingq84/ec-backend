@@ -9,7 +9,6 @@ Default.args = {
   show: false,
   level: 'info',
   manualClose: true,
-  position: 'leftBottom',
   message: 'This is an example of toast',
   closeTimeout: 3000,
   autoClose: true

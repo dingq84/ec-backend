@@ -36,6 +36,7 @@ import { Mode } from '@/pages/role'
 // states
 import { useAppDispatch } from '@/states/hooks'
 import { setError } from '@/states/error'
+import { pushToast } from '@/states/toast'
 
 interface RoleTableProps {
   openDrawer: (mode: Mode, id?: number) => void
@@ -93,12 +94,19 @@ const RoleTable = (props: RoleTableProps) => {
   }
 
   const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
-    const id = data.original.id
+    const { id, name } = data.original
     const callback = async () => {
       const result = await deleteRoleMutation({ id })
 
       if (isRight(result)) {
         queryClient.invalidateQueries([ApiKey.roleList])
+        dispatch(
+          pushToast({
+            show: true,
+            message: `「${name}」角色刪除成功`,
+            level: 'success'
+          })
+        )
         return
       }
 
@@ -110,13 +118,20 @@ const RoleTable = (props: RoleTableProps) => {
   }
 
   const handleStatusChange = async (value: boolean, data: Row<IGetRoleOutput>): Promise<void> => {
-    const id = data.original.id
+    const { id, name } = data.original
     const callback = async () => {
       const status = value ? Status.active : Status.inactive
       const result = await updateRoleStatusMutation({ id, status })
 
       if (isRight(result)) {
         queryClient.invalidateQueries([ApiKey.roleList])
+        dispatch(
+          pushToast({
+            show: true,
+            message: `「${name}」角色${value ? '啟用' : '停用'}成功`,
+            level: 'success'
+          })
+        )
         return
       }
 

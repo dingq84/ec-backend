@@ -1,4 +1,4 @@
-import { useState, useRef, SyntheticEvent, useReducer } from 'react'
+import { useState, useRef, SyntheticEvent } from 'react'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import { isRight } from 'fp-ts/Either'
@@ -10,7 +10,6 @@ import 'twin.macro'
 import Button from '@/components/shared/button'
 import Paper from '@/components/shared/paper'
 import TextField from '@/components/shared/textField'
-import Toast from '@/components/shared/toast'
 
 // core
 import core from '@ec-backstage/core/src'
@@ -23,44 +22,14 @@ import LoginLayout from '@/layouts/login'
 // states
 import { useAppDispatch } from '@/states/hooks'
 import { setError } from '@/states/error'
-
-interface ErrorState {
-  type: 'local' | 'global'
-  message: string
-  target: Array<keyof ILoginInputPort>
-}
-
-type Action =
-  | { type: 'localError'; payload: { message: string; target: Array<keyof ILoginInputPort> } }
-  | { type: 'globalError' }
-  | { type: 'reset' }
-
-const initialValue: ErrorState = {
-  type: 'local',
-  message: '',
-  target: []
-}
-
-const reducer = (state: ErrorState, action: Action): ErrorState => {
-  switch (action.type) {
-    case 'localError':
-      return { ...state, ...action.payload, type: 'local' }
-    case 'globalError':
-      return { ...state, type: 'global', target: ['account', 'password'] }
-    case 'reset':
-      return initialValue
-    default:
-      return state
-  }
-}
+import { pushToast } from '@/states/toast'
 
 function Login() {
   const router = useRouter()
   const [inputType, setInputType] = useState<'text' | 'password'>('password')
   const [data, setData] = useState<ILoginInputPort>({ account: '', password: '' })
-  const [errors, dispatch] = useReducer(reducer, initialValue)
-  const reduxDispatch = useAppDispatch()
-
+  const [errorFields, setErrorFields] = useState<Array<keyof ILoginInputPort>>([])
+  const dispatch = useAppDispatch()
   const accountRef = useRef<HTMLInputElement>(null!)
   const mutation = useMutation((data: ILoginInputPort) => core.auth.login(data))
 
@@ -72,18 +41,15 @@ function Login() {
     }
   }
 
-  const resetError = (): void => {
-    dispatch({ type: 'reset' })
-  }
-
   const handleChange = (value: string, type: keyof ILoginInputPort): void => {
+    if (errorFields.length) {
+      setErrorFields([])
+    }
     setData(data => ({ ...data, [type]: value }))
-    resetError()
   }
 
   const onSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault()
-
     const result = await mutation.mutateAsync(data)
     if (isRight(result)) {
       router.push('/')
@@ -91,44 +57,33 @@ function Login() {
     }
 
     const { errorMessage, statusCode } = result.left
-
     // 清除密碼
     setData(data => ({ ...data, password: '' }))
     // 反白帳號
     accountRef.current.focus()
     accountRef.current.select()
-    // 錯誤為帳號密碼的問題，視為局部錯誤，其餘為全局錯誤
-
     if (
       [
         StatusCode.emptyAccountOrPassword,
         StatusCode.wrongAccountFormat,
         StatusCode.wrongAccountOrPassword
-      ].includes(statusCode)
+      ].includes(statusCode) === false
     ) {
-      const target: Array<keyof ILoginInputPort> = ['account']
-      if (statusCode !== StatusCode.wrongAccountFormat) {
-        target.push('password')
-      }
-
-      dispatch({ type: 'localError', payload: { message: errorMessage, target } })
+      dispatch(setError({ message: errorMessage, show: true, statusCode }))
       return
     }
 
-    const message = errorMessage.replace(/,/g, ',\n')
-    dispatch({ type: 'globalError' })
-    reduxDispatch(setError({ message, show: true, statusCode }))
+    if (statusCode !== StatusCode.wrongAccountFormat) {
+      setErrorFields(['account', 'password'])
+    } else {
+      setErrorFields(['account'])
+    }
+
+    dispatch(pushToast({ show: true, message: errorMessage, level: 'warning' }))
   }
 
   return (
     <LoginLayout>
-      <Toast
-        show={Boolean(errors.message && errors.type === 'local')}
-        message={errors.message}
-        level="warning"
-        position="leftBottom"
-      />
-
       <Paper tw="bg-white height[calc(100% - 64px)] px-12 width[450px] flex flex-col justify-center">
         <h1 tw="w-full text-black text-4xl font-semibold leading-normal mb-4">後台管理系統</h1>
         <p tw="text-lg text-gray-3 font-normal w-full">請登入您的使用者帳號及密碼</p>
@@ -139,7 +94,7 @@ function Login() {
             name="account"
             label="帳號"
             placeholder="請輸入您的帳號"
-            error={errors.target.includes('account')}
+            error={errorFields.includes('account')}
             onChange={value => handleChange(value, 'account')}
             tabIndex={1}
             value={data.account}
@@ -153,7 +108,7 @@ function Login() {
             tabIndex={2}
             value={data.password}
             placeholder="請輸入您的密碼"
-            error={errors.target.includes('password')}
+            error={errorFields.includes('password')}
             onChange={value => handleChange(value, 'password')}
             adornment={{
               end: (

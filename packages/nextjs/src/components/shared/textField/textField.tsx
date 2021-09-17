@@ -84,9 +84,9 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
         <div
           tw="py-1.5 px-2.5 rounded-lg border border-solid border-blue-gray-3 flex items-center text-black space-x-1 bg-blue-2 h-9"
           css={[
+            border === false && error === false && tw`border-none`,
             error && tw`border-red-1`,
-            disabled && tw`bg-blue-1 text-blue-gray-3 border-none`,
-            border === false && tw`border-none`
+            disabled && tw`bg-blue-1 text-blue-gray-3 border-none`
           ]}
         >
           {/* 針對 start adornment 和 input 包起來，讓他可以有 wrap 的樣子，end adornment 和 clear button 維持垂直置中 */}
