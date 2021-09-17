@@ -34,8 +34,8 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import { Mode } from '@/pages/role'
 
 // states
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { useAppDispatch } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 interface RoleTableProps {
   openDrawer: (mode: Mode, id?: number) => void
@@ -78,8 +78,8 @@ const RoleTable = (props: RoleTableProps) => {
 
   useEnhancedEffect(() => {
     if (data && isLeft(data)) {
-      const { errorMessage } = data.left
-      dispatch(setError({ message: errorMessage }))
+      const { errorMessage, statusCode } = data.left
+      dispatch(setError({ message: errorMessage, show: true, statusCode }))
     }
   }, [data])
 
@@ -102,8 +102,8 @@ const RoleTable = (props: RoleTableProps) => {
         return
       }
 
-      const { errorMessage } = result.left
-      dispatch(setError({ message: errorMessage }))
+      const { errorMessage, statusCode } = result.left
+      dispatch(setError({ message: errorMessage, show: true, statusCode }))
     }
 
     setModalProps({ open: true, id, callback })
@@ -120,8 +120,8 @@ const RoleTable = (props: RoleTableProps) => {
         return
       }
 
-      const { errorMessage } = result.left
-      dispatch(setError({ message: errorMessage }))
+      const { errorMessage, statusCode } = result.left
+      dispatch(setError({ message: errorMessage, show: true, statusCode }))
     }
 
     if (value) {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useQuery } from 'react-query'
-import { isRight } from 'fp-ts/Either'
+import { isLeft, isRight } from 'fp-ts/Either'
 import { useState } from 'react'
 import 'twin.macro'
 
@@ -27,8 +27,8 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import { Mode } from '@/pages/role'
 
 // state
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { useAppDispatch } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 interface EditViewDrawerProps {
   mode: Mode
@@ -73,43 +73,44 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
       if (isRight(permissionData)) {
         dispatch({ type: 'setPermissionData', payload: { permissions: permissionData.right } })
       } else {
-        const { errorMessage } = permissionData.left
-        reduxDispatch(setError({ message: errorMessage }))
+        const { errorMessage, statusCode } = permissionData.left
+        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
       }
     }
   }, [permissionData])
 
   useEnhancedEffect(() => {
     if (roleData) {
-      if (isRight(roleData)) {
-        const { name, status, permissions } = roleData.right
-
-        permissions.forEach(permission => {
-          const { id } = permission
-          const target = state.permissions.find(permission => permission.id === id)
-
-          if (target) {
-            dispatch({ type: 'updateParentPermission', payload: { id, value: true } })
-            return
-          }
-
-          let index = state.permissions.findIndex(permission => permission.id > id)
-          if (index === -1) {
-            index = state.permissions.length - 1
-          } else {
-            index = index - 1
-          }
-
-          const parentId = state.permissions[index].id
-          dispatch({ type: 'updateChildPermission', payload: { id, value: true, parentId } })
-        })
-
-        dispatch({ type: 'updateName', payload: { name } })
-        dispatch({ type: 'updateStatus', payload: { status } })
-      } else {
-        const { errorMessage } = roleData.left
-        reduxDispatch(setError({ message: errorMessage }))
+      if (isLeft(roleData)) {
+        const { errorMessage, statusCode } = roleData.left
+        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
+        return
       }
+
+      const { name, status, permissions } = roleData.right
+
+      permissions.forEach(permission => {
+        const { id } = permission
+        const target = state.permissions.find(permission => permission.id === id)
+
+        if (target) {
+          dispatch({ type: 'updateParentPermission', payload: { id, value: true } })
+          return
+        }
+
+        let index = state.permissions.findIndex(permission => permission.id > id)
+        if (index === -1) {
+          index = state.permissions.length - 1
+        } else {
+          index = index - 1
+        }
+
+        const parentId = state.permissions[index].id
+        dispatch({ type: 'updateChildPermission', payload: { id, value: true, parentId } })
+      })
+
+      dispatch({ type: 'updateName', payload: { name } })
+      dispatch({ type: 'updateStatus', payload: { status } })
     }
   }, [roleData])
 
@@ -142,7 +143,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
       return
     }
 
-    reduxDispatch(setError({ message: errorMessage }))
+    reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
   }
 
   const handleSubmit = async (): Promise<void> => {
@@ -169,8 +170,8 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
         return
       }
 
-      const { errorMessage } = result.left
-      reduxDispatch(setError({ message: errorMessage }))
+      const { errorMessage, statusCode } = result.left
+      reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
     }
 
     setModalProps({ open: true, id, callback })

@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // reducers
-import error from '@/states/global/error'
-import me from '@/states/global/me'
-import settings from '@/states/global/settings'
+import error from '@/states/error'
+import me from '@/states/me'
+import settings from '@/states/settings'
 
 export const store = configureStore({
   reducer: { error, me, settings },

@@ -21,8 +21,8 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 import { Mode } from '@/pages/role'
 
 // state
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { useAppDispatch } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 interface CreateDrawerProps {
   open: boolean
@@ -61,8 +61,8 @@ const CreateDrawer = (props: CreateDrawerProps) => {
       if (isRight(permissionData)) {
         dispatch({ type: 'setPermissionData', payload: { permissions: permissionData.right } })
       } else {
-        const { errorMessage } = permissionData.left
-        reduxDispatch(setError({ message: errorMessage }))
+        const { errorMessage, statusCode } = permissionData.left
+        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
       }
     }
   }, [permissionData])
@@ -95,7 +95,7 @@ const CreateDrawer = (props: CreateDrawerProps) => {
       return
     }
 
-    reduxDispatch(setError({ message: errorMessage }))
+    reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
   }
 
   const { element, handleErrorTarget } = useDrawerTemplate({

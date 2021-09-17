@@ -1,19 +1,27 @@
+import { useRouter } from 'next/router'
 import 'twin.macro'
 
 // components
 import Dialog from '@/components/shared/dialog'
 
+// core
+import core from '@ec-backstage/core/src'
+import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
+
 // states
-import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
-import { reset } from '@/states/global/error'
+import { useAppDispatch, useAppSelector } from '@/states/hooks'
+import { hideError } from '@/states/error'
 
 const ErrorDialog = () => {
-  const message = useAppSelector(state => state.error.message).replace(/,/g, ',\n')
-  const callback = useAppSelector(state => state.error.callback)
   const dispatch = useAppDispatch()
-
+  const router = useRouter()
+  const { message, callback, show, statusCode } = useAppSelector(state => state.error)
   const close = (): void => {
-    dispatch(reset())
+    dispatch(hideError())
+    if ([StatusCode.tokenCancel, StatusCode.tokenExpire].includes(statusCode)) {
+      core.auth.removeRefreshToken()
+      router.push('/auth/login')
+    }
 
     if (callback) {
       callback()
@@ -22,7 +30,7 @@ const ErrorDialog = () => {
 
   return (
     <Dialog
-      open={Boolean(message)}
+      open={show}
       modalProps={{
         onClose: close
       }}

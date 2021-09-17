@@ -16,8 +16,8 @@ import core from '@ec-backstage/core/src'
 import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 
 // states
-import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { useAppDispatch, useAppSelector } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 // password initialState and reducer
 interface PasswordInitialState {
@@ -190,7 +190,7 @@ const ModifyPasswordDialog = (props: ModifyPasswordDialogProps) => {
         })
         break
       default:
-        reduxDispatch(setError({ message: errorMessage }))
+        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
     }
   }
 

@@ -19,11 +19,12 @@ import core from '@ec-backstage/core/src'
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // states
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { useAppDispatch } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 // types
 import { Option } from '@/types/components/input'
+
 interface RoleDialogProps {
   id: number
   open: boolean
@@ -48,8 +49,8 @@ const AffectedAccountsDialog = (props: RoleDialogProps) => {
   useEnhancedEffect(() => {
     if (data) {
       if (isLeft(data)) {
-        const { errorMessage } = data.left
-        dispatch(setError({ message: errorMessage }))
+        const { errorMessage, statusCode } = data.left
+        dispatch(setError({ message: errorMessage, show: true, statusCode }))
       } else {
         setAccounts(
           data.right.accounts.map(account => ({ key: account.id.toString(), value: account.name }))
@@ -58,7 +59,7 @@ const AffectedAccountsDialog = (props: RoleDialogProps) => {
     }
   }, [data])
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     callback()
     close()
   }

@@ -6,6 +6,7 @@ import { IGetMeUseCase } from '@/auth/application/interface/iGetMeUseCase'
 import { ILoginUseCase } from '@/auth/application/interface/iLoginUseCase'
 import { ILogoutUseCase } from '@/auth/application/interface/iLogoutUseCase'
 import { IRefreshTokenUseCase } from '@/auth/application/interface/iRefreshTokenUseCase'
+import { IRemoveRefreshTokenUseCase } from '@/auth/application/interface/iRemoveRefreshTokenUseCase'
 import { IGetPermissionListUseCase } from '@/permission/application/interface/iGetPermissionListUseCase'
 import { ICreateRoleUseCase } from '@/role/application/interface/iCreateRoleUseCase'
 import { IDeleteRoleUseCase } from '@/role/application/interface/iDeleteRoleUseCase'
@@ -27,6 +28,7 @@ export interface IUseCases {
     getMe: IGetMeUseCase
     getAccessToken: IGetAccessTokenUseCase
     checkIsLogged: ICheckIsLoggedUseCase
+    removeRefreshToken: IRemoveRefreshTokenUseCase
   }
   role: {
     getRoleList: IGetRoleListUseCase

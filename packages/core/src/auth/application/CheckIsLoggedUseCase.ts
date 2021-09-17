@@ -23,7 +23,6 @@ class CheckIsLoggedUseCase implements ICheckIsLoggedUseCase {
     }
 
     const meEntity = await this.authRepository.getMe()
-
     if (isLeft(meEntity)) {
       return false
     }

@@ -9,8 +9,8 @@ import Outer from '@/components/layout/sidebar/outer'
 import Collapse from '@/components/shared/collapse'
 
 // states
-import { useAppDispatch, useAppSelector } from '@/states/global/hooks'
-import { toggleSidebar } from '@/states/global/settings'
+import { useAppDispatch, useAppSelector } from '@/states/hooks'
+import { toggleSidebar } from '@/states/settings'
 
 const backgroundGradient = css`
   & {

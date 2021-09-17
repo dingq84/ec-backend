@@ -17,6 +17,7 @@ import GetRoleDetailUseCase from '@/role/application/GetRoleDetailUseCase'
 import UpdateRoleUseCase from '@/role/application/UpdateRoleUseCase'
 import GetRoleAccountListUseCase from '@/role/application/GetRoleAccountListUseCase'
 import GetAccountListUseCase from '@/admin/application/GetAccountListUseCase'
+import RemoveRefreshTokenUseCase from '@/auth/application/RemoveRefreshTokenUseCase'
 
 function createUseCases(repositories: IRepositories, presenters: IPresenters): IUseCases {
   const refreshTokenUseCase = new RefreshTokenUseCase(
@@ -25,6 +26,7 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
     presenters.error.auth
   )
   const getAccessTokenUseCase = new GetAccessTokenUseCase(repositories.auth)
+  const removeRefreshTokenUseCase = new RemoveRefreshTokenUseCase(repositories.auth)
 
   return {
     admin: {
@@ -33,7 +35,11 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
     },
     auth: {
       login: new LoginUseCase(repositories.auth, presenters.auth, presenters.error.auth),
-      logout: new LogoutUseCase(repositories.auth, presenters.error.default),
+      logout: new LogoutUseCase(
+        removeRefreshTokenUseCase,
+        repositories.auth,
+        presenters.error.default
+      ),
       refreshToken: refreshTokenUseCase,
       getMe: new GetMeUseCase(repositories.auth, presenters.auth),
       getAccessToken: getAccessTokenUseCase,
@@ -41,7 +47,8 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
         repositories.auth,
         getAccessTokenUseCase,
         refreshTokenUseCase
-      )
+      ),
+      removeRefreshToken: removeRefreshTokenUseCase
     },
     role: {
       getRoleList: new GetRoleListUseCase(repositories.role, presenters.role),

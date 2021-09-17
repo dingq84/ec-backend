@@ -21,8 +21,8 @@ import { ILoginInputPort } from '@ec-backstage/core/src/auth/application/interfa
 import LoginLayout from '@/layouts/login'
 
 // states
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { useAppDispatch } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 interface ErrorState {
   type: 'local' | 'global'
@@ -117,7 +117,7 @@ function Login() {
 
     const message = errorMessage.replace(/,/g, ',\n')
     dispatch({ type: 'globalError' })
-    reduxDispatch(setError({ message }))
+    reduxDispatch(setError({ message, show: true, statusCode }))
   }
 
   return (

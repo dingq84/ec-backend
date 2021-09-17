@@ -14,7 +14,7 @@ import Prefix from '@/components/layout/sidebar/prefix'
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // states
-import { useAppSelector } from '@/states/global/hooks'
+import { useAppSelector } from '@/states/hooks'
 
 // types
 import { SidebarMenuType } from '@/types/components/sidebar'

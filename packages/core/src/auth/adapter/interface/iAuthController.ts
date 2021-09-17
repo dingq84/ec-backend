@@ -12,4 +12,5 @@ export interface IAuthController {
   getMe(): Promise<Either<IErrorOutputPort, IGetMeOutPort>>
   getAccessToken(): string
   checkIsLogged(): Promise<boolean>
+  removeRefreshToken(): void
 }

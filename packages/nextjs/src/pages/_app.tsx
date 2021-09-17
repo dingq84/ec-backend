@@ -11,7 +11,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 import ErrorDialog from '@/components/page/common/errorDialog'
 
 // states
-import { store } from '@/states/global/store'
+import { store } from '@/states/store'
 
 // styles
 import '@/styles/globals.css'

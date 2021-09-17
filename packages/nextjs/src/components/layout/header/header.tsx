@@ -24,9 +24,9 @@ import LogoutDialog from '@/components/layout/header/logoutDialog'
 import core from '@ec-backstage/core/src'
 
 // states
-import { useAppSelector, useAppDispatch } from '@/states/global/hooks'
-import { clearMe } from '@/states/global/me'
-import { setError } from '@/states/global/error'
+import { useAppSelector, useAppDispatch } from '@/states/hooks'
+import { clearMe } from '@/states/me'
+import { setError } from '@/states/error'
 
 const Header = () => {
   const anchorEl = useRef<HTMLDivElement>(null!)
@@ -56,8 +56,8 @@ const Header = () => {
       return
     }
 
-    const { errorMessage } = result.left
-    dispatch(setError({ message: errorMessage }))
+    const { errorMessage, statusCode } = result.left
+    dispatch(setError({ message: errorMessage, show: true, statusCode }))
   }
 
   const openLogoutDialog = (): void => {

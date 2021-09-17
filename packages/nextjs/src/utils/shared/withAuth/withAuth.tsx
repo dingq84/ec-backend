@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { isLeft, isRight } from 'fp-ts/lib/Either'
 import { useQuery } from 'react-query'
 import 'twin.macro'
@@ -11,25 +10,23 @@ import Loading from '@/components/shared/loading'
 
 // core
 import core from '@ec-backstage/core/src'
+import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // states
-import { setMe } from '@/states/global/me'
-import { useAppDispatch } from '@/states/global/hooks'
-import { setError } from '@/states/global/error'
+import { setMe } from '@/states/me'
+import { useAppDispatch } from '@/states/hooks'
+import { setError } from '@/states/error'
 
 function withAuth<T extends {}>(Component: React.ComponentType<T>) {
   return function WrapperComponent(props: T) {
-    const router = useRouter()
     const dispatch = useAppDispatch()
-
     const { data: isLogged, isLoading: isLoggedLoading } = useQuery(
       ApiKey.isLogged,
       () => core.auth.checkIsLogged(),
       {
-        // refetchOnWindowFocus: false,
         staleTime: 10000
       }
     )
@@ -50,10 +47,9 @@ function withAuth<T extends {}>(Component: React.ComponentType<T>) {
       if ((meData && isLeft(meData)) || isLogged === false) {
         dispatch(
           setError({
+            statusCode: StatusCode.tokenCancel,
             message: '請先登入',
-            callback: () => {
-              router.push('/auth/login')
-            }
+            show: true
           })
         )
       }

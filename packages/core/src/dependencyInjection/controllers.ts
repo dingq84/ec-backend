@@ -14,7 +14,8 @@ function createControllers(useCases: IUseCases): IControllers {
       useCases.auth.refreshToken,
       useCases.auth.getMe,
       useCases.auth.getAccessToken,
-      useCases.auth.checkIsLogged
+      useCases.auth.checkIsLogged,
+      useCases.auth.removeRefreshToken
     ),
     role: new RoleController(
       useCases.role.getRoleList,

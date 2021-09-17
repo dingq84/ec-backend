@@ -15,6 +15,7 @@ import {
 } from '@/auth/application/interface/iRefreshTokenUseCase'
 import { IGetAccessTokenUseCase } from '@/auth/application/interface/iGetAccessTokenUseCase'
 import { ICheckIsLoggedUseCase } from '@/auth/application/interface/iCheckIsLoggedUseCase'
+import { IRemoveRefreshTokenUseCase } from '@/auth/application/interface/iRemoveRefreshTokenUseCase'
 
 class AuthController implements IAuthController {
   constructor(
@@ -23,7 +24,8 @@ class AuthController implements IAuthController {
     private readonly refreshTokenUseCase: IRefreshTokenUseCase,
     private readonly getMeUseCase: IGetMeUseCase,
     private readonly getAccessTokenUseCase: IGetAccessTokenUseCase,
-    private readonly checkIsLoggedUseCase: ICheckIsLoggedUseCase
+    private readonly checkIsLoggedUseCase: ICheckIsLoggedUseCase,
+    private readonly removeRefreshTokenUseCase: IRemoveRefreshTokenUseCase
   ) {}
 
   login(parameters: ILoginInputPort): Promise<Either<IErrorOutputPort, ILoginOutputPort>> {
@@ -48,6 +50,10 @@ class AuthController implements IAuthController {
 
   checkIsLogged(): Promise<boolean> {
     return this.checkIsLoggedUseCase.checkIsLogged()
+  }
+
+  removeRefreshToken(): void {
+    return this.removeRefreshTokenUseCase.removeRefreshToken()
   }
 }
 
