@@ -12,11 +12,13 @@ import { IGetAdminListOutputPort } from '@/admin/application/interface/iGetAdmin
 import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
 import { Status } from '@/common/constants/status'
 import { IGetAdminDetailOutputPort } from '@/admin/application/interface/iGetAdminDetailUseCase'
+import { IFormatPresenter } from '@/common/adapter/interface/iFormatPresenter'
 
 class AdminPresenter implements IAdminPresenter {
   constructor(
     private readonly errorPresenter: IErrorPresenter,
-    private readonly paginationPresenter: IPaginationPresenter
+    private readonly paginationPresenter: IPaginationPresenter,
+    private readonly formatPresenter: IFormatPresenter
   ) {}
 
   private getStatusText(status: Status): string {
@@ -44,8 +46,8 @@ class AdminPresenter implements IAdminPresenter {
                 name: account.name,
                 account: account.account,
                 status: account.status,
-                createdAt: account.createdAt,
-                updatedAt: account.updatedAt,
+                createdAt: this.formatPresenter.formatStringDate(account.createdAt),
+                updatedAt: this.formatPresenter.formatStringDate(account.updatedAt),
                 statusText: this.getStatusText(account.status),
                 role: account.roles[0]?.name || ''
               }))

@@ -4,6 +4,8 @@ import { StatusCode } from '@/common/constants/statusCode'
 class AdminErrorPresenter extends ErrorPresenter {
   convertErrorToViewMessage(statusCode: StatusCode): string {
     switch (statusCode) {
+      case StatusCode.accountIsExist:
+        return '此帳號已存在，請重新填寫'
       case StatusCode.emptyPassword:
         return '未填寫必填欄位，欲進行下一步請填寫完畢'
       case StatusCode.wrongAdminId:

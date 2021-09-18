@@ -18,9 +18,7 @@ export interface IGetRoleOutput {
   name: string
   status: Status
   statusText: string
-  createdUser: string
   createdAt: string
-  updatedUser: string
   updatedAt: string
   permissions: Pick<IGetPermissionListOutputPort, 'id' | 'name'>[]
 }

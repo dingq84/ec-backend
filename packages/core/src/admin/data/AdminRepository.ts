@@ -95,16 +95,18 @@ class AdminRepository implements IAdminRepository {
   async getAdminDetail(
     parameters: IAdminRepositoryParameters['getAdminDetail']
   ): Promise<Either<IErrorInputPort, IAdminData>> {
-    const result = await this.http.request<IAdminData>({
-      url: ApiUrl.adminDetail,
+    const { id } = parameters
+    const result = await this.http.request<{ admin: IAdminData }>({
+      url: `${ApiUrl.adminDetail}/${id}`,
       method: 'GET',
       withAuth: true,
-      params: parameters,
       data: {}
     })
 
     return flow(
-      either.map((response: ResponseResult<IAdminData>) => new AdminEntity(response.data))
+      either.map(
+        (response: ResponseResult<{ admin: IAdminData }>) => new AdminEntity(response.data.admin)
+      )
     )(result)
   }
 

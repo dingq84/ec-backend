@@ -13,10 +13,12 @@ import { IGetRoleDetailOutputPort } from '@/role/application/interface/iGetRoleD
 import { IGetRoleAdminListOutputPort } from '../application/interface/iGetRoleAdminListUseCase'
 import { IAdminEntity } from '@/admin/domain/interface/iAdminEntity'
 import { Status } from '@/common/constants/status'
+import { IFormatPresenter } from '@/common/adapter/interface/iFormatPresenter'
 class RolePresenter implements IRolePresenter {
   constructor(
     private readonly errorPresenter: IErrorPresenter,
-    private readonly paginationPresenter: IPaginationPresenter
+    private readonly paginationPresenter: IPaginationPresenter,
+    private readonly formatPresenter: IFormatPresenter
   ) {}
 
   private getStatusText(status: Status): string {
@@ -43,10 +45,8 @@ class RolePresenter implements IRolePresenter {
               name: role.name,
               status: role.status,
               permissions: role.permissions,
-              createdUser: role.createdUser,
-              createdAt: role.createdAt,
-              updatedUser: role.updatedUser,
-              updatedAt: role.updatedAt,
+              createdAt: this.formatPresenter.formatStringDate(role.createdAt),
+              updatedAt: this.formatPresenter.formatStringDate(role.updatedAt),
               statusText: this.getStatusText(role.status)
             }))
           }))

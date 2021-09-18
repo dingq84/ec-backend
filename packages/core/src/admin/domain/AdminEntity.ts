@@ -21,7 +21,7 @@ class AdminEntity implements IAdminEntity {
     this._id = parameters.id
     this._name = parameters.name
     this._account = parameters.account || ''
-    this._status = parameters.status || Status.active
+    this._status = parameters.status === undefined ? Status.active : parameters.status
     this._createdAt = parameters.createdAt || ''
     this._updatedAt = parameters.updatedAt || ''
     this._roles = parameters.roles || []

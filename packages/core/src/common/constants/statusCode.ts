@@ -17,6 +17,7 @@ export enum StatusCode {
   emptyPassword = 'client-011',
   wrongPasswordFormat = 'client-005',
   passwordIsNotSame = 'client-006',
+  accountIsExist = '1301',
   wrongPassword = '1302',
   newPasswordIsSameAsOldPassword = '1303',
 
@@ -31,7 +32,7 @@ export enum StatusCode {
 
   // global
   // 帳號已被停權
-  accountFrozen = '1003',
+  accountFrozen = '1103',
   // 成功
   success = '0000',
   // 參數錯誤
