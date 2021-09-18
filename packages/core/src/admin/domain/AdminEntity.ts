@@ -2,11 +2,11 @@ import { IErrorInputPort } from '@/common/application/interface/iErrorUseCase'
 import { StatusCode } from '@/common/constants/statusCode'
 import { IUpdatePasswordInputPort } from '@/admin/application/interface/iUpdatePasswordUseCase'
 import Validator from '@/common/domain/Validator'
-import { IAccountData, IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
+import { IAdminData, IAdminEntity } from '@/admin/domain/interface/iAdminEntity'
 import { IRoleEntity } from '@/role/domain/interface/iRoleEntity'
 import { Status } from '@/common/constants/status'
 
-class AccountEntity implements IAccountEntity {
+class AdminEntity implements IAdminEntity {
   private readonly _id: number
   private readonly _name: string
   private readonly _account: string
@@ -16,7 +16,7 @@ class AccountEntity implements IAccountEntity {
   private readonly _roles: Array<Pick<IRoleEntity, 'id' | 'name'>>
 
   constructor(
-    parameters: Pick<IAccountData, 'id' | 'name'> & Partial<Exclude<IAccountData, 'id' | 'name'>>
+    parameters: Pick<IAdminData, 'id' | 'name'> & Partial<Exclude<IAdminData, 'id' | 'name'>>
   ) {
     this._id = parameters.id
     this._name = parameters.name
@@ -119,4 +119,4 @@ class AccountEntity implements IAccountEntity {
   }
 }
 
-export default AccountEntity
+export default AdminEntity

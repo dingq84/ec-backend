@@ -1,4 +1,4 @@
-import { IAccountPresenter } from '@/admin/adapter/interface/iAccountPresenter'
+import { IAdminPresenter } from '@/admin/adapter/interface/iAdminPresenter'
 import { IAuthPresenter } from '@/auth/adapter/interface/iAuthPresenter'
 import { IErrorPresenter } from '@/common/adapter/interface/iErrorPresenter'
 import { IPaginationPresenter } from '@/common/adapter/interface/iPaginationPresenter'
@@ -6,7 +6,7 @@ import { IPermissionPresenter } from '@/permission/adapter/interface/iPermission
 import { IRolePresenter } from '@/role/adapter/interface/iRolePresenter'
 
 export interface IPresenters {
-  admin: IAccountPresenter
+  admin: IAdminPresenter
   auth: IAuthPresenter
   role: IRolePresenter
   permission: IPermissionPresenter

@@ -29,10 +29,10 @@ import {
   IUpdateRoleUseCase
 } from '@/role/application/interface/iUpdateRoleUseCase'
 import {
-  IGetRoleAccountListInputPort,
-  IGetRoleAccountListOutputPort,
-  IGetRoleAccountListUseCase
-} from '@/role/application/interface/iGetRoleAccountListUseCase'
+  IGetRoleAdminListInputPort,
+  IGetRoleAdminListOutputPort,
+  IGetRoleAdminListUseCase
+} from '@/role/application/interface/iGetRoleAdminListUseCase'
 
 class RoleController implements IRoleController {
   constructor(
@@ -42,7 +42,7 @@ class RoleController implements IRoleController {
     private readonly createRoleUseCase: ICreateRoleUseCase,
     private readonly getRoleDetailUseCase: IGetRoleDetailUseCase,
     private readonly updateRoleUseCase: IUpdateRoleUseCase,
-    private readonly getRoleAccountListUseCase: IGetRoleAccountListUseCase
+    private readonly getRoleAdminListUseCase: IGetRoleAdminListUseCase
   ) {}
 
   getRoleList(
@@ -75,10 +75,10 @@ class RoleController implements IRoleController {
     return this.updateRoleUseCase.updateRole(parameters)
   }
 
-  getRoleAccountList(
-    parameters: IGetRoleAccountListInputPort
-  ): Promise<Either<IErrorOutputPort, IGetRoleAccountListOutputPort>> {
-    return this.getRoleAccountListUseCase.getRoleAccountList(parameters)
+  getRoleAdminList(
+    parameters: IGetRoleAdminListInputPort
+  ): Promise<Either<IErrorOutputPort, IGetRoleAdminListOutputPort>> {
+    return this.getRoleAdminListUseCase.getRoleAdminList(parameters)
   }
 }
 

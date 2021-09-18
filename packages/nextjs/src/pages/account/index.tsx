@@ -9,7 +9,7 @@ import Paper from '@/components/shared/paper'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
 import Select from '@/components/shared/select'
 import TextField from '@/components/shared/textField'
-import AccountTable from '@/components/page/account/table'
+import AdminTable from '@/components/page/account/table'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
@@ -152,7 +152,7 @@ const SearchContainer = memo(
   }
 )
 
-const Account = () => {
+const Admin = () => {
   const [keyword, setKeyword] = useState('')
   const [roleId, setRoleId] = useState<undefined | number>(undefined)
   const [status, setStatus] = useState<Status>(-1)
@@ -182,24 +182,24 @@ const Account = () => {
 
         <TabPanel>
           <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
-          <AccountTable keyword={keyword} roleId={roleId} status={status} />
+          <AdminTable keyword={keyword} roleId={roleId} status={status} />
         </TabPanel>
 
         <TabPanel>
           <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
-          <AccountTable keyword={keyword} roleId={roleId} status={status} />
+          <AdminTable keyword={keyword} roleId={roleId} status={status} />
         </TabPanel>
 
         <TabPanel>
           <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
-          <AccountTable keyword={keyword} roleId={roleId} status={status} />
+          <AdminTable keyword={keyword} roleId={roleId} status={status} />
         </TabPanel>
       </Tabs>
     </>
   )
 }
 
-Account.layout = DefaultLayout
-Account.auth = true
+Admin.layout = DefaultLayout
+Admin.auth = true
 
-export default Account
+export default Admin

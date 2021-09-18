@@ -1,10 +1,10 @@
 // core
-import { IGetAccountOutputPort } from '@ec-backstage/core/src/admin/application/interface/iGetAccountListUseCase'
+import { IGetAdminOutputPort } from '@ec-backstage/core/src/admin/application/interface/iGetAdminListUseCase'
 
 // types
 import { CustomColumn } from '@/types/components/table'
 
-const columns: CustomColumn<IGetAccountOutputPort>[] = [
+const columns: CustomColumn<IGetAdminOutputPort>[] = [
   {
     Header: '管理者名稱',
     accessor: 'name',

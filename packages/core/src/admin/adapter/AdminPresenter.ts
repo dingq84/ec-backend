@@ -2,17 +2,18 @@ import { Either } from 'fp-ts/lib/Either'
 import { either } from 'fp-ts'
 import { flow } from 'fp-ts/lib/function'
 
-import { IAccountPresenter } from '@/admin/adapter/interface/iAccountPresenter'
+import { IAdminPresenter } from '@/admin/adapter/interface/iAdminPresenter'
 import { IErrorPresenter } from '@/common/adapter/interface/iErrorPresenter'
 import { IPaginationPresenter } from '@/common/adapter/interface/iPaginationPresenter'
 import { IErrorInputPort, IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
-import { IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
+import { IAdminEntity } from '@/admin/domain/interface/iAdminEntity'
 import { IPaginationData } from '@/common/adapter/interface/iHttpInfrastructure'
-import { IGetAccountListOutputPort } from '@/admin/application/interface/iGetAccountListUseCase'
+import { IGetAdminListOutputPort } from '@/admin/application/interface/iGetAdminListUseCase'
 import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
 import { Status } from '@/common/constants/status'
+import { IGetAdminDetailOutputPort } from '@/admin/application/interface/iGetAdminDetailUseCase'
 
-class AccountPresenter implements IAccountPresenter {
+class AdminPresenter implements IAdminPresenter {
   constructor(
     private readonly errorPresenter: IErrorPresenter,
     private readonly paginationPresenter: IPaginationPresenter
@@ -29,14 +30,14 @@ class AccountPresenter implements IAccountPresenter {
     }
   }
 
-  getAccountList(
-    data: Either<IErrorInputPort, { accounts: IAccountEntity[]; pagination: IPaginationData }>
-  ): Either<IErrorOutputPort, IGetAccountListOutputPort> {
+  getAdminList(
+    data: Either<IErrorInputPort, { accounts: IAdminEntity[]; pagination: IPaginationData }>
+  ): Either<IErrorOutputPort, IGetAdminListOutputPort> {
     return this.paginationPresenter.present(
-      this.errorPresenter.present<IGetAccountListOutputPort>(
+      this.errorPresenter.present<IGetAdminListOutputPort>(
         flow(
           either.map(
-            (response: { accounts: IAccountEntity[]; pagination: IPaginationInputPort }) => ({
+            (response: { accounts: IAdminEntity[]; pagination: IPaginationInputPort }) => ({
               ...response,
               accounts: response.accounts.map(account => ({
                 id: account.id,
@@ -54,6 +55,22 @@ class AccountPresenter implements IAccountPresenter {
       )
     )
   }
+
+  getAdminDetail(
+    data: Either<IErrorInputPort, IAdminEntity>
+  ): Either<IErrorOutputPort, IGetAdminDetailOutputPort> {
+    return this.errorPresenter.present<IGetAdminDetailOutputPort>(
+      flow(
+        either.map((admin: IAdminEntity) => ({
+          id: admin.id,
+          name: admin.name,
+          account: admin.account,
+          status: admin.status,
+          roleId: admin.roles[0].id
+        }))
+      )(data)
+    )
+  }
 }
 
-export default AccountPresenter
+export default AdminPresenter

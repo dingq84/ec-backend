@@ -6,7 +6,7 @@ import tw, { css } from 'twin.macro'
 // components
 import Button from '@/components/shared/button'
 import Checkbox from '@/components/shared/checkbox'
-import Collapse from '@/components/shared/collapse'
+import Fade from '@/components/shared/fade'
 import Drawer from '@/components/shared/drawer'
 import Loading from '@/components/shared/loading'
 import Radio from '@/components/shared/radio'
@@ -147,15 +147,6 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
               onChange={handleStatusChange}
               disabled={isView}
             />
-
-            {isView ? (
-              <Button
-                tw="ml-auto"
-                label="編輯"
-                className="btn-outline"
-                onClick={changeModeToEdit}
-              />
-            ) : null}
           </div>
 
           <div tw="flex flex-col gap-y-2 mb-5">
@@ -205,16 +196,27 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
           </div>
         </div>
 
-        <Collapse inProps={mode !== 'view'} tw="flex-shrink-0 relative z-10">
-          <div tw="h-16 pl-5 pr-14 flex justify-end items-center" css={[footerShadowCss]}>
-            {deleteButton || null}
+        <div tw="flex-shrink-0 relative z-10 h-16 pl-5 pr-14" css={[footerShadowCss]}>
+          {isView ? (
+            <Button
+              tw="ml-auto mt-3"
+              label="編輯"
+              className="btn-outline"
+              onClick={changeModeToEdit}
+            />
+          ) : (
+            <Fade inProps={isView === false}>
+              <div tw="flex justify-end items-center w-full h-full">
+                {deleteButton || null}
 
-            <div tw="flex items-center ml-auto">
-              <Button label="取消" className="btn-outline" onClick={close} />
-              <Button tw="ml-5" label="儲存" className="btn" onClick={submit} />
-            </div>
-          </div>
-        </Collapse>
+                <div tw="flex items-center ml-auto">
+                  <Button label="取消" className="btn-outline" onClick={close} />
+                  <Button tw="ml-5" label="儲存" className="btn" onClick={submit} />
+                </div>
+              </div>
+            </Fade>
+          )}
+        </div>
       </Drawer>
     </>
   )

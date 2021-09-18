@@ -15,9 +15,14 @@ import UpdatePasswordUseCase from '@/admin/application/UpdatePasswordUseCase'
 import CreateRoleUseCase from '@/role/application/CreateRoleUseCase'
 import GetRoleDetailUseCase from '@/role/application/GetRoleDetailUseCase'
 import UpdateRoleUseCase from '@/role/application/UpdateRoleUseCase'
-import GetRoleAccountListUseCase from '@/role/application/GetRoleAccountListUseCase'
-import GetAccountListUseCase from '@/admin/application/GetAccountListUseCase'
+import GetRoleAdminListUseCase from '@/role/application/GetRoleAdminListUseCase'
+import GetAdminListUseCase from '@/admin/application/GetAdminListUseCase'
 import RemoveRefreshTokenUseCase from '@/auth/application/RemoveRefreshTokenUseCase'
+import CreateAdminUseCase from '@/admin/application/CreateAdminUseCase'
+import UpdateAdminUseCase from '@/admin/application/UpdateAdminUseCase'
+import DeleteAdminUseCase from '@/admin/application/DeleteAdminUseCase'
+import GetAdminDetailUseCase from '@/admin/application/GetAdminDetailUseCase'
+import UpdateAdminStatusUseCase from '@/admin/application/UpdateAdminStatusUseCase'
 
 function createUseCases(repositories: IRepositories, presenters: IPresenters): IUseCases {
   const refreshTokenUseCase = new RefreshTokenUseCase(
@@ -31,7 +36,12 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
   return {
     admin: {
       updatePassword: new UpdatePasswordUseCase(repositories.admin, presenters.error.admin),
-      getAccountList: new GetAccountListUseCase(repositories.admin, presenters.admin)
+      getAdminList: new GetAdminListUseCase(repositories.admin, presenters.admin),
+      createAdmin: new CreateAdminUseCase(repositories.admin, presenters.error.default),
+      updateAdmin: new UpdateAdminUseCase(repositories.admin, presenters.error.default),
+      deleteAdmin: new DeleteAdminUseCase(repositories.admin, presenters.error.default),
+      getAdminDetail: new GetAdminDetailUseCase(repositories.admin, presenters.admin),
+      updateAdminStatus: new UpdateAdminStatusUseCase(repositories.admin, presenters.error.default)
     },
     auth: {
       login: new LoginUseCase(repositories.auth, presenters.auth, presenters.error.auth),
@@ -61,7 +71,7 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
         presenters.error.role
       ),
       updateRole: new UpdateRoleUseCase(repositories.role, presenters.error.role),
-      getRoleAccountList: new GetRoleAccountListUseCase(repositories.role, presenters.role)
+      getRoleAdminList: new GetRoleAdminListUseCase(repositories.role, presenters.role)
     },
     permission: {
       getPermissionList: new GerPermissionListUseCase(

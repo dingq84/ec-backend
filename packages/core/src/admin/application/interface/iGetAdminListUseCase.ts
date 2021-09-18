@@ -5,7 +5,7 @@ import { IPaginationOutputPort } from '@/common/application/interface/iPaginatio
 import { Order } from '@/common/constants/order'
 import { Status } from '@/common/constants/status'
 
-export interface IGetAccountOutputPort {
+export interface IGetAdminOutputPort {
   id: number
   name: string
   account: string
@@ -15,7 +15,7 @@ export interface IGetAccountOutputPort {
   statusText: string
 }
 
-export interface IGetAccountListInputPort {
+export interface IGetAdminListInputPort {
   status?: Status
   keyword?: string
   orderBy: Order
@@ -23,13 +23,13 @@ export interface IGetAccountListInputPort {
   roleId?: number
 }
 
-export interface IGetAccountListOutputPort {
-  accounts: IGetAccountOutputPort[]
+export interface IGetAdminListOutputPort {
+  accounts: IGetAdminOutputPort[]
   pagination: IPaginationOutputPort
 }
 
-export interface IGetAccountListUseCase {
-  getAccountListUseCase(
-    parameters: IGetAccountListInputPort
-  ): Promise<Either<IErrorOutputPort, IGetAccountListOutputPort>>
+export interface IGetAdminListUseCase {
+  getAdminListUseCase(
+    parameters: IGetAdminListInputPort
+  ): Promise<Either<IErrorOutputPort, IGetAdminListOutputPort>>
 }

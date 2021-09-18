@@ -15,7 +15,7 @@ enum ApiKey {
   // role
   roleList = 'roleList',
   roleDetail = 'roleDetail',
-  roleAccountList = 'roleAccountList'
+  roleAdminList = 'roleAdminList'
 }
 
 export { ApiKey }

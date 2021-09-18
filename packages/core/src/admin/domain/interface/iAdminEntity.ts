@@ -1,7 +1,7 @@
 import { Status } from '@/common/constants/status'
 import { IRoleData, IRoleEntity } from '@/role/domain/interface/iRoleEntity'
 
-export interface IAccountData {
+export interface IAdminData {
   id: number
   name: string
   account: string
@@ -11,7 +11,7 @@ export interface IAccountData {
   roles: Array<Pick<IRoleData, 'id' | 'name'>>
 }
 
-export interface IAccountEntity {
+export interface IAdminEntity {
   readonly id: number
   readonly name: string
   readonly account: string

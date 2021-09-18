@@ -1,12 +1,12 @@
 import ErrorPresenter from '@/common/adapter/ErrorPresenter'
 import { StatusCode } from '@/common/constants/statusCode'
 
-class AccountErrorPresenter extends ErrorPresenter {
+class AdminErrorPresenter extends ErrorPresenter {
   convertErrorToViewMessage(statusCode: StatusCode): string {
     switch (statusCode) {
       case StatusCode.emptyPassword:
         return '未填寫必填欄位，欲進行下一步請填寫完畢'
-      case StatusCode.wrongAccountId:
+      case StatusCode.wrongAdminId:
         return '帳號 id 格式錯誤'
       case StatusCode.wrongPasswordFormat:
         return '密碼格式錯誤，請重新輸入。'
@@ -22,4 +22,4 @@ class AccountErrorPresenter extends ErrorPresenter {
   }
 }
 
-export default AccountErrorPresenter
+export default AdminErrorPresenter

@@ -17,21 +17,21 @@ import { columns } from '@/constants/pages/account'
 // core
 import core from '@ec-backstage/core/src'
 import {
-  IGetAccountOutputPort,
-  IGetAccountListInputPort
-} from '@ec-backstage/core/src/admin/application/interface/iGetAccountListUseCase'
+  IGetAdminOutputPort,
+  IGetAdminListInputPort
+} from '@ec-backstage/core/src/admin/application/interface/iGetAdminListUseCase'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
 
 // states
 // import { useAppDispatch } from '@/states/global/hooks'
 
-interface AccountTableProps {
+interface AdminTableProps {
   keyword: string
   roleId: number | undefined
-  status: IGetAccountListInputPort['status']
+  status: IGetAdminListInputPort['status']
 }
 
-const AccountTable = (props: AccountTableProps) => {
+const AdminTable = (props: AdminTableProps) => {
   const { keyword, status, roleId } = props
   const [page, setPage] = useState(1)
   const [desc, setDesc] = useState(true)
@@ -41,7 +41,7 @@ const AccountTable = (props: AccountTableProps) => {
   const parameter = { orderBy: desc ? Order.Desc : Order.Asc, keyword, status, roleId, page }
   const { data, isLoading } = useQuery(
     [ApiKey.accountList, parameter],
-    () => core.admin.getAccountList(parameter),
+    () => core.admin.getAdminList(parameter),
     {
       refetchOnWindowFocus: false,
       keepPreviousData: true,
@@ -53,26 +53,26 @@ const AccountTable = (props: AccountTableProps) => {
     return null
   }
 
-  const handleSort = (rule: SortingRule<IGetAccountOutputPort>[]): void => {
+  const handleSort = (rule: SortingRule<IGetAdminOutputPort>[]): void => {
     const { desc: newDesc } = rule[0]
     setDesc(newDesc || false)
   }
 
-  const handleEdit = (data: Row<IGetAccountOutputPort>): void => {
+  const handleEdit = (data: Row<IGetAdminOutputPort>): void => {
     console.log(data)
   }
 
-  const handleDelete = async (data: Row<IGetAccountOutputPort>): Promise<void> => {
+  const handleDelete = async (data: Row<IGetAdminOutputPort>): Promise<void> => {
     console.log(data)
   }
 
-  const handleRowClick = (data: Row<IGetAccountOutputPort>): void => {
+  const handleRowClick = (data: Row<IGetAdminOutputPort>): void => {
     console.log(data)
   }
 
   const handleStatusChange = async (
     value: boolean,
-    data: Row<IGetAccountOutputPort>
+    data: Row<IGetAdminOutputPort>
   ): Promise<void> => {
     console.log(value, data)
   }
@@ -80,7 +80,7 @@ const AccountTable = (props: AccountTableProps) => {
   return (
     <>
       <Loading isLoading={isLoading} />
-      <Table<IGetAccountOutputPort>
+      <Table<IGetAdminOutputPort>
         columns={columns}
         data={data && isRight(data) ? data.right.accounts : []}
         pagination={{
@@ -121,4 +121,4 @@ const AccountTable = (props: AccountTableProps) => {
   )
 }
 
-export default AccountTable
+export default AdminTable

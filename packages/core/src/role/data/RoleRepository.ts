@@ -12,8 +12,8 @@ import {
 } from '@/role/application/repository-interface/iRoleRepository'
 import { IRoleEntity, IRoleData } from '@/role/domain/interface/iRoleEntity'
 import RoleEntity from '@/role/domain/RoleEntity'
-import { IAccountData, IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
-import AccountEntity from '@/admin/domain/AccountEntity'
+import { IAdminData, IAdminEntity } from '@/admin/domain/interface/iAdminEntity'
+import AdminEntity from '@/admin/domain/AdminEntity'
 
 class RoleRepository implements IRoleRepository {
   constructor(private readonly http: IHttpInfrastructure) {}
@@ -60,7 +60,6 @@ class RoleRepository implements IRoleRepository {
       url: ApiUrl.roleStatus,
       method: 'PATCH',
       withAuth: true,
-      // status 2 為刪除的狀態，不過 api 資料不會回傳 status 2 的資料，因此未納入 Status enum
       data: { ...parameters, status: 2 }
     })
     return flow(either.map((response: ResponseResult<void>) => response.data))(result)
@@ -110,23 +109,21 @@ class RoleRepository implements IRoleRepository {
     return flow(either.map((response: ResponseResult<void>) => response.data))(result)
   }
 
-  async getRoleAccountList(
-    parameters: IRoleRepositoryParameters['getRoleAccountList']
-  ): Promise<Either<IErrorInputPort, { accounts: Array<Pick<IAccountEntity, 'id' | 'name'>> }>> {
+  async getRoleAdminList(
+    parameters: IRoleRepositoryParameters['getRoleAdminList']
+  ): Promise<Either<IErrorInputPort, { accounts: Array<Pick<IAdminEntity, 'id' | 'name'>> }>> {
     const { id } = parameters
-    const result = await this.http.request<{ admin: Array<Pick<IAccountData, 'id' | 'name'>> }>({
-      url: `${ApiUrl.roleAccountList}/${id}`,
+    const result = await this.http.request<{ admin: Array<Pick<IAdminData, 'id' | 'name'>> }>({
+      url: `${ApiUrl.roleAdminList}/${id}`,
       method: 'GET',
       withAuth: true,
       data: {}
     })
 
     return flow(
-      either.map(
-        (response: ResponseResult<{ admin: Array<Pick<IAccountData, 'id' | 'name'>> }>) => ({
-          accounts: response.data.admin.map(account => new AccountEntity(account))
-        })
-      )
+      either.map((response: ResponseResult<{ admin: Array<Pick<IAdminData, 'id' | 'name'>> }>) => ({
+        accounts: response.data.admin.map(account => new AdminEntity(account))
+      }))
     )(result)
   }
 }

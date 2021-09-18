@@ -34,11 +34,11 @@ interface RoleDialogProps {
 
 const AffectedAccountsDialog = (props: RoleDialogProps) => {
   const { id, open, close, callback } = props
-  const [accounts, setAccounts] = useState<Option[]>([])
+  const [accounts, setAdmins] = useState<Option[]>([])
   const dispatch = useAppDispatch()
   const { data, isLoading } = useQuery(
-    [ApiKey.roleAccountList, id],
-    () => core.role.getRoleAccountList({ id }),
+    [ApiKey.roleAdminList, id],
+    () => core.role.getRoleAdminList({ id }),
     {
       enabled: id !== -1,
       staleTime: 6000000,
@@ -52,7 +52,7 @@ const AffectedAccountsDialog = (props: RoleDialogProps) => {
         const { errorMessage, statusCode } = data.left
         dispatch(setError({ message: errorMessage, show: true, statusCode }))
       } else {
-        setAccounts(
+        setAdmins(
           data.right.accounts.map(account => ({ key: account.id.toString(), value: account.name }))
         )
       }

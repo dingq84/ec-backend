@@ -10,8 +10,8 @@ import { IPaginationPresenter } from '@/common/adapter/interface/iPaginationPres
 import { IErrorInputPort, IErrorOutputPort } from '@/common/application/interface/iErrorUseCase'
 import { IPaginationInputPort } from '@/common/application/interface/iPaginationUseCase'
 import { IGetRoleDetailOutputPort } from '@/role/application/interface/iGetRoleDetailUseCase'
-import { IGetRoleAccountListOutputPort } from '../application/interface/iGetRoleAccountListUseCase'
-import { IAccountEntity } from '@/admin/domain/interface/iAccountEntity'
+import { IGetRoleAdminListOutputPort } from '../application/interface/iGetRoleAdminListUseCase'
+import { IAdminEntity } from '@/admin/domain/interface/iAdminEntity'
 import { Status } from '@/common/constants/status'
 class RolePresenter implements IRolePresenter {
   constructor(
@@ -75,12 +75,12 @@ class RolePresenter implements IRolePresenter {
     )
   }
 
-  getRoleAccountList(
-    data: Either<IErrorInputPort, { accounts: Array<Pick<IAccountEntity, 'id' | 'name'>> }>
-  ): Either<IErrorOutputPort, IGetRoleAccountListOutputPort> {
-    return this.errorPresenter.present<IGetRoleAccountListOutputPort>(
+  getRoleAdminList(
+    data: Either<IErrorInputPort, { accounts: Array<Pick<IAdminEntity, 'id' | 'name'>> }>
+  ): Either<IErrorOutputPort, IGetRoleAdminListOutputPort> {
+    return this.errorPresenter.present<IGetRoleAdminListOutputPort>(
       flow(
-        either.map((data: { accounts: Array<Pick<IAccountEntity, 'id' | 'name'>> }) => ({
+        either.map((data: { accounts: Array<Pick<IAdminEntity, 'id' | 'name'>> }) => ({
           accounts: data.accounts.map(account => ({ id: account.id, name: account.name }))
         }))
       )(data)
