@@ -44,7 +44,7 @@ interface IUseDrawerTemplate {
   close: () => void
   changeModeToEdit?: () => void
   title: string
-  submit: () => Promise<void>
+  submit: () => void
   mode: Mode
   state: InitialStateProps
   dispatch: Dispatch<Action>

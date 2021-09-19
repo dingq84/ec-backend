@@ -1,9 +1,23 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { css } from 'twin.macro'
 
 // components
 import Fade from '@/components/shared/fade'
+import Loading from '@/components/shared/loading'
+
+// constants
+import { ApiKey } from '@/constants/services/api'
+
+// core
+import core from '@ec-backstage/core/src'
+
+// hooks
+import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+
+// services
+import useNoCacheQuery from '@/services/useNoCacheQuery'
 
 type LoginLayoutProps = {
   children: React.ReactNode
@@ -16,7 +30,19 @@ const gradient = css`
 `
 
 function LoginLayout(props: LoginLayoutProps) {
+  const router = useRouter()
+  const { data, isLoading } = useNoCacheQuery(ApiKey.isLogged, () => core.auth.checkIsLogged())
   const { children } = props
+
+  useEnhancedEffect(() => {
+    if (data) {
+      router.push('/')
+    }
+  }, [data])
+
+  if (isLoading || data === true) {
+    return <Loading isLoading />
+  }
 
   return (
     <Fade inProps>

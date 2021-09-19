@@ -1,5 +1,4 @@
-import { useMutation, useQueryClient, useQuery } from 'react-query'
-import { isRight } from 'fp-ts/Either'
+import { useQueryClient } from 'react-query'
 
 // components
 import useDrawerTemplate from '@/components/page/role/drawer/useDrawerTemplate'
@@ -19,6 +18,10 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 // pages
 import { Mode } from '@/pages/role'
 
+// services
+import useNormalQuery from '@/services/useNormalQuery'
+import useNormalMutation from '@/services/useNormalMutation'
+
 // state
 import { useAppDispatch } from '@/states/hooks'
 import { setError } from '@/states/error'
@@ -34,20 +37,46 @@ const CreateDrawer = (props: CreateDrawerProps) => {
   const queryClient = useQueryClient()
   const reduxDispatch = useAppDispatch()
   const [state, dispatch] = useDrawerReducer()
-  const { data: permissionData } = useQuery(
+  const { data: permissionData } = useNormalQuery(
     ApiKey.permissionList,
     () => core.permission.getPermissionList(),
     {
-      enabled: open,
-      refetchOnWindowFocus: false,
-      staleTime: 600000
+      enabled: open
     }
   )
-  const mutation = useMutation((data: ICreateRoleInputPort) => core.role.createRole(data), {
-    onSuccess() {
-      queryClient.invalidateQueries(ApiKey.roleList)
+  const { isLoading, mutate } = useNormalMutation(
+    (data: ICreateRoleInputPort) => core.role.createRole(data),
+    {
+      onSuccess(_, variables) {
+        const { name } = variables
+        queryClient.invalidateQueries(ApiKey.roleList)
+        reduxDispatch(
+          pushToast({ show: true, level: 'success', message: `「${name}」角色新增成功` })
+        )
+        close()
+      },
+      onError(error) {
+        const { statusCode, errorMessage } = error
+        if (
+          [
+            StatusCode.wrongRoleNameFormat,
+            StatusCode.permissionIsEmpty,
+            StatusCode.roleNameIsExist
+          ].includes(statusCode)
+        ) {
+          if (statusCode === StatusCode.permissionIsEmpty) {
+            handleErrorTarget(['permissions'])
+          } else {
+            handleErrorTarget(['name'])
+          }
+          reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
+          return
+        }
+
+        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
+      }
     }
-  })
+  )
 
   useEnhancedEffect(() => {
     if (open) {
@@ -57,53 +86,19 @@ const CreateDrawer = (props: CreateDrawerProps) => {
 
   useEnhancedEffect(() => {
     if (permissionData) {
-      if (isRight(permissionData)) {
-        dispatch({ type: 'setPermissionData', payload: { permissions: permissionData.right } })
-      } else {
-        const { errorMessage, statusCode } = permissionData.left
-        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-      }
+      dispatch({ type: 'setPermissionData', payload: { permissions: permissionData } })
     }
   }, [permissionData])
-
-  const submit = async () => {
-    const result = await mutation.mutateAsync(state)
-    if (isRight(result)) {
-      reduxDispatch(
-        pushToast({ show: true, level: 'success', message: `「${state.name}」角色新增成功` })
-      )
-      close()
-      return
-    }
-
-    const { statusCode, errorMessage } = result.left
-    if (
-      [
-        StatusCode.wrongRoleNameFormat,
-        StatusCode.permissionIsEmpty,
-        StatusCode.roleNameIsExist
-      ].includes(statusCode)
-    ) {
-      if (statusCode === StatusCode.permissionIsEmpty) {
-        handleErrorTarget(['permissions'])
-      } else {
-        handleErrorTarget(['name'])
-      }
-      reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
-      return
-    }
-
-    reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-  }
 
   const { element, handleErrorTarget } = useDrawerTemplate({
     open,
     close,
     mode: Mode.create,
     title: '創建',
-    submit,
+    submit: () => mutate(state),
     state,
-    dispatch
+    dispatch,
+    isLoading
   })
 
   return element

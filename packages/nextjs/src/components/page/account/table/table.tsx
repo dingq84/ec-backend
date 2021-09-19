@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { useQuery } from 'react-query'
-import { isLeft, isRight } from 'fp-ts/lib/Either'
 import { Row, SortingRule } from 'react-table'
 
 // components
@@ -22,6 +20,9 @@ import {
 } from '@ec-backstage/core/src/admin/application/interface/iGetAdminListUseCase'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
 
+// services
+import useNormalQuery from '@/services/useNormalQuery'
+
 // states
 // import { useAppDispatch } from '@/states/global/hooks'
 
@@ -39,19 +40,14 @@ const AdminTable = (props: AdminTableProps) => {
   // const queryClient = useQueryClient()
   // get role list
   const parameter = { orderBy: desc ? Order.Desc : Order.Asc, keyword, status, roleId, page }
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError } = useNormalQuery(
     [ApiKey.accountList, parameter],
     () => core.admin.getAdminList(parameter),
     {
-      refetchOnWindowFocus: false,
       keepPreviousData: true,
       staleTime: 60000 // 相同 query 值 cache 60秒
     }
   )
-
-  if (data && isLeft(data)) {
-    return null
-  }
 
   const handleSort = (rule: SortingRule<IGetAdminOutputPort>[]): void => {
     const { desc: newDesc } = rule[0]
@@ -77,16 +73,20 @@ const AdminTable = (props: AdminTableProps) => {
     console.log(value, data)
   }
 
+  if (isError) {
+    return null
+  }
+
   return (
     <>
       <Loading isLoading={isLoading} />
       <Table<IGetAdminOutputPort>
         columns={columns}
-        data={data && isRight(data) ? data.right.accounts : []}
+        data={data?.accounts || []}
         pagination={{
           pageSize: 10,
           currentPage: page,
-          totalRows: data && isRight(data) ? data.right.pagination.total : 0,
+          totalRows: data?.pagination.total || 0,
           nextPage: pageCount => {
             setPage(page => page + pageCount)
           }

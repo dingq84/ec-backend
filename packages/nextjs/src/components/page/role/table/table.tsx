@@ -1,5 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { isLeft, isRight } from 'fp-ts/lib/Either'
+import { useQueryClient } from 'react-query'
 import { useState } from 'react'
 import { Row, SortingRule } from 'react-table'
 import 'twin.macro'
@@ -33,9 +32,12 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 // pages
 import { Mode } from '@/pages/role'
 
+// services
+import useNormalQuery from '@/services/useNormalQuery'
+import useNormalMutation from '@/services/useNormalMutation'
+
 // states
 import { useAppDispatch } from '@/states/hooks'
-import { setError } from '@/states/error'
 import { pushToast } from '@/states/toast'
 
 interface RoleTableProps {
@@ -53,21 +55,24 @@ const RoleTable = (props: RoleTableProps) => {
   const queryClient = useQueryClient()
   // get role list
   const parameter = { orderBy: desc ? Order.Desc : Order.Asc, name, status, page }
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError } = useNormalQuery(
     [ApiKey.roleList, parameter],
     () => core.role.getRoleList(parameter),
     {
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      staleTime: 60000 // 相同 query 值 cache 60秒
+      keepPreviousData: true
     }
   )
   // update role status
-  const { isLoading: updateRoleStatusLoading, mutateAsync: updateRoleStatusMutation } = useMutation(
-    (data: IUpdateRoleStatusInputPort) => core.role.updateRoleStatus(data)
+  const { isLoading: updateRoleStatusLoading, mutate: updateRoleStatusMutate } = useNormalMutation(
+    (data: IUpdateRoleStatusInputPort) => core.role.updateRoleStatus(data),
+    {
+      onSuccess(_, variables) {
+        console.log(variables)
+      }
+    }
   )
   // delete role
-  const { isLoading: deleteRoleLoading, mutateAsync: deleteRoleMutation } = useMutation(
+  const { isLoading: deleteRoleLoading, mutate: deleteRoleMutate } = useNormalMutation(
     ({ id }: IDeleteRoleInputPort) => core.role.deleteRole({ id })
   )
 
@@ -76,13 +81,6 @@ const RoleTable = (props: RoleTableProps) => {
     setPage(1)
     setDesc(true)
   }, [status])
-
-  useEnhancedEffect(() => {
-    if (data && isLeft(data)) {
-      const { errorMessage, statusCode } = data.left
-      dispatch(setError({ message: errorMessage, show: true, statusCode }))
-    }
-  }, [data])
 
   const handleSort = (rule: SortingRule<IGetRoleOutput>[]): void => {
     const { desc: newDesc } = rule[0]
@@ -95,23 +93,23 @@ const RoleTable = (props: RoleTableProps) => {
 
   const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
     const { id, name } = data.original
-    const callback = async () => {
-      const result = await deleteRoleMutation({ id })
-
-      if (isRight(result)) {
-        queryClient.invalidateQueries([ApiKey.roleList])
-        dispatch(
-          pushToast({
-            show: true,
-            message: `「${name}」角色刪除成功`,
-            level: 'success'
-          })
-        )
-        return
-      }
-
-      const { errorMessage, statusCode } = result.left
-      dispatch(setError({ message: errorMessage, show: true, statusCode }))
+    const message = `「${name}」角色刪除成功`
+    const callback = () => {
+      deleteRoleMutate(
+        { id },
+        {
+          onSuccess() {
+            queryClient.invalidateQueries([ApiKey.roleList])
+            dispatch(
+              pushToast({
+                message,
+                show: true,
+                level: 'success'
+              })
+            )
+          }
+        }
+      )
     }
 
     setModalProps({ open: true, id, callback })
@@ -119,24 +117,25 @@ const RoleTable = (props: RoleTableProps) => {
 
   const handleStatusChange = async (value: boolean, data: Row<IGetRoleOutput>): Promise<void> => {
     const { id, name } = data.original
-    const callback = async () => {
+    const message = `「${name}」角色${value ? '啟用' : '停用'}成功`
+    const callback = () => {
       const status = value ? Status.active : Status.inactive
-      const result = await updateRoleStatusMutation({ id, status })
-
-      if (isRight(result)) {
-        queryClient.invalidateQueries([ApiKey.roleList])
-        dispatch(
-          pushToast({
-            show: true,
-            message: `「${name}」角色${value ? '啟用' : '停用'}成功`,
-            level: 'success'
-          })
-        )
-        return
-      }
-
-      const { errorMessage, statusCode } = result.left
-      dispatch(setError({ message: errorMessage, show: true, statusCode }))
+      updateRoleStatusMutate(
+        { id, status },
+        {
+          onSuccess() {
+            queryClient.invalidateQueries([ApiKey.roleList])
+            queryClient.invalidateQueries([ApiKey.roleDetail, id])
+            dispatch(
+              pushToast({
+                message,
+                show: true,
+                level: 'success'
+              })
+            )
+          }
+        }
+      )
     }
 
     if (value) {
@@ -154,7 +153,7 @@ const RoleTable = (props: RoleTableProps) => {
     setModalProps({ ...modalProps, open: false })
   }
 
-  if (data && isLeft(data)) {
+  if (isError) {
     return null
   }
 
@@ -163,11 +162,11 @@ const RoleTable = (props: RoleTableProps) => {
       <Loading isLoading={isLoading || updateRoleStatusLoading || deleteRoleLoading} />
       <Table<IGetRoleOutput>
         columns={columns}
-        data={data && isRight(data) ? data.right.roles : []}
+        data={data?.roles || []}
         pagination={{
           pageSize: 10,
           currentPage: page,
-          totalRows: data && isRight(data) ? data.right.pagination.total : 0,
+          totalRows: data?.pagination?.total || 0,
           nextPage: pageCount => {
             setPage(page => page + pageCount)
           }

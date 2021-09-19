@@ -1,13 +1,12 @@
 import { useState, useRef, SyntheticEvent } from 'react'
-import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
-import { isRight } from 'fp-ts/Either'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
+import Loading from '@/components/shared/loading'
 import Paper from '@/components/shared/paper'
 import TextField from '@/components/shared/textField'
 
@@ -18,6 +17,9 @@ import { ILoginInputPort } from '@ec-backstage/core/src/auth/application/interfa
 
 // layouts
 import LoginLayout from '@/layouts/login'
+
+// services
+import useNormalMutation from '@/services/useNormalMutation'
 
 // states
 import { useAppDispatch } from '@/states/hooks'
@@ -31,7 +33,40 @@ function Login() {
   const [errorFields, setErrorFields] = useState<Array<keyof ILoginInputPort>>([])
   const dispatch = useAppDispatch()
   const accountRef = useRef<HTMLInputElement>(null!)
-  const mutation = useMutation((data: ILoginInputPort) => core.auth.login(data))
+  const { isLoading, mutate } = useNormalMutation(
+    (data: ILoginInputPort) => core.auth.login(data),
+    {
+      onSuccess() {
+        router.push('/')
+      },
+      onError(error) {
+        const { errorMessage, statusCode } = error
+        // 清除密碼
+        setData(data => ({ ...data, password: '' }))
+        // 反白帳號
+        accountRef.current.focus()
+        accountRef.current.select()
+        if (
+          [
+            StatusCode.emptyAccountOrPassword,
+            StatusCode.wrongAccountFormat,
+            StatusCode.wrongAccountOrPassword
+          ].includes(statusCode) === false
+        ) {
+          dispatch(setError({ message: errorMessage, show: true, statusCode }))
+          return
+        }
+
+        if (statusCode !== StatusCode.wrongAccountFormat) {
+          setErrorFields(['account', 'password'])
+        } else {
+          setErrorFields(['account'])
+        }
+
+        dispatch(pushToast({ show: true, message: errorMessage, level: 'warning' }))
+      }
+    }
+  )
 
   const handleInputTypeChange = (): void => {
     if (inputType === 'text') {
@@ -50,36 +85,7 @@ function Login() {
 
   const onSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault()
-    const result = await mutation.mutateAsync(data)
-    if (isRight(result)) {
-      router.push('/')
-      return
-    }
-
-    const { errorMessage, statusCode } = result.left
-    // 清除密碼
-    setData(data => ({ ...data, password: '' }))
-    // 反白帳號
-    accountRef.current.focus()
-    accountRef.current.select()
-    if (
-      [
-        StatusCode.emptyAccountOrPassword,
-        StatusCode.wrongAccountFormat,
-        StatusCode.wrongAccountOrPassword
-      ].includes(statusCode) === false
-    ) {
-      dispatch(setError({ message: errorMessage, show: true, statusCode }))
-      return
-    }
-
-    if (statusCode !== StatusCode.wrongAccountFormat) {
-      setErrorFields(['account', 'password'])
-    } else {
-      setErrorFields(['account'])
-    }
-
-    dispatch(pushToast({ show: true, message: errorMessage, level: 'warning' }))
+    mutate(data)
   }
 
   return (
@@ -129,6 +135,7 @@ function Login() {
           />
         </form>
       </Paper>
+      <Loading isLoading={isLoading} />
     </LoginLayout>
   )
 }

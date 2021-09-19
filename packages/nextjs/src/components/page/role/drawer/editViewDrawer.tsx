@@ -1,13 +1,12 @@
-import { useMutation, useQueryClient, useQuery } from 'react-query'
-import { isLeft, isRight } from 'fp-ts/Either'
+import { useQueryClient } from 'react-query'
 import { useState } from 'react'
 import 'twin.macro'
 
 // components
 import Button from '@/components/shared/button'
+import RoleAffectedAccountsDialog from '@/components/page/role/affectedAccountsDialog'
 import useDrawerTemplate from '@/components/page/role/drawer/useDrawerTemplate'
 import useDrawerReducer from '@/components/page/role/drawer/useDrawerReducer'
-import RoleAffectedAccountsDialog from '@/components/page/role/affectedAccountsDialog'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
@@ -24,6 +23,10 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
 // pages
 import { Mode } from '@/pages/role'
+
+// services
+import useNormalQuery from '@/services/useNormalQuery'
+import useNormalMutation from '@/services/useNormalMutation'
 
 // state
 import { useAppDispatch } from '@/states/hooks'
@@ -44,49 +47,76 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
   const reduxDispatch = useAppDispatch()
   const [state, dispatch] = useDrawerReducer()
   const [modalProps, setModalProps] = useState({ open: false, id: -1, callback: () => {} })
-  const { data: permissionData, isLoading: permissionDataLoading } = useQuery(
+  const { data: permissionData, isLoading: permissionDataLoading } = useNormalQuery(
     [ApiKey.permissionList, open],
     () => core.permission.getPermissionList(),
     {
-      enabled: open,
-      refetchOnWindowFocus: false,
-      staleTime: 600000
+      enabled: open
     }
   )
-  const { data: roleData, isLoading: roleDataLoading } = useQuery(
+  const { data: roleData, isLoading: roleDataLoading } = useNormalQuery(
     [ApiKey.roleDetail, id, open],
     () => core.role.getRoleDetail({ id }),
     {
       enabled: open && Boolean(permissionData),
-      refetchOnWindowFocus: false,
       staleTime: 600000
     }
   )
-  const { isLoading: updateRoleLoading, mutateAsync } = useMutation((data: IUpdateRoleInputPort) =>
-    core.role.updateRole(data)
+  const { isLoading: updateRoleLoading, mutate: updateRoleMutate } = useNormalMutation(
+    (data: IUpdateRoleInputPort) => core.role.updateRole(data),
+    {
+      onSuccess(_, variables) {
+        const { name } = variables
+        queryClient.invalidateQueries(ApiKey.roleList)
+        queryClient.invalidateQueries([ApiKey.roleDetail, id])
+        reduxDispatch(
+          pushToast({ show: true, level: 'success', message: `「${name}」角色編輯成功` })
+        )
+        close()
+      },
+      onError(error) {
+        const { statusCode, errorMessage } = error
+        if (
+          [
+            StatusCode.wrongRoleNameFormat,
+            StatusCode.permissionIsEmpty,
+            StatusCode.roleNameIsExist
+          ].includes(statusCode)
+        ) {
+          if (statusCode === StatusCode.permissionIsEmpty) {
+            handleErrorTarget(['permissions'])
+          } else {
+            handleErrorTarget(['name'])
+          }
+          reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
+          return
+        }
+        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
+      }
+    }
   )
-  const deleteMutation = useMutation(({ id }: IDeleteRoleInputPort) => core.role.deleteRole({ id }))
+  const { isLoading: deleteRoleLoading, mutate: deleteRoleMutate } = useNormalMutation(
+    ({ id }: IDeleteRoleInputPort) => core.role.deleteRole({ id }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([ApiKey.roleList])
+        reduxDispatch(
+          pushToast({ show: true, level: 'success', message: `「${state.name}」角色刪除成功` })
+        )
+        close()
+      }
+    }
+  )
 
   useEnhancedEffect(() => {
     if (permissionData) {
-      if (isRight(permissionData)) {
-        dispatch({ type: 'setPermissionData', payload: { permissions: permissionData.right } })
-      } else {
-        const { errorMessage, statusCode } = permissionData.left
-        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-      }
+      dispatch({ type: 'setPermissionData', payload: { permissions: permissionData } })
     }
   }, [permissionData])
 
   useEnhancedEffect(() => {
     if (roleData) {
-      if (isLeft(roleData)) {
-        const { errorMessage, statusCode } = roleData.left
-        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-        return
-      }
-
-      const { name, status, permissions } = roleData.right
+      const { name, status, permissions } = roleData
       permissions.forEach(permission => {
         const { id } = permission
         const target = state.permissions.find(permission => permission.id === id)
@@ -112,42 +142,11 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     }
   }, [roleData])
 
-  const submit = async (): Promise<void> => {
-    const result = await mutateAsync({ ...state, id })
-    if (isRight(result)) {
-      queryClient.invalidateQueries(ApiKey.roleList)
-      queryClient.invalidateQueries([ApiKey.roleDetail, id])
-      reduxDispatch(
-        pushToast({ show: true, level: 'success', message: `「${state.name}」角色編輯成功` })
-      )
-      close()
-      return
-    }
-
-    const { statusCode, errorMessage } = result.left
-    if (
-      [
-        StatusCode.wrongRoleNameFormat,
-        StatusCode.permissionIsEmpty,
-        StatusCode.roleNameIsExist
-      ].includes(statusCode)
-    ) {
-      if (statusCode === StatusCode.permissionIsEmpty) {
-        handleErrorTarget(['permissions'])
-      } else {
-        handleErrorTarget(['name'])
-      }
-      reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
-      return
-    }
-    reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-  }
-
-  const handleSubmit = async (): Promise<void> => {
+  const handleSubmit = (): void => {
     if (state.status === Status.inactive) {
-      setModalProps({ open: true, id, callback: submit })
+      setModalProps({ open: true, id, callback: () => updateRoleMutate({ ...state, id }) })
     } else {
-      submit()
+      updateRoleMutate({ ...state, id })
     }
   }
 
@@ -156,23 +155,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
   }
 
   const handleDelete = (): void => {
-    const callback = async () => {
-      const result = await deleteMutation.mutateAsync({ id })
-
-      if (isRight(result)) {
-        queryClient.invalidateQueries([ApiKey.roleList])
-        reduxDispatch(
-          pushToast({ show: true, level: 'success', message: `「${state.name}」角色刪除成功` })
-        )
-        close()
-        return
-      }
-
-      const { errorMessage, statusCode } = result.left
-      reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-    }
-
-    setModalProps({ open: true, id, callback })
+    setModalProps({ open: true, id, callback: () => deleteRoleMutate({ id }) })
   }
 
   const { element, handleErrorTarget } = useDrawerTemplate({
@@ -184,7 +167,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     state,
     dispatch,
     changeModeToEdit,
-    isLoading: permissionDataLoading || roleDataLoading || updateRoleLoading,
+    isLoading: permissionDataLoading || roleDataLoading || updateRoleLoading || deleteRoleLoading,
     slots: {
       delete:
         mode === Mode.edit ? (

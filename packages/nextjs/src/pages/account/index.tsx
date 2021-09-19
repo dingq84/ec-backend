@@ -1,7 +1,5 @@
 import { useState, memo } from 'react'
 import tw, { css } from 'twin.macro'
-import { useQuery } from 'react-query'
-import { isRight } from 'fp-ts/lib/Either'
 
 // components
 import Button from '@/components/shared/button'
@@ -22,6 +20,9 @@ import { Status } from '@ec-backstage/core/src/common/constants/status'
 // layouts
 import DefaultLayout from '@/layouts/default'
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
+
+// services
+import useNormalQuery from '@/services/useNormalQuery'
 
 // types
 import { Option } from '@/types/components/input'
@@ -77,11 +78,10 @@ const SearchContainer = memo(
     const [keyword, setKeyword] = useState(propKeyword)
     const [roleId, setRoleId] = useState(propRoleId === undefined ? '' : propRoleId.toString())
     const [roleList, setRoleList] = useState<Option[]>([])
-    const { data } = useQuery(
+    const { data } = useNormalQuery(
       ApiKey.roleList,
       () => core.role.getRoleList({ orderBy: Order.Desc, page: 1 }),
       {
-        refetchOnWindowFocus: false,
         staleTime: 600000
       }
     )
@@ -97,9 +97,7 @@ const SearchContainer = memo(
 
     useEnhancedEffect(() => {
       if (data) {
-        if (isRight(data)) {
-          setRoleList(data.right.roles.map(role => ({ key: role.id.toString(), value: role.name })))
-        }
+        setRoleList(data.roles.map(role => ({ key: role.id.toString(), value: role.name })))
       }
     }, [data])
 

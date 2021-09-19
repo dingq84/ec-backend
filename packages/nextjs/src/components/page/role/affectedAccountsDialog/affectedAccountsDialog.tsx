@@ -1,6 +1,4 @@
-import { useQuery } from 'react-query'
 import { useState } from 'react'
-import { isLeft } from 'fp-ts/lib/Either'
 import 'twin.macro'
 
 // components
@@ -18,9 +16,8 @@ import core from '@ec-backstage/core/src'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-// states
-import { useAppDispatch } from '@/states/hooks'
-import { setError } from '@/states/error'
+// services
+import useNormalQuery from '@/services/useNormalQuery'
 
 // types
 import { Option } from '@/types/components/input'
@@ -34,28 +31,20 @@ interface RoleDialogProps {
 
 const AffectedAccountsDialog = (props: RoleDialogProps) => {
   const { id, open, close, callback } = props
-  const [accounts, setAdmins] = useState<Option[]>([])
-  const dispatch = useAppDispatch()
-  const { data, isLoading } = useQuery(
+  const [accounts, setAccounts] = useState<Option[]>([])
+  const { data, isLoading } = useNormalQuery(
     [ApiKey.roleAdminList, id],
     () => core.role.getRoleAdminList({ id }),
     {
-      enabled: id !== -1,
-      staleTime: 6000000,
-      refetchOnWindowFocus: false
+      enabled: id !== -1
     }
   )
 
   useEnhancedEffect(() => {
     if (data) {
-      if (isLeft(data)) {
-        const { errorMessage, statusCode } = data.left
-        dispatch(setError({ message: errorMessage, show: true, statusCode }))
-      } else {
-        setAdmins(
-          data.right.accounts.map(account => ({ key: account.id.toString(), value: account.name }))
-        )
-      }
+      setAccounts(
+        data.accounts.map(account => ({ key: account.id.toString(), value: account.name }))
+      )
     }
   }, [data])
 
