@@ -45,6 +45,7 @@ interface IUseDrawerTemplate {
   changeModeToEdit?: () => void
   title: string
   submit: () => void
+  submitLabel: string
   mode: Mode
   state: InitialStateProps
   dispatch: Dispatch<Action>
@@ -60,6 +61,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
     close,
     title,
     submit,
+    submitLabel,
     mode,
     state,
     dispatch,
@@ -211,7 +213,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
 
                 <div tw="flex items-center ml-auto">
                   <Button label="取消" className="btn-outline" onClick={close} />
-                  <Button tw="ml-5" label="儲存" className="btn" onClick={submit} />
+                  <Button tw="ml-5" label={submitLabel} className="btn" onClick={submit} />
                 </div>
               </div>
             </Fade>

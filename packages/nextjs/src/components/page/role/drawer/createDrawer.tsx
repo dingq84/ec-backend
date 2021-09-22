@@ -96,6 +96,7 @@ const CreateDrawer = (props: CreateDrawerProps) => {
     mode: Mode.create,
     title: '創建',
     submit: () => mutate(state),
+    submitLabel: '新增',
     state,
     dispatch,
     isLoading

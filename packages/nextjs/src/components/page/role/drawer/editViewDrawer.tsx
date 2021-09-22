@@ -164,6 +164,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     mode,
     title: mode === Mode.edit ? '編輯' : '檢視',
     submit: handleSubmit,
+    submitLabel: '儲存',
     state,
     dispatch,
     changeModeToEdit,
