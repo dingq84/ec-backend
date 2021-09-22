@@ -7,7 +7,7 @@ import Dialog from '@/components/shared/dialog'
 interface LogoutDialogProps {
   open: boolean
   close: () => void
-  logout: () => Promise<void>
+  logout: () => void
 }
 const LogoutDialog = (props: LogoutDialogProps) => {
   const { open, close, logout } = props

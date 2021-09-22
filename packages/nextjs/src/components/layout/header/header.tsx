@@ -1,15 +1,8 @@
-/**
- * @author Dean Chen 2021-04-17
- * Header 從首頁中拉出來，主要顯示使用者訊息已經 Sidebar 的控制，
- * 屬於 Default layout 的一個 component，所以放在 layout 底下
- */
-
 import { useState, useRef } from 'react'
+import { useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { useMutation } from 'react-query'
-import { isRight } from 'fp-ts/lib/Either'
 import Image from 'next/image'
 import tw from 'twin.macro'
 
@@ -20,23 +13,36 @@ import Popover from '@/components/shared/popover'
 import ModifyPasswordDialog from '@/components/layout/header/modifyPasswordDialog'
 import LogoutDialog from '@/components/layout/header/logoutDialog'
 
+// constants
+import { ApiKey } from '@/constants/services/api'
+
 // core
 import core from '@ec-backstage/core/src'
+
+// services
+import useNormalMutation from '@/services/useNormalMutation'
 
 // states
 import { useAppSelector, useAppDispatch } from '@/states/hooks'
 import { clearMe } from '@/states/me'
-import { setError } from '@/states/error'
 
 const Header = () => {
   const anchorEl = useRef<HTMLDivElement>(null!)
+  const queryClient = useQueryClient()
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
   const [modifyPasswordDialogOpen, setModifyPasswordDialogOpen] = useState(false)
   const [successDialogOpen, setSuccessDialogOpen] = useState(false)
   const dispatch = useAppDispatch()
   const { user, role } = useAppSelector(state => state.me)
-  const mutation = useMutation(() => core.auth.logout())
+  const { mutate } = useNormalMutation(() => core.auth.logout(), {
+    onSuccess() {
+      dispatch(clearMe())
+      queryClient.removeQueries(ApiKey.isLogged)
+      queryClient.removeQueries(ApiKey.me)
+      router.push('/auth/login')
+    }
+  })
   const router = useRouter()
   const { name, account } = user
   const userName = name ? `嗨${name}，您好!` : ''
@@ -47,17 +53,8 @@ const Header = () => {
     setPopoverOpen(open)
   }
 
-  const logout = async (): Promise<void> => {
-    const result = await mutation.mutateAsync()
-
-    if (isRight(result)) {
-      router.push('/auth/login')
-      dispatch(clearMe())
-      return
-    }
-
-    const { errorMessage, statusCode } = result.left
-    dispatch(setError({ message: errorMessage, show: true, statusCode }))
+  const logout = (): void => {
+    mutate()
   }
 
   const openLogoutDialog = (): void => {
