@@ -7,7 +7,8 @@ import Paper from '@/components/shared/paper'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
 import Select from '@/components/shared/select'
 import TextField from '@/components/shared/textField'
-import AdminTable from '@/components/page/account/table'
+import AccountTable from '@/components/page/account/table'
+import AccountDrawer from '@/components/page/account/drawer'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
@@ -48,7 +49,7 @@ const selectCss = css`
   }
 
   & > div > div > div {
-    ${tw`border-gray-1 text-gray-3`}
+    ${tw`border-gray-1 bg-white text-gray-3`}
   }
 
   & input {
@@ -128,7 +129,7 @@ const SearchContainer = memo(
           <Select
             value={roleId}
             options={roleList}
-            inputProps={{ label: '角色名稱', placeholder: '全部' }}
+            inputProps={{ label: '角色名稱', placeholder: '全部', border: true }}
             css={[selectCss]}
             onChange={handleRoleChange}
             paperProps={{ css: [tw`text-gray-3 text-xs`] }}
@@ -150,11 +151,18 @@ const SearchContainer = memo(
   }
 )
 
+export enum Mode {
+  'create' = 'create',
+  'edit' = 'edit',
+  'view' = 'view'
+}
+
 const Admin = () => {
   const [keyword, setKeyword] = useState('')
   const [roleId, setRoleId] = useState<undefined | number>(undefined)
   const [status, setStatus] = useState<Status>(-1)
-
+  const [currentAccountId, setCurrentAccountId] = useState<number | undefined>(undefined)
+  const [drawProps, setDrawProps] = useState({ open: false, mode: Mode.view })
   const handleSearch = (newKeyword: string, newRoleId: string): void => {
     setKeyword(newKeyword)
     setRoleId(newRoleId === '' ? undefined : Number(newRoleId))
@@ -164,11 +172,24 @@ const Admin = () => {
     setStatus(newStatus)
   }
 
+  const changeModeToEdit = (): void => {
+    setDrawProps({ ...drawProps, mode: Mode.edit })
+  }
+
+  const openDrawer = (mode: Mode, accountId: number | undefined = undefined): void => {
+    setDrawProps({ open: true, mode })
+    setCurrentAccountId(accountId)
+  }
+
+  const closeDrawer = (): void => {
+    setDrawProps({ ...drawProps, open: false })
+  }
+
   return (
     <>
       <div tw="flex items-center justify-between">
         <h1 tw="text-blue-gray-3 font-medium text-2xl">帳號管理</h1>
-        <Button className="btn" label="創建帳號" />
+        <Button className="btn" label="創建帳號" onClick={() => openDrawer(Mode.create)} />
       </div>
 
       <Tabs>
@@ -180,19 +201,26 @@ const Admin = () => {
 
         <TabPanel>
           <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
-          <AdminTable keyword={keyword} roleId={roleId} status={status} />
+          <AccountTable keyword={keyword} roleId={roleId} status={status} openDrawer={openDrawer} />
         </TabPanel>
 
         <TabPanel>
           <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
-          <AdminTable keyword={keyword} roleId={roleId} status={status} />
+          <AccountTable keyword={keyword} roleId={roleId} status={status} openDrawer={openDrawer} />
         </TabPanel>
 
         <TabPanel>
           <SearchContainer keyword={keyword} roleId={roleId} search={handleSearch} />
-          <AdminTable keyword={keyword} roleId={roleId} status={status} />
+          <AccountTable keyword={keyword} roleId={roleId} status={status} openDrawer={openDrawer} />
         </TabPanel>
       </Tabs>
+
+      <AccountDrawer
+        {...drawProps}
+        id={currentAccountId}
+        close={closeDrawer}
+        changeModeToEdit={changeModeToEdit}
+      />
     </>
   )
 }

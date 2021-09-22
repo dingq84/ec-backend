@@ -29,6 +29,11 @@ class Validator {
     const result = schema.validate(value)
     return !result.error
   }
+
+  static isChineseCharacters(value: string): boolean {
+    const REGEX_CHINESE = /^[\u4e00-\u9fa5]+$/g
+    return REGEX_CHINESE.test(value)
+  }
 }
 
 export default Validator

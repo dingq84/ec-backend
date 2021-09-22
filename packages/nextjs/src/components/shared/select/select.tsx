@@ -1,7 +1,7 @@
 import { forwardRef, useState, useRef, HTMLAttributes } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import tw, { css, TwStyle } from 'twin.macro'
+import tw, { TwStyle } from 'twin.macro'
 
 // components
 import Popover from '@/components/shared/popover'
@@ -13,18 +13,6 @@ import useForkRef from '@/hooks/useForkRef'
 
 // types
 import type { Option } from '@/types/components/input'
-
-const inputCss = css`
-  & {
-    & > div > div {
-      ${tw`bg-white`}
-    }
-
-    & input {
-      ${tw`text-black placeholder:text-black`}
-    }
-  }
-`
 
 export interface SelectProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   options: Option[]
@@ -67,7 +55,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
     }
   }, [value])
 
-  const openPopover = (): void => setIsOpen(true)
+  const openPopover = (): void => {
+    if (disabled === false) {
+      setIsOpen(true)
+    }
+  }
 
   const closePopover = (): void => setIsOpen(false)
 
@@ -87,8 +79,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
   return (
     <div tw="w-full" {...restProps}>
       <TextField
-        css={[inputCss]}
-        border
         {...inputProps}
         ref={handleRef}
         readOnly

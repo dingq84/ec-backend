@@ -20,6 +20,8 @@ export enum StatusCode {
   accountIsExist = '1301',
   wrongPassword = '1302',
   newPasswordIsSameAsOldPassword = '1303',
+  adminNameOnlyChinese = 'client-011',
+  wrongAdminNameLength = 'client-012',
 
   // role
   wrongRoleId = 'client-0007',
@@ -31,6 +33,7 @@ export enum StatusCode {
   roleCanNotUpdate = '1404',
 
   // global
+  parameterRequired = 'client-0000',
   // 帳號已被停權
   accountFrozen = '1103',
   // 成功

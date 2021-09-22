@@ -37,11 +37,11 @@ function createUseCases(repositories: IRepositories, presenters: IPresenters): I
     admin: {
       updatePassword: new UpdatePasswordUseCase(repositories.admin, presenters.error.admin),
       getAdminList: new GetAdminListUseCase(repositories.admin, presenters.admin),
-      createAdmin: new CreateAdminUseCase(repositories.admin, presenters.error.default),
-      updateAdmin: new UpdateAdminUseCase(repositories.admin, presenters.error.default),
-      deleteAdmin: new DeleteAdminUseCase(repositories.admin, presenters.error.default),
+      createAdmin: new CreateAdminUseCase(repositories.admin, presenters.error.admin),
+      updateAdmin: new UpdateAdminUseCase(repositories.admin, presenters.error.admin),
+      deleteAdmin: new DeleteAdminUseCase(repositories.admin, presenters.error.admin),
       getAdminDetail: new GetAdminDetailUseCase(repositories.admin, presenters.admin),
-      updateAdminStatus: new UpdateAdminStatusUseCase(repositories.admin, presenters.error.default)
+      updateAdminStatus: new UpdateAdminStatusUseCase(repositories.admin, presenters.error.admin)
     },
     auth: {
       login: new LoginUseCase(repositories.auth, presenters.auth, presenters.error.auth),

@@ -5,6 +5,8 @@ import Validator from '@/common/domain/Validator'
 import { IAdminData, IAdminEntity } from '@/admin/domain/interface/iAdminEntity'
 import { IRoleEntity } from '@/role/domain/interface/iRoleEntity'
 import { Status } from '@/common/constants/status'
+import { ICreateAdminInputPort } from '@/admin/application/interface/iCreateAdminUseCase'
+import { IUpdateAdminInputPort } from '@/admin/application/interface/iUpdateAdminUseCase'
 
 class AdminEntity implements IAdminEntity {
   private readonly _id: number
@@ -111,6 +113,94 @@ class AdminEntity implements IAdminEntity {
         data: {
           newPassword1: statusMessage,
           newPassword2: statusMessage
+        }
+      }
+    }
+
+    return true
+  }
+
+  static createAdminValidate(parameters: ICreateAdminInputPort): IErrorInputPort | true {
+    const { name, account, password, roleId } = parameters
+
+    if (
+      Boolean(name) === false ||
+      Boolean(account) === false ||
+      Boolean(password) === false ||
+      typeof roleId !== 'number'
+    ) {
+      const statusMessage = '必填欄位為空，請填寫完畢再送出'
+      return {
+        statusCode: StatusCode.parameterRequired,
+        statusMessage,
+        data: {
+          name: statusMessage,
+          account: statusMessage,
+          password: statusMessage,
+          roleId: statusMessage
+        }
+      }
+    }
+
+    if (name.length > 10) {
+      const statusMessage = '管理者名稱超過字數限制，上限為十字，請重新填寫'
+      return {
+        statusCode: StatusCode.wrongAdminNameLength,
+        statusMessage,
+        data: {
+          name: statusMessage
+        }
+      }
+    }
+
+    if (Validator.isChineseCharacters(name) === false) {
+      const statusMessage = '必填欄位格式錯誤，請填寫正確再送出'
+      return {
+        statusCode: StatusCode.adminNameOnlyChinese,
+        statusMessage,
+        data: {
+          name: statusMessage
+        }
+      }
+    }
+
+    return true
+  }
+
+  static updateAdminValidate(parameters: IUpdateAdminInputPort): IErrorInputPort | true {
+    const { name, account, roleId } = parameters
+
+    if (Boolean(name) === false || Boolean(account) === false || typeof roleId !== 'number') {
+      const statusMessage = '必填欄位為空，請填寫完畢再送出'
+      return {
+        statusCode: StatusCode.parameterRequired,
+        statusMessage,
+        data: {
+          name: statusMessage,
+          account: statusMessage,
+          roleId: statusMessage
+        }
+      }
+    }
+
+    if (name.length > 10) {
+      const statusMessage = '管理者名稱超過字數限制，上限為十字，請重新填寫'
+      return {
+        statusCode: StatusCode.wrongAdminNameLength,
+        statusMessage,
+        data: {
+          name: statusMessage
+        }
+      }
+    }
+
+    if (Validator.isChineseCharacters(name) === false) {
+      const statusMessage = '必填欄位格式錯誤，請填寫正確再送出'
+      return {
+        statusCode: StatusCode.adminNameOnlyChinese,
+        statusMessage,
+        data: {
+          name: statusMessage
         }
       }
     }

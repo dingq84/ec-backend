@@ -99,7 +99,7 @@ const RoleTable = (props: RoleTableProps) => {
         { id },
         {
           onSuccess() {
-            queryClient.invalidateQueries([ApiKey.roleList])
+            queryClient.removeQueries(ApiKey.roleList)
             dispatch(
               pushToast({
                 message,
@@ -124,8 +124,8 @@ const RoleTable = (props: RoleTableProps) => {
         { id, status },
         {
           onSuccess() {
-            queryClient.invalidateQueries([ApiKey.roleList])
-            queryClient.invalidateQueries([ApiKey.roleDetail, id])
+            queryClient.removeQueries(ApiKey.roleList)
+            queryClient.removeQueries([ApiKey.roleDetail, id])
             dispatch(
               pushToast({
                 message,

@@ -1,8 +1,12 @@
 import { useRouter } from 'next/router'
+import { useQueryClient } from 'react-query'
 import 'twin.macro'
 
 // components
 import Dialog from '@/components/shared/dialog'
+
+// constants
+import { ApiKey } from '@/constants/services/api'
 
 // core
 import core from '@ec-backstage/core/src'
@@ -15,10 +19,17 @@ import { hideError } from '@/states/error'
 const ErrorDialog = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const queryClient = useQueryClient()
   const { message, callback, show, statusCode } = useAppSelector(state => state.error)
   const close = (): void => {
     dispatch(hideError())
-    if ([StatusCode.tokenCancel, StatusCode.tokenExpire].includes(statusCode)) {
+    if (
+      [StatusCode.tokenCancel, StatusCode.tokenExpire, StatusCode.accountFrozen].includes(
+        statusCode
+      )
+    ) {
+      queryClient.removeQueries(ApiKey.isLogged)
+      queryClient.removeQueries(ApiKey.me)
       core.auth.removeRefreshToken()
       router.push('/auth/login')
     }

@@ -65,6 +65,9 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
   const { isLoading: updateRoleLoading, mutate: updateRoleMutate } = useNormalMutation(
     (data: IUpdateRoleInputPort) => core.role.updateRole(data),
     {
+      onSettled() {
+        closeModal()
+      },
       onSuccess(_, variables) {
         const { name } = variables
         queryClient.invalidateQueries(ApiKey.roleList)

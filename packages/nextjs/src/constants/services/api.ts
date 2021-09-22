@@ -8,6 +8,7 @@ enum ApiKey {
 
   // admin
   accountList = 'accountList',
+  accountDetail = 'accountDetail',
 
   // permission
   permissionList = 'permissionList',
