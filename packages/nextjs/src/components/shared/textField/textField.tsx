@@ -59,6 +59,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
   }
 
   const handleClear = (event: MouseEvent<HTMLButtonElement>): void => {
+    event.preventDefault()
     event.stopPropagation()
 
     if (disabled) {
