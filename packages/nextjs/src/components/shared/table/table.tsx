@@ -28,6 +28,9 @@ import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 // types
 import { CustomColumn } from '@/types/components/table'
 
+// utils
+import calculatePagination from '@/utils/components/table/calculatePagination'
+
 interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
   columns: CustomColumn<T>[]
   data: Array<T>
@@ -40,9 +43,11 @@ interface TableProps<T extends object> extends HTMLAttributes<HTMLDivElement> {
     [key: string]: (data: Row<T>) => JSX.Element
   }
   pagination: {
-    currentPage?: number // 目前第幾頁 (要)
+    currentPage: number // 目前第幾頁
+    lastPage: number // 最後一頁
     totalRows: number // 總共幾筆
     nextPage: (page: number) => void // 換頁 call api
+    goPage: (page: number) => void // 換頁 call api
     pageSize?: number
   }
 }
@@ -60,7 +65,14 @@ const Table = <T extends object>(props: TableProps<T>) => {
     handleSort,
     ...restProps
   } = props
-  const { totalRows, pageSize = 10, nextPage: propNextPage } = pagination
+  const {
+    currentPage,
+    lastPage,
+    totalRows,
+    pageSize = 10,
+    nextPage: propNextPage,
+    goPage
+  } = pagination
   const [totalWidth, setTotalWidth] = useState(1000)
   const ref = useRef<HTMLDivElement>(null!)
   const getColumnsSlot = useCallback(
@@ -107,7 +119,8 @@ const Table = <T extends object>(props: TableProps<T>) => {
     canPreviousPage,
     canNextPage,
     previousPage,
-    nextPage
+    nextPage,
+    gotoPage
   } = useTable<T>(
     {
       columns: memoColumns,
@@ -158,6 +171,11 @@ const Table = <T extends object>(props: TableProps<T>) => {
     }
 
     propNextPage(page)
+  }
+
+  const handleSpecificPagination = (page: number): void => {
+    gotoPage(page - 1)
+    goPage(page)
   }
 
   return (
@@ -236,17 +254,22 @@ const Table = <T extends object>(props: TableProps<T>) => {
                 onClick={() => handlePagination(-1)}
               />
             ) : null}
-            <Button
-              className="btn-text"
-              label={
-                <span
-                  tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3"
-                  css={[tw`bg-blue-2 text-primary`]}
-                >
-                  {pageIndex + 1}
-                </span>
-              }
-            />
+
+            {calculatePagination(currentPage, lastPage).map(pagination => (
+              <Button
+                key={pagination.toString()}
+                className="btn-text"
+                onClick={() => handleSpecificPagination(pagination)}
+                label={
+                  <span
+                    tw="w-5 h-5 rounded inline-block leading-5 text-sm text-blue-gray-3"
+                    css={[pagination === pageIndex + 1 && tw`bg-blue-2 text-primary`]}
+                  >
+                    {pagination}
+                  </span>
+                }
+              />
+            ))}
             {canNextPage ? (
               <Button
                 className="btn-text"

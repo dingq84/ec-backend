@@ -161,10 +161,12 @@ const AdminTable = (props: AdminTableProps) => {
         pagination={{
           pageSize: 10,
           currentPage: page,
+          lastPage: data?.pagination.lastPage || page,
           totalRows: data?.pagination.total || 0,
           nextPage: pageCount => {
             setPage(page => page + pageCount)
-          }
+          },
+          goPage: page => setPage(page)
         }}
         slots={{
           edit: data => <EditButton onClick={() => handleEdit(data)} />,
