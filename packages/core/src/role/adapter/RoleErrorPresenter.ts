@@ -15,7 +15,7 @@ class RoleErrorPresenter extends ErrorPresenter {
       case StatusCode.wrongRoleNameFormat:
         return '角色名稱不得超過10個字。'
       case StatusCode.permissionIsEmpty:
-        return '角色名稱不得為空'
+        return '角色權限不得為空'
       case StatusCode.roleNameIsExist:
         return '角色名稱不得重複'
       default:

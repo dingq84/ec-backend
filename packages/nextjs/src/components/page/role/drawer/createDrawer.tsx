@@ -88,7 +88,7 @@ const CreateDrawer = (props: CreateDrawerProps) => {
     if (permissionData) {
       dispatch({ type: 'setPermissionData', payload: { permissions: permissionData } })
     }
-  }, [permissionData])
+  }, [permissionData, open])
 
   const { element, handleErrorTarget } = useDrawerTemplate({
     open,

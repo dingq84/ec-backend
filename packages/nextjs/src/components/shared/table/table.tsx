@@ -60,7 +60,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
     handleSort,
     ...restProps
   } = props
-  const { totalRows, pageSize = 10, nextPage } = pagination
+  const { totalRows, pageSize = 10, nextPage: propNextPage } = pagination
   const [totalWidth, setTotalWidth] = useState(1000)
   const ref = useRef<HTMLDivElement>(null!)
   const getColumnsSlot = useCallback(
@@ -105,7 +105,9 @@ const Table = <T extends object>(props: TableProps<T>) => {
     prepareRow,
     state,
     canPreviousPage,
-    canNextPage
+    canNextPage,
+    previousPage,
+    nextPage
   } = useTable<T>(
     {
       columns: memoColumns,
@@ -146,6 +148,16 @@ const Table = <T extends object>(props: TableProps<T>) => {
     if (handleRowClick) {
       handleRowClick(data)
     }
+  }
+
+  const handlePagination = (page: number): void => {
+    if (page > 0) {
+      nextPage()
+    } else {
+      previousPage()
+    }
+
+    propNextPage(page)
   }
 
   return (
@@ -220,9 +232,8 @@ const Table = <T extends object>(props: TableProps<T>) => {
             {canPreviousPage ? (
               <Button
                 className="btn-text"
-                tw="text-blue-gray-3"
                 label={<FontAwesomeIcon icon={faChevronLeft} />}
-                onClick={() => nextPage(-1)}
+                onClick={() => handlePagination(-1)}
               />
             ) : null}
             <Button
@@ -240,7 +251,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
               <Button
                 className="btn-text"
                 label={<FontAwesomeIcon icon={faChevronRight} />}
-                onClick={() => nextPage(1)}
+                onClick={() => handlePagination(1)}
               />
             ) : null}
           </div>
