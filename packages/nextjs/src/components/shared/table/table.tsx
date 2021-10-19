@@ -246,7 +246,6 @@ const Table = <T extends object>(props: TableProps<T>) => {
 
         {disabledPagination ? null : (
           <div className="flex-center" tw="gap-x-2">
-            {/* TODO: page calculation */}
             {canPreviousPage ? (
               <Button
                 className="btn-text"
