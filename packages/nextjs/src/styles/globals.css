@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-8xl leading-tighter font-light tracking-tight;
+  }
+  h2 {
+    @apply text-6xl leading-tight font-light tracking-tight;
+  }
+  h3 {
+    @apply text-5xl leading-tighter font-normal tracking-wide;
+  }
+  h4 {
+    @apply text-4xl leading-tight font-normal tracking-wide;
+  }
+  h5 {
+    @apply text-2xl leading-snug font-normal tracking-normal;
+  }
+  h6 {
+    @apply text-xl leading-relaxed font-medium tracking-wide;
+  }
+  p {
+    @apply text-base leading-relaxed font-medium tracking-wide;
+  }
+  span {
+    @apply text-sm leading-normal font-medium tracking-wide;
+  }
+  small {
+    @apply text-xs leading-relaxed font-normal;
+  }
+  a {
+    @apply text-center select-none text-base leading-none font-normal text-black hover:text-primary;
+  }
+  button,
+  input {
+    @apply border-none outline-none bg-transparent tracking-wide focus:outline-none;
+  }
+
+  input[type='password']::-ms-reveal,
+  input[type='password']::-ms-clear {
+    @apply hidden;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply rounded-lg px-8 py-2 bg-primary text-white hover:bg-opacity-80 disabled:pointer-events-none disabled:bg-purple-3;
+  }
+  .btn-outline {
+    @apply rounded-lg px-8 py-2 text-primary border border-solid border-primary hover:bg-primary hover:text-white disabled:pointer-events-none disabled:bg-gray-1;
+  }
+  .btn-text {
+    @apply text-primary hover:opacity-80 disabled:pointer-events-none disabled:text-gray-1;
+  }
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+  .scroll {
+    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-auto;
+  }
+  .scroll-x {
+    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-x-auto;
+  }
+  .scroll-y {
+    @apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-gray-1 overflow-y-auto;
+  }
+}
