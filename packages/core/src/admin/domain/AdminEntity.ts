@@ -60,23 +60,24 @@ class AdminEntity implements IAdminEntity {
   static updatePasswordValidate(parameters: IUpdatePasswordInputPort): IErrorInputPort | true {
     const { accountId, oldPassword, newPassword1, newPassword2 } = parameters
 
-    if (oldPassword === '' || newPassword1 === '' || newPassword2 === '') {
+    const emptyList = Validator.checkIsEmpty({ oldPassword, newPassword1, newPassword2 })
+    if (emptyList.length) {
       const statusMessage = '必填欄位未填寫'
       return {
         statusCode: StatusCode.emptyPassword,
         statusMessage,
-        data: {
-          oldPassword: statusMessage,
-          newPassword1: statusMessage,
-          newPassword2: statusMessage
-        }
+        data: emptyList.reduce(
+          (accumulate, current) => ({ ...accumulate, [current]: statusMessage }),
+          {}
+        )
       }
     }
 
     if (!Validator.isNumber(accountId)) {
       return {
         statusCode: StatusCode.passwordIsNotSame,
-        statusMessage: '帳號 id 錯誤'
+        statusMessage: '帳號 id 錯誤',
+        data: []
       }
     }
 
