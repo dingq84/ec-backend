@@ -34,6 +34,11 @@ class Validator {
     const REGEX_CHINESE = /^[\u4e00-\u9fa5]+$/g
     return REGEX_CHINESE.test(value)
   }
+
+  static checkIsEmpty<K extends string>(data: Record<K, string>): Array<Partial<K>> {
+    const keys = Object.keys(data) as Array<K>
+    return keys.filter(key => Validator.isStringEmpty(data[key]))
+  }
 }
 
 export default Validator

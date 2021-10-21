@@ -22,27 +22,26 @@ class TokenEntity implements ITokenEntity {
   }
 
   static loginValidate(parameters: ILoginInputPort): IErrorInputPort | true {
-    const { account, password } = parameters
-    if (Validator.isStringEmpty(account) || Validator.isStringEmpty(password)) {
+    const emptyList = Validator.checkIsEmpty(parameters)
+    if (emptyList.length) {
       const statusMessage = '帳號或密碼不能為空值'
       return {
         statusCode: StatusCode.emptyAccountOrPassword,
         statusMessage,
-        data: {
-          account: statusMessage,
-          password: statusMessage
-        }
+        data: emptyList.reduce(
+          (accumulate, current) => ({ ...accumulate, [current]: statusMessage }),
+          {}
+        )
       }
     }
 
-    if (Validator.isEmail(account) === false) {
+    if (Validator.isEmail(parameters.account) === false) {
       const statusMessage = '帳號需為 Email 格式'
       return {
         statusCode: StatusCode.wrongAccountFormat,
         statusMessage,
         data: {
-          account: statusMessage,
-          password: statusMessage
+          account: statusMessage
         }
       }
     }

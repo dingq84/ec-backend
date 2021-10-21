@@ -28,10 +28,10 @@ import { pushToast } from '@/states/toast'
 
 function Login() {
   const router = useRouter()
-  const [inputType, setInputType] = useState<'text' | 'password'>('password')
-  const [data, setData] = useState<ILoginInputPort>({ account: '', password: '' })
-  const [errorFields, setErrorFields] = useState<Array<keyof ILoginInputPort>>([])
   const dispatch = useAppDispatch()
+  const [inputType, setInputType] = useState<'text' | 'password'>('password')
+  const [loginData, setLoginData] = useState<ILoginInputPort>({ account: '', password: '' })
+  const [errorFields, setErrorFields] = useState<Array<keyof ILoginInputPort>>([])
   const accountRef = useRef<HTMLInputElement>(null!)
   const { isLoading, mutate } = useNormalMutation(
     (data: ILoginInputPort) => core.auth.login(data),
@@ -40,52 +40,50 @@ function Login() {
         router.push('/')
       },
       onError(error) {
-        const { errorMessage, statusCode } = error
+        const { errorMessage: message, statusCode, data } = error
+        const errorData = data as Record<Partial<keyof ILoginInputPort>, 'string'> | []
         // 清除密碼
-        setData(data => ({ ...data, password: '' }))
-        // 反白帳號
-        accountRef.current.focus()
-        accountRef.current.select()
-        if (
-          [
-            StatusCode.emptyAccountOrPassword,
-            StatusCode.wrongAccountFormat,
-            StatusCode.wrongAccountOrPassword
-          ].includes(statusCode) === false
-        ) {
-          dispatch(setError({ message: errorMessage, show: true, statusCode }))
+        setLoginData(oldLoginData => ({ ...oldLoginData, password: '' }))
+        focusAccountField()
+        // 後端回傳的 data 為空陣列
+        if (Array.isArray(errorData)) {
+          setErrorFields(['account', 'password'])
+
+          // 帳號密碼錯誤跳 toast
+          if (StatusCode.wrongAccountOrPassword === statusCode) {
+            dispatch(pushToast({ show: true, message, level: 'warning' }))
+          } else {
+            dispatch(setError({ show: true, message, statusCode }))
+          }
           return
         }
 
-        if (statusCode !== StatusCode.wrongAccountFormat) {
-          setErrorFields(['account', 'password'])
-        } else {
-          setErrorFields(['account'])
-        }
-
-        dispatch(pushToast({ show: true, message: errorMessage, level: 'warning' }))
+        setErrorFields(Object.keys(errorData) as Array<keyof typeof errorData>)
+        dispatch(pushToast({ show: true, message, level: 'warning' }))
       }
     }
   )
 
-  const handleInputTypeChange = (): void => {
-    if (inputType === 'text') {
-      setInputType('password')
-    } else {
-      setInputType('text')
-    }
+  const focusAccountField = (): void => {
+    // 反白帳號
+    accountRef.current.focus()
+    accountRef.current.select()
   }
 
-  const handleChange = (value: string, type: keyof ILoginInputPort): void => {
+  const handleInputTypeChange = (): void => {
+    setInputType(inputType === 'text' ? 'password' : 'text')
+  }
+
+  const handleChange = (value: string, field: keyof ILoginInputPort): void => {
     if (errorFields.length) {
       setErrorFields([])
     }
-    setData(data => ({ ...data, [type]: value }))
+    setLoginData(oldLoginData => ({ ...oldLoginData, [field]: value }))
   }
 
   const onSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault()
-    mutate(data)
+    mutate(loginData)
   }
 
   return (
@@ -102,8 +100,9 @@ function Login() {
             placeholder="請輸入您的帳號"
             error={errorFields.includes('account')}
             onChange={value => handleChange(value, 'account')}
+            onClear={() => handleChange('', 'account')}
             tabIndex={1}
-            value={data.account}
+            value={loginData.account}
             tw="mb-4 w-full"
           />
           <TextField
@@ -112,10 +111,11 @@ function Login() {
             type={inputType}
             label="密碼"
             tabIndex={2}
-            value={data.password}
+            value={loginData.password}
             placeholder="請輸入您的密碼"
             error={errorFields.includes('password')}
             onChange={value => handleChange(value, 'password')}
+            onClear={() => handleChange('', 'password')}
             adornment={{
               end: (
                 <FontAwesomeIcon
