@@ -10,19 +10,16 @@ import useDrawerReducer from '@/components/page/role/drawer/useDrawerReducer'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
+import { OperationMode } from '@/constants/common'
 
 // core
 import core from '@ec-backstage/core/src'
-import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 import { IUpdateRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iUpdateRoleUseCase'
 import { IDeleteRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iDeleteRoleUseCase'
 import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-
-// pages
-import { Mode } from '@/pages/role'
 
 // services
 import useNormalQuery from '@/services/useNormalQuery'
@@ -34,7 +31,7 @@ import { setError } from '@/states/error'
 import { pushToast } from '@/states/toast'
 
 interface EditViewDrawerProps {
-  mode: Mode
+  mode: OperationMode
   open: boolean
   close(): void
   changeModeToEdit(): void
@@ -78,23 +75,18 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
         close()
       },
       onError(error) {
-        const { statusCode, errorMessage } = error
-        if (
-          [
-            StatusCode.wrongRoleNameFormat,
-            StatusCode.permissionIsEmpty,
-            StatusCode.roleNameIsExist
-          ].includes(statusCode)
-        ) {
-          if (statusCode === StatusCode.permissionIsEmpty) {
-            handleErrorTarget(['permissions'])
-          } else {
-            handleErrorTarget(['name'])
-          }
-          reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
+        const { statusCode, errorMessage: message, data } = error
+        const errorData = data as Record<Partial<keyof IUpdateRoleInputPort>, 'string'> | []
+        // 後端回傳的 data 為空陣列
+        if (Array.isArray(errorData)) {
+          reduxDispatch(setError({ show: true, message, statusCode }))
           return
         }
-        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
+
+        handleErrorTarget(
+          Object.keys(errorData) as Array<Partial<Exclude<keyof IUpdateRoleInputPort, 'id'>>>
+        )
+        reduxDispatch(pushToast({ show: true, level: 'warning', message }))
       }
     }
   )
@@ -165,7 +157,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     open,
     close,
     mode,
-    title: mode === Mode.edit ? '編輯' : '檢視',
+    title: mode === OperationMode.edit ? '編輯' : '檢視',
     submit: handleSubmit,
     submitLabel: '儲存',
     state,
@@ -174,7 +166,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     isLoading: permissionDataLoading || roleDataLoading || updateRoleLoading || deleteRoleLoading,
     slots: {
       delete:
-        mode === Mode.edit ? (
+        mode === OperationMode.edit ? (
           <Button
             label="刪除"
             className="btn-outline"

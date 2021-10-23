@@ -91,6 +91,7 @@ const reducer = (state: InitialStateProps, action: Action): InitialStateProps =>
       return state
   }
 }
+
 const useDrawerReducer = () => {
   return useReducer(reducer, initialState)
 }

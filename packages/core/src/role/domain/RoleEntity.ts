@@ -108,7 +108,7 @@ class RoleEntity implements IRoleEntity {
   ): IErrorInputPort | true {
     const { name, permissions } = parameters
 
-    if (name.length === 0) {
+    if (Validator.isStringEmpty(name)) {
       const statusMessage = '角色名稱不得為空'
       return {
         statusCode: StatusCode.wrongRoleNameFormat,

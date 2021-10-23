@@ -6,17 +6,14 @@ import useDrawerReducer from '@/components/page/role/drawer/useDrawerReducer'
 
 // constants
 import { ApiKey } from '@/constants/services/api'
+import { OperationMode } from '@/constants/common'
 
 // core
 import core from '@ec-backstage/core/src'
-import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 import { ICreateRoleInputPort } from '@ec-backstage/core/src/role/application/interface/iCreateRoleUseCase'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-
-// pages
-import { Mode } from '@/pages/role'
 
 // services
 import useNormalQuery from '@/services/useNormalQuery'
@@ -40,9 +37,7 @@ const CreateDrawer = (props: CreateDrawerProps) => {
   const { data: permissionData } = useNormalQuery(
     ApiKey.permissionList,
     () => core.permission.getPermissionList(),
-    {
-      enabled: open
-    }
+    { enabled: open }
   )
   const { isLoading, mutate } = useNormalMutation(
     (data: ICreateRoleInputPort) => core.role.createRole(data),
@@ -56,24 +51,16 @@ const CreateDrawer = (props: CreateDrawerProps) => {
         close()
       },
       onError(error) {
-        const { statusCode, errorMessage } = error
-        if (
-          [
-            StatusCode.wrongRoleNameFormat,
-            StatusCode.permissionIsEmpty,
-            StatusCode.roleNameIsExist
-          ].includes(statusCode)
-        ) {
-          if (statusCode === StatusCode.permissionIsEmpty) {
-            handleErrorTarget(['permissions'])
-          } else {
-            handleErrorTarget(['name'])
-          }
-          reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
+        const { statusCode, errorMessage: message, data } = error
+        const errorData = data as Record<Partial<keyof ICreateRoleInputPort>, 'string'> | []
+        // 後端回傳的 data 為空陣列
+        if (Array.isArray(errorData)) {
+          reduxDispatch(setError({ show: true, message, statusCode }))
           return
         }
 
-        reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
+        handleErrorTarget(Object.keys(errorData) as Array<Partial<keyof ICreateRoleInputPort>>)
+        reduxDispatch(pushToast({ show: true, level: 'warning', message }))
       }
     }
   )
@@ -93,7 +80,7 @@ const CreateDrawer = (props: CreateDrawerProps) => {
   const { element, handleErrorTarget } = useDrawerTemplate({
     open,
     close,
-    mode: Mode.create,
+    mode: OperationMode.create,
     title: '創建',
     submit: () => mutate(state),
     submitLabel: '新增',

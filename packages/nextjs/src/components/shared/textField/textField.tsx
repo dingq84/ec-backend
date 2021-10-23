@@ -54,7 +54,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(function TextField(
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (onChange) {
-      onChange(event.target.value)
+      onChange(event.target.value.replace(/</g, '&lt').replace(/>/g, '&gt'))
     }
   }
 

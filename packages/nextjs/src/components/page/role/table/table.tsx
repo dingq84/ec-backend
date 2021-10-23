@@ -14,6 +14,7 @@ import RoleAffectedAccountsDialog from '@/components/page/role/affectedAccountsD
 // constants
 import { columns } from '@/constants/pages/role'
 import { ApiKey } from '@/constants/services/api'
+import { OperationMode } from '@/constants/common'
 
 // core
 import core from '@ec-backstage/core/src'
@@ -29,9 +30,6 @@ import { Status } from '@ec-backstage/core/src/common/constants/status'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-// pages
-import { Mode } from '@/pages/role'
-
 // services
 import useNormalQuery from '@/services/useNormalQuery'
 import useNormalMutation from '@/services/useNormalMutation'
@@ -41,7 +39,7 @@ import { useAppDispatch } from '@/states/hooks'
 import { pushToast } from '@/states/toast'
 
 interface RoleTableProps {
-  openDrawer: (mode: Mode, id?: number) => void
+  openDrawer: (mode: OperationMode, id?: number) => void
   name: string
   status: IGetRoleListInputPort['status']
 }
@@ -88,13 +86,13 @@ const RoleTable = (props: RoleTableProps) => {
   }
 
   const handleEdit = (data: Row<IGetRoleOutput>): void => {
-    openDrawer(Mode.edit, data.original.id)
+    openDrawer(OperationMode.edit, data.original.id)
   }
 
   const handleDelete = async (data: Row<IGetRoleOutput>): Promise<void> => {
     const { id, name } = data.original
     const message = `「${name}」角色刪除成功`
-    const callback = () => {
+    const callback = (): void => {
       deleteRoleMutate(
         { id },
         {
@@ -118,7 +116,7 @@ const RoleTable = (props: RoleTableProps) => {
   const handleStatusChange = async (value: boolean, data: Row<IGetRoleOutput>): Promise<void> => {
     const { id, name } = data.original
     const message = `「${name}」角色${value ? '啟用' : '停用'}成功`
-    const callback = () => {
+    const callback = (): void => {
       const status = value ? Status.active : Status.inactive
       updateRoleStatusMutate(
         { id, status },
@@ -146,7 +144,7 @@ const RoleTable = (props: RoleTableProps) => {
   }
 
   const handleRowClick = (data: Row<IGetRoleOutput>): void => {
-    openDrawer(Mode.view, data.original.id)
+    openDrawer(OperationMode.view, data.original.id)
   }
 
   const closeModal = (): void => {

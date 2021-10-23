@@ -2,13 +2,13 @@
 import CreateDrawer from '@/components/page/role/drawer/createDrawer'
 import EditViewDrawer from '@/components/page/role/drawer/editViewDrawer'
 
-// pages
-import { Mode } from '@/pages/role'
+// constants
+import { OperationMode } from '@/constants/common'
 
-type RoleDrawerProps = {
+interface RoleDrawerProps {
   open: boolean
   close(): void
-  mode: Mode
+  mode: OperationMode
   id?: number
   changeModeToEdit(): void
 }
@@ -16,7 +16,7 @@ type RoleDrawerProps = {
 const RoleDrawer = (props: RoleDrawerProps) => {
   const { mode, open, changeModeToEdit, ...restProps } = props
 
-  return mode === 'create' ? (
+  return mode === OperationMode.create ? (
     <CreateDrawer open={open} {...restProps} />
   ) : (
     <EditViewDrawer

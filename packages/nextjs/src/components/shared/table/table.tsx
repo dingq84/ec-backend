@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, HTMLAttributes, useCallback } from 'react'
+import { memo, useMemo, useState, useRef, HTMLAttributes, useCallback } from 'react'
 import {
   useTable,
   useFlexLayout,
@@ -73,6 +73,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
     nextPage: propNextPage,
     goPage
   } = pagination
+  console.log('tttable')
   const [totalWidth, setTotalWidth] = useState(1000)
   const ref = useRef<HTMLDivElement>(null!)
   const getColumnsSlot = useCallback(
@@ -283,4 +284,14 @@ const Table = <T extends object>(props: TableProps<T>) => {
   )
 }
 
-export default Table
+export default memo(Table, (prevProps, nextProps) => {
+  if (prevProps.columns.length !== nextProps.columns.length) {
+    return false
+  } else if (JSON.stringify(prevProps.data) !== JSON.stringify(nextProps.data)) {
+    return false
+  } else if (prevProps.pagination?.currentPage !== nextProps.pagination?.currentPage) {
+    return false
+  }
+
+  return true
+}) as typeof Table

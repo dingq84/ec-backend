@@ -5,9 +5,12 @@ import tw, { css } from 'twin.macro'
 import Button from '@/components/shared/button'
 import Paper from '@/components/shared/paper'
 import { Tabs, Tab, TabList, TabPanel } from '@/components/shared/tab'
-import TextField from '@/components/shared/textField'
 import RoleDrawer from '@/components/page/role/drawer'
 import RoleTable from '@/components/page/role/table'
+import TextField from '@/components/shared/textField'
+
+// constants
+import { OperationMode } from '@/constants/common'
 
 // core
 import { Status } from '@ec-backstage/core/src/common/constants/status'
@@ -65,17 +68,11 @@ const SearchContainer = (props: { value: string; search: (name: string) => void 
   )
 }
 
-export enum Mode {
-  'create' = 'create',
-  'edit' = 'edit',
-  'view' = 'view'
-}
-
 const Role = () => {
   const [keyword, setKeyword] = useState('')
   const [status, setStatus] = useState<Status>(-1)
   const [currentRoleId, setCurrentRoleId] = useState<number | undefined>(undefined)
-  const [drawProps, setDrawProps] = useState({ open: false, mode: Mode.view })
+  const [drawProps, setDrawProps] = useState({ open: false, mode: OperationMode.view })
   const handleSearch = (newKeyword: string): void => {
     setKeyword(newKeyword)
   }
@@ -85,10 +82,10 @@ const Role = () => {
   }
 
   const changeModeToEdit = (): void => {
-    setDrawProps({ ...drawProps, mode: Mode.edit })
+    setDrawProps({ ...drawProps, mode: OperationMode.edit })
   }
 
-  const openDrawer = (mode: Mode, roleId: number | undefined = undefined): void => {
+  const openDrawer = (mode: OperationMode, roleId: number | undefined = undefined): void => {
     setDrawProps({ open: true, mode })
     setCurrentRoleId(roleId)
   }
@@ -101,7 +98,7 @@ const Role = () => {
     <>
       <div tw="flex items-center justify-between">
         <h1 tw="text-blue-gray-3 font-medium text-2xl">角色權限管理</h1>
-        <Button className="btn" label="創建角色" onClick={() => openDrawer(Mode.create)} />
+        <Button className="btn" label="創建角色" onClick={() => openDrawer(OperationMode.create)} />
       </div>
 
       <Tabs>

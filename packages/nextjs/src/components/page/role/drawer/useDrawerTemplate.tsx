@@ -13,14 +13,14 @@ import Radio from '@/components/shared/radio'
 import TextField from '@/components/shared/textField/textField'
 import { InitialStateProps, Action } from '@/components/page/role/drawer/useDrawerReducer'
 
+// constants
+import { OperationMode } from '@/constants/common'
+
 // core
 import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-
-// pages
-import { Mode } from '@/pages/role'
 
 const titleCss = css`
   ${tw`block text-base text-black font-medium`}
@@ -46,12 +46,12 @@ interface IUseDrawerTemplate {
   title: string
   submit: () => void
   submitLabel: string
-  mode: Mode
+  mode: OperationMode
   state: InitialStateProps
   dispatch: Dispatch<Action>
   isLoading?: boolean
   slots?: {
-    delete?: JSX.Element | undefined
+    delete?: JSX.Element
   }
 }
 
@@ -67,11 +67,10 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
     dispatch,
     changeModeToEdit = () => {},
     isLoading = false,
-    slots = {}
+    slots
   } = props
   const [errorTarget, setErrorTarget] = useState<Array<keyof InitialStateProps>>([])
-  const { delete: deleteButton } = slots
-  const isView = mode === Mode.view
+  const isView = mode === OperationMode.view
 
   useEnhancedEffect(() => {
     setErrorTarget([])
@@ -209,7 +208,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
           ) : (
             <Fade inProps={isView === false}>
               <div tw="flex justify-end items-center w-full h-full">
-                {deleteButton || null}
+                {slots?.delete || null}
 
                 <div tw="flex items-center ml-auto">
                   <Button label="取消" className="btn-outline" onClick={close} />
