@@ -122,24 +122,18 @@ class AdminEntity implements IAdminEntity {
   }
 
   static createAdminValidate(parameters: ICreateAdminInputPort): IErrorInputPort | true {
-    const { name, account, password, roleId } = parameters
+    const { name, account, password } = parameters
 
-    if (
-      Boolean(name) === false ||
-      Boolean(account) === false ||
-      Boolean(password) === false ||
-      typeof roleId !== 'number'
-    ) {
+    const emptyList = Validator.checkIsEmpty({ name, account, password })
+    if (emptyList.length) {
       const statusMessage = '必填欄位為空，請填寫完畢再送出'
       return {
         statusCode: StatusCode.parameterRequired,
         statusMessage,
-        data: {
-          name: statusMessage,
-          account: statusMessage,
-          password: statusMessage,
-          roleId: statusMessage
-        }
+        data: emptyList.reduce(
+          (accumulate, current) => ({ ...accumulate, [current]: statusMessage }),
+          {}
+        )
       }
     }
 
@@ -169,18 +163,18 @@ class AdminEntity implements IAdminEntity {
   }
 
   static updateAdminValidate(parameters: IUpdateAdminInputPort): IErrorInputPort | true {
-    const { name, account, roleId } = parameters
+    const { name, account } = parameters
 
-    if (Boolean(name) === false || Boolean(account) === false || typeof roleId !== 'number') {
+    const emptyList = Validator.checkIsEmpty({ name, account })
+    if (emptyList.length) {
       const statusMessage = '必填欄位為空，請填寫完畢再送出'
       return {
         statusCode: StatusCode.parameterRequired,
         statusMessage,
-        data: {
-          name: statusMessage,
-          account: statusMessage,
-          roleId: statusMessage
-        }
+        data: emptyList.reduce(
+          (accumulate, current) => ({ ...accumulate, [current]: statusMessage }),
+          {}
+        )
       }
     }
 

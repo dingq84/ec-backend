@@ -64,7 +64,6 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
   } = props
   const [errorTarget, setErrorTarget] = useState<Array<keyof InitialStateProps>>([])
   const [inputType, setInputType] = useState<'text' | 'password'>('password')
-  const { delete: deleteButton } = slots
   const isView = mode === OperationMode.view
 
   useEnhancedEffect(() => {
@@ -72,11 +71,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
   }, [open])
 
   const handleInputTypeChange = (): void => {
-    if (inputType === 'text') {
-      setInputType('password')
-    } else {
-      setInputType('text')
-    }
+    setInputType(inputType === 'text' ? 'password' : 'text')
   }
 
   const handleErrorTarget = (data: typeof errorTarget): void => {
@@ -230,7 +225,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
           ) : (
             <Fade inProps={isView === false}>
               <div tw="flex justify-end items-center w-full h-full">
-                {deleteButton || null}
+                {slots.delete || null}
 
                 <div tw="flex items-center ml-auto">
                   <Button label="取消" className="btn-outline" onClick={close} />

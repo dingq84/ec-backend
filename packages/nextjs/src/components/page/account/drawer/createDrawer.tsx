@@ -10,7 +10,6 @@ import { ApiKey } from '@/constants/services/api'
 
 // core
 import core from '@ec-backstage/core/src'
-import { StatusCode } from '@ec-backstage/core/src/common/constants/statusCode'
 import { ICreateAdminInputPort } from '@ec-backstage/core/src/admin/application/interface/iCreateAdminUseCase'
 import { Order } from '@ec-backstage/core/src/common/constants/order'
 
@@ -55,27 +54,16 @@ const CreateDrawer = (props: CreateDrawerProps) => {
         close()
       },
       onError(error) {
-        const { errorMessage, statusCode } = error
-
-        if (
-          [
-            StatusCode.wrongAdminNameLength,
-            StatusCode.adminNameOnlyChinese,
-            StatusCode.accountIsExist
-          ].includes(statusCode)
-        ) {
-          handleErrorTarget(['name'])
-          reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
+        const { errorMessage: message, statusCode, data } = error
+        const errorData = data as Record<Partial<keyof ICreateAdminInputPort>, 'string'> | []
+        // 後端回傳的 data 為空陣列
+        if (Array.isArray(errorData)) {
+          reduxDispatch(setError({ show: true, message, statusCode }))
           return
         }
 
-        if (StatusCode.parameterRequired === statusCode) {
-          handleErrorTarget(['name', 'password', 'account', 'roleId'])
-          reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
-          return
-        }
-
-        reduxDispatch(setError({ show: true, message: errorMessage, statusCode }))
+        handleErrorTarget(Object.keys(errorData) as Array<Partial<keyof ICreateAdminInputPort>>)
+        reduxDispatch(pushToast({ show: true, level: 'warning', message }))
       }
     }
   )
