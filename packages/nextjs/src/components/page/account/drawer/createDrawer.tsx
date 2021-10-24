@@ -5,6 +5,7 @@ import useDrawerTemplate from '@/components/page/account/drawer/useDrawerTemplat
 import useDrawerReducer from '@/components/page/account/drawer/useDrawerReducer'
 
 // constants
+import { OperationMode } from '@/constants/common'
 import { ApiKey } from '@/constants/services/api'
 
 // core
@@ -15,9 +16,6 @@ import { Order } from '@ec-backstage/core/src/common/constants/order'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-
-// pages
-import { Mode } from '@/pages/account'
 
 // services
 import useNormalMutation from '@/services/useNormalMutation'
@@ -102,36 +100,10 @@ const CreateDrawer = (props: CreateDrawerProps) => {
     }
   }, [roleList])
 
-  // const submit = async () => {
-  //   const result = await mutate({ ...state, roleId: Number(state.roleId) })
-  //   if (isRight(result)) {
-  //     return
-  //   }
-
-  // const { statusCode, errorMessage } = result.left
-  // if (
-  //   [
-  //     StatusCode.wrongAccountFormat,
-  //     StatusCode.permissionIsEmpty,
-  //     StatusCode.roleNameIsExist
-  //   ].includes(statusCode)
-  // ) {
-  //   if (statusCode === StatusCode.permissionIsEmpty) {
-  //     handleErrorTarget(['permissions'])
-  //   } else {
-  //     handleErrorTarget(['name'])
-  //   }
-  //   reduxDispatch(pushToast({ show: true, level: 'warning', message: errorMessage }))
-  //   return
-  // }
-
-  // reduxDispatch(setError({ message: errorMessage, show: true, statusCode }))
-  // }
-
   const { element, handleErrorTarget } = useDrawerTemplate({
     open,
     close,
-    mode: Mode.create,
+    mode: OperationMode.create,
     title: '創建',
     submit: () => mutate({ ...state, roleId: Number(state.roleId) }),
     submitLabel: '新增',

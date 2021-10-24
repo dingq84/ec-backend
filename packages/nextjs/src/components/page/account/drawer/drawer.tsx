@@ -2,13 +2,13 @@
 import CreateDrawer from '@/components/page/account/drawer/createDrawer'
 import EditViewDrawer from '@/components/page/account/drawer/editViewDrawer'
 
-// pages
-import { Mode } from '@/pages/account'
+// constants
+import { OperationMode } from '@/constants/common'
 
 type AccountDrawerProps = {
   open: boolean
   close(): void
-  mode: Mode
+  mode: OperationMode
   id?: number
   changeModeToEdit(): void
 }
@@ -16,7 +16,7 @@ type AccountDrawerProps = {
 const AccountDrawer = (props: AccountDrawerProps) => {
   const { mode, open, changeModeToEdit, ...restProps } = props
 
-  return mode === 'create' ? (
+  return mode === OperationMode.create ? (
     <CreateDrawer open={open} {...restProps} />
   ) : (
     <EditViewDrawer

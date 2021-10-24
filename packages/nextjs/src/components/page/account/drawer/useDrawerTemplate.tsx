@@ -13,14 +13,14 @@ import Select from '@/components/shared/select'
 import TextField from '@/components/shared/textField/textField'
 import { InitialStateProps, Action } from '@/components/page/account/drawer/useDrawerReducer'
 
+// constants
+import { OperationMode } from '@/constants/common'
+
 // core
 import { Status } from '@ec-backstage/core/src/common/constants/status'
 
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
-
-// pages
-import { Mode } from '@/pages/account'
 
 const titleCss = css`
   ${tw`block text-base text-black font-medium`}
@@ -39,7 +39,7 @@ interface IUseDrawerTemplate {
   title: string
   submit: () => void
   submitLabel: string
-  mode: Mode
+  mode: OperationMode
   state: InitialStateProps
   dispatch: Dispatch<Action>
   isLoading?: boolean
@@ -65,7 +65,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
   const [errorTarget, setErrorTarget] = useState<Array<keyof InitialStateProps>>([])
   const [inputType, setInputType] = useState<'text' | 'password'>('password')
   const { delete: deleteButton } = slots
-  const isView = mode === Mode.view
+  const isView = mode === OperationMode.view
 
   useEnhancedEffect(() => {
     setErrorTarget([])
@@ -178,7 +178,7 @@ const useDrawerTemplate = (props: IUseDrawerTemplate) => {
             />
           </div>
 
-          {mode === Mode.create ? (
+          {mode === OperationMode.create ? (
             <div tw="flex flex-col gap-y-2 mb-5">
               <span css={[titleCss]}>管理者密碼</span>
               <TextField

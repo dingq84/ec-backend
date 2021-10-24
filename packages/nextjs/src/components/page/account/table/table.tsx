@@ -13,8 +13,9 @@ import Switch from '@/components/shared/switch'
 import Table from '@/components/shared/table'
 
 // constants
-import { ApiKey } from '@/constants/services/api'
+import { OperationMode } from '@/constants/common'
 import { columns } from '@/constants/pages/account'
+import { ApiKey } from '@/constants/services/api'
 
 // core
 import core from '@ec-backstage/core/src'
@@ -26,9 +27,6 @@ import { Order } from '@ec-backstage/core/src/common/constants/order'
 import { IDeleteAdminInputPort } from '@ec-backstage/core/src/admin/application/interface/iDeleteAdminUseCase'
 import { IUpdateAdminStatusInputPort } from '@ec-backstage/core/src/admin/application/interface/iUpdateAdminStatusUseCase'
 import { Status } from '@ec-backstage/core/src/common/constants/status'
-
-// pages
-import { Mode } from '@/pages/account'
 
 // services
 import useNormalQuery from '@/services/useNormalQuery'
@@ -42,7 +40,7 @@ interface AdminTableProps {
   keyword: string
   roleId: number | undefined
   status: IGetAdminListInputPort['status']
-  openDrawer: (mode: Mode, id?: number) => void
+  openDrawer: (mode: OperationMode, id?: number) => void
 }
 
 const AdminTable = (props: AdminTableProps) => {
@@ -76,7 +74,7 @@ const AdminTable = (props: AdminTableProps) => {
   }
 
   const handleEdit = (data: Row<IGetAdminOutputPort>): void => {
-    openDrawer(Mode.edit, data.original.id)
+    openDrawer(OperationMode.edit, data.original.id)
   }
 
   const handleDelete = async (data: Row<IGetAdminOutputPort>): Promise<void> => {
@@ -103,7 +101,7 @@ const AdminTable = (props: AdminTableProps) => {
   }
 
   const handleRowClick = (data: Row<IGetAdminOutputPort>): void => {
-    openDrawer(Mode.view, data.original.id)
+    openDrawer(OperationMode.view, data.original.id)
   }
 
   const handleStatusChange = async (

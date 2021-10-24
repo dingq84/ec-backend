@@ -11,6 +11,7 @@ import AccountTable from '@/components/page/account/table'
 import AccountDrawer from '@/components/page/account/drawer'
 
 // constants
+import { OperationMode } from '@/constants/common'
 import { ApiKey } from '@/constants/services/api'
 
 // core
@@ -151,18 +152,12 @@ const SearchContainer = memo(
   }
 )
 
-export enum Mode {
-  'create' = 'create',
-  'edit' = 'edit',
-  'view' = 'view'
-}
-
 const Admin = () => {
   const [keyword, setKeyword] = useState('')
   const [roleId, setRoleId] = useState<undefined | number>(undefined)
   const [status, setStatus] = useState<Status>(-1)
   const [currentAccountId, setCurrentAccountId] = useState<number | undefined>(undefined)
-  const [drawProps, setDrawProps] = useState({ open: false, mode: Mode.view })
+  const [drawProps, setDrawProps] = useState({ open: false, mode: OperationMode.view })
   const handleSearch = (newKeyword: string, newRoleId: string): void => {
     setKeyword(newKeyword)
     setRoleId(newRoleId === '' ? undefined : Number(newRoleId))
@@ -173,10 +168,10 @@ const Admin = () => {
   }
 
   const changeModeToEdit = (): void => {
-    setDrawProps({ ...drawProps, mode: Mode.edit })
+    setDrawProps({ ...drawProps, mode: OperationMode.edit })
   }
 
-  const openDrawer = (mode: Mode, accountId: number | undefined = undefined): void => {
+  const openDrawer = (mode: OperationMode, accountId: number | undefined = undefined): void => {
     setDrawProps({ open: true, mode })
     setCurrentAccountId(accountId)
   }
@@ -189,7 +184,7 @@ const Admin = () => {
     <>
       <div tw="flex items-center justify-between">
         <h1 tw="text-blue-gray-3 font-medium text-2xl">帳號管理</h1>
-        <Button className="btn" label="創建帳號" onClick={() => openDrawer(Mode.create)} />
+        <Button className="btn" label="創建帳號" onClick={() => openDrawer(OperationMode.create)} />
       </div>
 
       <Tabs>

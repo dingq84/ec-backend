@@ -9,6 +9,7 @@ import useDrawerTemplate from '@/components/page/account/drawer/useDrawerTemplat
 import useDrawerReducer from '@/components/page/account/drawer/useDrawerReducer'
 
 // constants
+import { OperationMode } from '@/constants/common'
 import { ApiKey } from '@/constants/services/api'
 
 // core
@@ -22,9 +23,6 @@ import { Order } from '@ec-backstage/core/src/common/constants/order'
 // hooks
 import useEnhancedEffect from '@/hooks/useEnhancedEffect'
 
-// pages
-import { Mode } from '@/pages/account'
-
 // services
 import useNormalMutation from '@/services/useNormalMutation'
 import useNormalQuery from '@/services/useNormalQuery'
@@ -35,7 +33,7 @@ import { pushToast } from '@/states/toast'
 import { setError } from '@/states/error'
 
 interface EditViewDrawerProps {
-  mode: Mode
+  mode: OperationMode
   open: boolean
   close(): void
   changeModeToEdit(): void
@@ -168,7 +166,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     open,
     close,
     mode,
-    title: mode === Mode.edit ? '編輯' : '檢視',
+    title: mode === OperationMode.edit ? '編輯' : '檢視',
     submit: submitModal,
     submitLabel: '儲存',
     state,
@@ -177,7 +175,7 @@ const EditViewDrawer = (props: EditViewDrawerProps) => {
     isLoading: roleListLoading || adminDataLoading || updateAdminLoading || deleteAdminLoading,
     slots: {
       delete:
-        mode === Mode.edit ? (
+        mode === OperationMode.edit ? (
           <Button
             label="刪除"
             className="btn-outline"
