@@ -39,7 +39,7 @@ const Tag = forwardRef<HTMLButtonElement, TagProps>(function Tag(props, ref) {
         <>
           <span>{label}</span>
           {clear ? (
-            <button onClick={onClear}>
+            <button onClick={onClear} tw="ml-1">
               <FontAwesomeIcon icon={faTimes} tw="text-xs" />
             </button>
           ) : null}

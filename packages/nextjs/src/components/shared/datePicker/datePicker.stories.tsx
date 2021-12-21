@@ -1,6 +1,6 @@
 import DatePicker from '.'
 
-const Default = () => <DatePicker />
+const Default = () => <DatePicker value={''} />
 
 const defaultSetting = {
   component: DatePicker,

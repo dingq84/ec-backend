@@ -1,4 +1,4 @@
-import { forwardRef, useState, useRef, HTMLAttributes } from 'react'
+import { forwardRef, useState, useRef, HTMLAttributes, SyntheticEvent } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import tw, { TwStyle } from 'twin.macro'
@@ -18,6 +18,7 @@ export interface SelectProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCha
   options: Option[]
   value: string
   onChange?: (value: string) => void
+  onClose?: () => void
   inputProps?: Partial<TextFieldProps>
   disabled?: boolean
   paperProps?: {
@@ -29,6 +30,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
   const {
     options,
     onChange,
+    onClose,
     value,
     disabled = false,
     inputProps = {},
@@ -61,9 +63,17 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
     }
   }
 
-  const closePopover = (): void => setIsOpen(false)
+  const closePopover = (): void => {
+    setIsOpen(false)
 
-  const handleClick = (option: Option): void => {
+    if (onClose) {
+      onClose()
+    }
+  }
+
+  const handleClick = (event: SyntheticEvent, option: Option): void => {
+    event.stopPropagation()
+
     if (onChange) {
       onChange(option.key)
     }
@@ -117,7 +127,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(function Select(props, re
             options.map(option => (
               <li
                 key={`option-${option.key}`}
-                onClick={() => handleClick(option)}
+                onClick={event => handleClick(event, option)}
                 css={[value === option.key && tw`text-primary`]}
               >
                 {option.value}
