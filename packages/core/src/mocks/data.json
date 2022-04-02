@@ -1,0 +1,159 @@
+{
+  "permissionList": [
+    {
+      "id": 1,
+      "name": "帳號管理",
+      "parentId": 0,
+      "children": [
+        {
+          "id": 2,
+          "name": "帳號管理-(列表)",
+          "parentId": 1
+        },
+        {
+          "id": 3,
+          "name": "帳號管理-(新增)",
+          "parentId": 1
+        },
+        {
+          "id": 4,
+          "name": "帳號管理-(顯示單筆帳號)",
+          "parentId": 1
+        },
+        {
+          "id": 5,
+          "name": "帳號管理-(更新)",
+          "parentId": 1
+        },
+        {
+          "id": 6,
+          "name": "帳號管理-(刪除)",
+          "parentId": 1
+        },
+        {
+          "id": 7,
+          "name": "(更新個人密碼)",
+          "parentId": 1
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "操作紀錄",
+      "parentId": 0
+    },
+    {
+      "id": 9,
+      "name": "會員管理",
+      "parentId": 0,
+      "children": [
+        {
+          "id": 10,
+          "name": "會員管理-(列表)",
+          "parentId": 9
+        },
+        {
+          "id": 11,
+          "name": "會員管理-(顯示單筆帳號)",
+          "parentId": 9
+        },
+        {
+          "id": 12,
+          "name": "會員管理-(會員匯出csv)",
+          "parentId": 9
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "選單管理",
+      "parentId": 0,
+      "children": [
+        {
+          "id": 14,
+          "name": "選單管理-(列表)",
+          "parentId": 13
+        },
+        {
+          "id": 15,
+          "name": "選單管理-(顯示單筆帳號)",
+          "parentId": 13
+        },
+        {
+          "id": 16,
+          "name": "選單管理-(更新)",
+          "parentId": 13
+        },
+        {
+          "id": 17,
+          "name": "選單管理-(刪除)",
+          "parentId": 13
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "權限管理",
+      "parentId": 0,
+      "children": [
+        {
+          "id": 19,
+          "name": "權限管理-(列表)",
+          "parentId": 18
+        },
+        {
+          "id": 20,
+          "name": "權限管理-(刪除)",
+          "parentId": 18
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "角色管理",
+      "parentId": 0,
+      "children": [
+        {
+          "id": 22,
+          "name": "角色管理-(列表)",
+          "parentId": 21
+        },
+        {
+          "id": 23,
+          "name": "角色管理-(新增)",
+          "parentId": 21
+        },
+        {
+          "id": 24,
+          "name": "角色管理-(顯示單筆帳號)",
+          "parentId": 21
+        },
+        {
+          "id": 25,
+          "name": "角色管理-(更新)",
+          "parentId": 21
+        },
+        {
+          "id": 26,
+          "name": "角色管理-(切換角色狀態)",
+          "parentId": 21
+        },
+        {
+          "id": 27,
+          "name": "角色管理-(取得角色之帳號列表)",
+          "parentId": 21
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "SuperAdmin",
+      "parentId": 0
+    },
+    {
+      "id": 29,
+      "name": "首頁",
+      "parentId": 0
+    }
+  ]
+}

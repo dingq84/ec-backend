@@ -1,4 +1,4 @@
-import isFormData from '.'
+import isFormData from '../isFormData'
 
 describe('test isFormData', () => {
   it('should be false when method equals get', () => {

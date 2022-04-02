@@ -116,6 +116,10 @@ class Http implements IHttpInfrastructure {
     return Http.instance
   }
 
+  static resetInstance(): void {
+    Http.instance = new Http()
+  }
+
   async request<T>(config: RequestConfig): Promise<Either<IErrorInputPort, ResponseResult<T>>> {
     const requestConfig = this.getRequestConfig(config)
 

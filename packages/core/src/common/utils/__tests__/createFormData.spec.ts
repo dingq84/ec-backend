@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 
 // utils
-import createFormData from '.'
+import createFormData from '../createFormData'
 
 describe('test createFormData', () => {
   const mockConsoleError = jest.fn()

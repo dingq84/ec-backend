@@ -6,14 +6,14 @@
   "author": "dingq84@gmail.com",
   "description": "EC-backstage",
   "license": "MIT",
-  "workspaces":{
-    "packages": ["packages/*"],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
     "nohoist": [
       "@storybook",
       "**/@storybook",
       "**/@storybook/**",
-      "**/babel-loader",
-      "**/babel-jest",
       "**/react",
       "**/react-dom",
       "**/twin.macro",
